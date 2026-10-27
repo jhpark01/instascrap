@@ -307,6 +307,48 @@ function renderHtml(posts) {
   .del-btn:hover { color: #ff4d4f; }
   .memo { cursor: pointer; }
   .memo:hover { text-decoration: underline; }
+  .tag-bar {
+    max-width: 1440px;
+    margin: 8px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .tag-chip {
+    background: rgba(255, 77, 121, 0.12);
+    color: #ff7aa2;
+    border: 1px solid rgba(255, 77, 121, 0.3);
+    border-radius: 99px;
+    padding: 3px 9px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .tag-chip:hover, .tag-chip.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .tag-add {
+    background: transparent;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    border-radius: 99px;
+    padding: 2px 8px;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .tag-add:hover { color: #fff; border-color: var(--muted); }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 6px;
+  }
   .viewer {
     position: relative;
     background: #08090c;
@@ -449,6 +491,7 @@ function renderHtml(posts) {
     <span id="syncStatus" style="font-size:12px;padding:5px 10px;border-radius:99px;background:#1f2430;color:#949ba8;"></span>
     <span id="count" class="count"></span>
   </div>
+  <div id="tagBar" class="tag-bar"></div>
 </header>
 <main id="grid" class="grid"></main>
 <dialog id="addModal" style="width:min(480px,92vw);">
@@ -458,7 +501,7 @@ function renderHtml(posts) {
   </div>
   <div style="display:flex;flex-direction:column;gap:10px;">
     <input id="addUrl" class="search" type="url" placeholder="https://www.instagram.com/p/... 또는 유튜브 링크" />
-    <input id="addMemo" class="search" type="text" placeholder="메모 / 키워드 (예: 발성연습, 맛집 등)" />
+    <input id="addMemo" class="search" type="text" placeholder="메모 및 #태그 (예: 발성연습 #노래발성 #연습)" />
     <button id="addSubmit" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);padding:11px;">저장 및 스크랩 실행</button>
   </div>
 </dialog>
@@ -542,7 +585,45 @@ function openModal(p) {
   modal.showModal();
 }
 
+function getTags(memo) {
+  return [...(memo || '').matchAll(/#([^\\s#]+)/g)].map(m => m[1]);
+}
+function stripTags(memo) {
+  return (memo || '').replace(/#[^\\s#]+/g, '').replace(/\\s+/g, ' ').trim();
+}
+function saveMemo(p, nextMemo) {
+  p.memo = nextMemo.trim();
+  customMemos[p.shortcode] = p.memo;
+  localStorage.setItem('ig_memos', JSON.stringify(customMemos));
+  syncApi('memo', { shortcode: p.shortcode, memo: p.memo });
+  render();
+}
+function renderTagBar() {
+  const counts = new Map();
+  for (const p of POSTS) {
+    if (deleted.has(p.shortcode)) continue;
+    for (const t of getTags(p.memo)) counts.set(t, (counts.get(t) || 0) + 1);
+  }
+  const bar = document.getElementById('tagBar');
+  bar.innerHTML = '';
+  const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  for (const [tag, cnt] of sorted) {
+    const chip = document.createElement('button');
+    const isAct = query.trim().toLowerCase() === ('#' + tag).toLowerCase();
+    chip.className = 'tag-chip' + (isAct ? ' active' : '');
+    chip.textContent = '#' + tag + ' (' + cnt + ')';
+    chip.onclick = () => {
+      const qEl = document.getElementById('q');
+      qEl.value = isAct ? '' : '#' + tag;
+      query = qEl.value;
+      render();
+    };
+    bar.appendChild(chip);
+  }
+}
+
 function render() {
+  renderTagBar();
   const q = query.trim().toLowerCase();
   const list = POSTS.filter(p => {
     const isDel = deleted.has(p.shortcode);
@@ -578,22 +659,58 @@ function render() {
     const headLeft = document.createElement('div');
     const memoEl = document.createElement('div');
     const firstCaptionLine = (p.caption || '').split('\\n').map(s => s.trim()).find(Boolean) || '';
-    memoEl.className = 'memo' + (p.memo ? '' : ' empty');
-    memoEl.title = '클릭하여 메모 수정';
-    memoEl.textContent = p.memo || (firstCaptionLine ? firstCaptionLine.slice(0, 42) : '(제목/메모 없음)');
+    const cleanMemo = stripTags(p.memo);
+    const tags = getTags(p.memo);
+    memoEl.className = 'memo' + (cleanMemo ? '' : ' empty');
+    memoEl.title = '클릭하여 메모 및 #태그 수정';
+    memoEl.textContent = cleanMemo || (firstCaptionLine ? firstCaptionLine.slice(0, 42) : '(제목/메모 없음)');
     memoEl.onclick = () => {
-      const next = prompt('메모 수정:', p.memo || '');
+      const next = prompt('메모 및 #태그 수정 (예: 발성연습 #노래발성):', p.memo || '');
       if (next === null) return;
-      p.memo = next.trim();
-      customMemos[p.shortcode] = p.memo;
-      localStorage.setItem('ig_memos', JSON.stringify(customMemos));
-      syncApi('memo', { shortcode: p.shortcode, memo: p.memo });
-      render();
+      saveMemo(p, next);
     };
     const metaEl = document.createElement('div');
     metaEl.className = 'meta';
     metaEl.textContent = p.date + (p.owner ? ' · @' + p.owner : '');
-    headLeft.append(memoEl, metaEl);
+
+    const tagWrap = document.createElement('div');
+    tagWrap.className = 'card-tags';
+    for (const t of tags) {
+      const chip = document.createElement('span');
+      chip.className = 'tag-chip';
+      chip.textContent = '#' + t;
+      chip.title = '클릭 시 이 태그만 보기 (우클릭 시 태그 삭제)';
+      chip.onclick = () => {
+        const qEl = document.getElementById('q');
+        qEl.value = '#' + t;
+        query = qEl.value;
+        render();
+      };
+      const rm = document.createElement('span');
+      rm.textContent = '×';
+      rm.style.opacity = '0.7';
+      rm.title = '태그 삭제';
+      rm.onclick = (e) => {
+        e.stopPropagation();
+        saveMemo(p, (p.memo || '').replace('#' + t, ''));
+      };
+      chip.appendChild(rm);
+      tagWrap.appendChild(chip);
+    }
+    const addTagBtn = document.createElement('button');
+    addTagBtn.className = 'tag-add';
+    addTagBtn.textContent = '+ #태그';
+    addTagBtn.onclick = () => {
+      const raw = prompt('추가할 태그 입력 (공백/쉼표 구분, # 생략 가능):');
+      if (!raw) return;
+      const newTags = raw.split(/[\\s,]+/).map(s => s.replace(/^#+/, '').trim()).filter(Boolean);
+      const existing = new Set(tags);
+      const toAdd = newTags.filter(t => !existing.has(t)).map(t => '#' + t).join(' ');
+      if (toAdd) saveMemo(p, ((p.memo || '') + ' ' + toAdd).trim());
+    };
+    tagWrap.appendChild(addTagBtn);
+
+    headLeft.append(memoEl, tagWrap, metaEl);
 
     const actions = document.createElement('div');
     actions.style.display = 'flex';
@@ -878,6 +995,7 @@ async function main() {
       const needsVid = isIgVideo && !hasVid;
       if (imgsOk && !needsVid) {
         Object.assign(item, {
+          memo: cached.memo || item.memo,
           owner: cached.owner,
           caption: cached.caption,
           localImages: cached.localImages,
