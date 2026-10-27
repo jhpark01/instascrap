@@ -12696,25 +12696,6 @@
     "isVideo": true
   },
   {
-    "shortcode": "Dd-__Q1PwQZ",
-    "kind": "post",
-    "url": "https://www.instagram.com/p/Dd-__Q1PwQZ/?obrf=MXVmaGt6emg4bmNqcw==",
-    "date": "2026년 10월 10일 오전 10:00",
-    "imgIndex": 1,
-    "memo": "",
-    "owner": "a.s.u.red_bdr",
-    "caption": "",
-    "localImages": [
-      "images/Dd-__Q1PwQZ_1.jpg"
-    ],
-    "driveImages": [
-      "https://lh3.googleusercontent.com/d/1Vx10gqrXgEp_I4ipcBbzo9ehbSqhMn-t=w1000"
-    ],
-    "localVideo": "",
-    "driveVideo": "",
-    "isVideo": false
-  },
-  {
     "shortcode": "Dd3STlQApar",
     "kind": "reel",
     "url": "https://www.instagram.com/reel/Dd3STlQApar/?srtk=MWU5Y3RmaDBnM2txMg==",
@@ -12808,9 +12789,7 @@
     "localVideo": "",
     "videoChecked": true,
     "isVideo": true,
-    "driveImages": [
-      "https://lh3.googleusercontent.com/d/1YjsxavJwhmgAnMzE-Rd17pYSnEn_8Ei8=w1000"
-    ]
+    "driveImages": []
   },
   {
     "shortcode": "DeWVyX4BMn8",
@@ -12970,9 +12949,11 @@
     "localImages": [
       "images/Dej0VadSA0J_1.jpg"
     ],
-    "driveImages": [],
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1mct-cXjkrNidiRHiY48p43RFwbUyQxXv=w1000"
+    ],
     "localVideo": "videos/Dej0VadSA0J.mp4",
-    "driveVideo": "https://drive.google.com/file/d/1ONpGmPkEG-1sqlD7BA5rrTFAHFfhugo_/preview",
+    "driveVideo": "https://drive.google.com/file/d/1eRHc7nJ0wh7HYm9y4dOfZ7A6r4FOU8so/preview",
     "videoChecked": true,
     "isVideo": true
   },
@@ -13012,7 +12993,13 @@
       "images/DeKKwePE491_4.jpg",
       "images/DeKKwePE491_5.jpg"
     ],
-    "driveImages": [],
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1P1TGOmBWOgNeycew6r05ueqMxhBVFwt8=w1000",
+      "https://lh3.googleusercontent.com/d/19YlQYYaNaCiyIv9E99P88y3VX8pZIB5m=w1000",
+      "https://lh3.googleusercontent.com/d/1mrtI5wE6F9GHWvklO7Kji2ymkx5keHtv=w1000",
+      "https://lh3.googleusercontent.com/d/1eAwycSFs6IYk-tvJTxvaGS-I48BAfh02=w1000",
+      "https://lh3.googleusercontent.com/d/1xVR27Zynh2SMVbBHlrgVFg9MBC_kDisg=w1000"
+    ],
     "localVideo": "",
     "driveVideo": "",
     "videoChecked": true,
@@ -13050,9 +13037,7 @@
     "localImages": [
       "images/DevVIwMqYp5_1.jpg"
     ],
-    "driveImages": [
-      "https://lh3.googleusercontent.com/d/1f93ys3llZ7up5ZyCJhRmmokt9Cbc5S2R=w1000"
-    ],
+    "driveImages": [],
     "localVideo": "videos/DevVIwMqYp5.mp4",
     "driveVideo": "https://drive.google.com/file/d/1GLfQomh02WnrVWMaF23AmLQUnuDG1oQx/preview",
     "videoChecked": true,
