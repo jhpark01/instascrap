@@ -1212,7 +1212,7 @@ async function main() {
         }
       }
       done++;
-      if (done === items.length) console.log(Progress: /);/${items.length}`);
+      if (done === items.length) { console.log(done + '/' + items.length);
         fs.writeFileSync(CACHE_FILE, JSON.stringify(items, null, 2), 'utf8');
       }
     }
