@@ -308,8 +308,7 @@ function saveDeleted() {
 function dispatchGitHub(inputs, promptIfMissing = false) {
   let pat = localStorage.getItem('gh_pat') || '';
   if (!pat && promptIfMissing) {
-    pat = (prompt('GitHub에서 바로 실행하려면 GitHub Personal Access Token (repo/workflow 권한)을 1회 입력해 주세요.
-(브라우저에만 저장되며 외부에 노출되지 않습니다)') || '').trim();
+    pat = (prompt('GitHub에서 바로 실행하려면 GitHub Personal Access Token (repo/workflow 권한)을 1회 입력해 주세요.\n(브라우저에만 저장되며 외부에 노출되지 않습니다)') || '').trim();
     if (pat) localStorage.setItem('gh_pat', pat);
   }
   if (!pat) return Promise.resolve(false);
