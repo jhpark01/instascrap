@@ -503,10 +503,24 @@ function renderHtml(posts) {
   </div>
   <div style="display:flex;flex-direction:column;gap:10px;">
     <input id="addUrl" class="search" type="url" placeholder="https://www.instagram.com/p/... 또는 유튜브 링크" />
-    <input id="addMemo" class="search" type="text" placeholder="메모 및 #태그 (예: 발성연습 #노래발성 #연습)" />
+    <input id="addMemo" class="search" type="text" list="tagSuggestions" placeholder="메모 및 #태그 (예: 발성연습 #노래발성)" />
+    <div id="addTagSuggestions" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
     <button id="addSubmit" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);padding:11px;">저장 및 스크랩 실행</button>
   </div>
 </dialog>
+<dialog id="tagModal" style="width:min(440px,92vw);">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <strong id="tagModalTitle">🏷️ #태그 추가 / 메모 수정</strong>
+    <button class="btn" onclick="document.getElementById('tagModal').close()">닫기</button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <input id="tagInput" class="search" type="text" list="tagSuggestions" placeholder="새 태그 입력 또는 아래 기존 태그 클릭..." />
+    <div style="font-size:12px;color:var(--muted);">기존 태그 클릭 시 바로 추가/해제됩니다:</div>
+    <div id="modalTagChips" style="display:flex;flex-wrap:wrap;gap:6px;max-height:180px;overflow-y:auto;"></div>
+    <button id="tagSaveBtn" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);padding:10px;">저장</button>
+  </div>
+</dialog>
+<datalist id="tagSuggestions"></datalist>
 <dialog id="modal">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:16px;">
     <strong id="modalTitle"></strong>
@@ -600,6 +614,9 @@ function saveMemo(p, nextMemo) {
   syncApi('memo', { shortcode: p.shortcode, memo: p.memo });
   render();
 }
+let allSortedTags = [];
+let editingPost = null;
+
 function renderTagBar() {
   const counts = new Map();
   for (const p of POSTS) {
@@ -609,6 +626,13 @@ function renderTagBar() {
   const bar = document.getElementById('tagBar');
   bar.innerHTML = '';
   const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  allSortedTags = sorted.map(([t]) => t);
+
+  const dl = document.getElementById('tagSuggestions');
+  if (dl) {
+    dl.innerHTML = allSortedTags.map(t => '<option value="#' + t + '"></option><option value="' + t + '"></option>').join('');
+  }
+
   for (const [tag, cnt] of sorted) {
     const chip = document.createElement('button');
     const isAct = query.trim().toLowerCase() === ('#' + tag).toLowerCase();
@@ -622,6 +646,68 @@ function renderTagBar() {
     };
     bar.appendChild(chip);
   }
+}
+
+function openTagEditor(p, mode = 'tag') {
+  editingPost = p;
+  const modal = document.getElementById('tagModal');
+  const inp = document.getElementById('tagInput');
+  document.getElementById('tagModalTitle').textContent = mode === 'memo' ? '📝 메모 및 #태그 수정' : '🏷️ #태그 추가 (' + (stripTags(p.memo) || p.shortcode) + ')';
+  inp.value = mode === 'memo' ? (p.memo || '') : '';
+  inp.placeholder = mode === 'memo' ? '메모와 #태그 입력...' : '추가할 태그 입력 (자동완성)...';
+
+  const renderModalChips = () => {
+    const wrap = document.getElementById('modalTagChips');
+    wrap.innerHTML = '';
+    const currentText = mode === 'memo' ? inp.value : ((p.memo || '') + ' ' + inp.value);
+    const activeSet = new Set(getTags(currentText));
+    const filterKw = mode === 'tag' ? inp.value.replace(/^#+/, '').trim().toLowerCase() : '';
+    const list = filterKw ? allSortedTags.filter(t => t.toLowerCase().includes(filterKw)) : allSortedTags;
+
+    for (const t of list) {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      const has = activeSet.has(t);
+      chip.className = 'tag-chip' + (has ? ' active' : '');
+      chip.textContent = (has ? '✓ #' : '+ #') + t;
+      chip.onclick = () => {
+        if (mode === 'memo') {
+          if (has) inp.value = inp.value.replace('#' + t, '').replace(/\\s+/g, ' ').trim();
+          else inp.value = (inp.value.trim() + ' #' + t).trim();
+          renderModalChips();
+        } else {
+          const curTags = new Set(getTags(p.memo));
+          if (curTags.has(t)) saveMemo(p, (p.memo || '').replace('#' + t, ''));
+          else saveMemo(p, ((p.memo || '') + ' #' + t).trim());
+          renderModalChips();
+        }
+      };
+      wrap.appendChild(chip);
+    }
+  };
+
+  inp.oninput = renderModalChips;
+  inp.onkeydown = e => {
+    if (e.key === 'Enter') { e.preventDefault(); document.getElementById('tagSaveBtn').click(); }
+  };
+  document.getElementById('tagSaveBtn').onclick = () => {
+    if (mode === 'memo') {
+      saveMemo(p, inp.value);
+    } else {
+      const raw = inp.value.trim();
+      if (raw) {
+        const newTags = raw.split(/[\\s,]+/).map(s => s.replace(/^#+/, '').trim()).filter(Boolean);
+        const existing = new Set(getTags(p.memo));
+        const toAdd = newTags.filter(t => !existing.has(t)).map(t => '#' + t).join(' ');
+        if (toAdd) saveMemo(p, ((p.memo || '') + ' ' + toAdd).trim());
+      }
+    }
+    modal.close();
+  };
+
+  renderModalChips();
+  modal.showModal();
+  inp.focus();
 }
 
 function render() {
@@ -666,11 +752,7 @@ function render() {
     memoEl.className = 'memo' + (cleanMemo ? '' : ' empty');
     memoEl.title = '클릭하여 메모 및 #태그 수정';
     memoEl.textContent = cleanMemo || (firstCaptionLine ? firstCaptionLine.slice(0, 42) : '(제목/메모 없음)');
-    memoEl.onclick = () => {
-      const next = prompt('메모 및 #태그 수정 (예: 발성연습 #노래발성):', p.memo || '');
-      if (next === null) return;
-      saveMemo(p, next);
-    };
+    memoEl.onclick = () => openTagEditor(p, 'memo');
     const metaEl = document.createElement('div');
     metaEl.className = 'meta';
     metaEl.textContent = p.date + (p.owner ? ' · @' + p.owner : '');
@@ -702,14 +784,7 @@ function render() {
     const addTagBtn = document.createElement('button');
     addTagBtn.className = 'tag-add';
     addTagBtn.textContent = '+ #태그';
-    addTagBtn.onclick = () => {
-      const raw = prompt('추가할 태그 입력 (공백/쉼표 구분, # 생략 가능):');
-      if (!raw) return;
-      const newTags = raw.split(/[\\s,]+/).map(s => s.replace(/^#+/, '').trim()).filter(Boolean);
-      const existing = new Set(tags);
-      const toAdd = newTags.filter(t => !existing.has(t)).map(t => '#' + t).join(' ');
-      if (toAdd) saveMemo(p, ((p.memo || '') + ' ' + toAdd).trim());
-    };
+    addTagBtn.onclick = () => openTagEditor(p, 'tag');
     tagWrap.appendChild(addTagBtn);
 
     headLeft.append(memoEl, tagWrap, metaEl);
@@ -886,12 +961,35 @@ document.getElementById('sortBtn').addEventListener('click', e => {
   render();
 });
 
+function populateAddModalTags() {
+  const wrap = document.getElementById('addTagSuggestions');
+  const memoInp = document.getElementById('addMemo');
+  if (!wrap || !memoInp) return;
+  wrap.innerHTML = '';
+  const active = new Set(getTags(memoInp.value));
+  for (const t of allSortedTags) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    const has = active.has(t);
+    chip.className = 'tag-chip' + (has ? ' active' : '');
+    chip.textContent = (has ? '✓ #' : '+ #') + t;
+    chip.onclick = () => {
+      if (has) memoInp.value = memoInp.value.replace('#' + t, '').replace(/\\s+/g, ' ').trim();
+      else memoInp.value = (memoInp.value.trim() + ' #' + t).trim();
+      populateAddModalTags();
+    };
+    wrap.appendChild(chip);
+  }
+}
+
 document.getElementById('addBtn').addEventListener('click', () => {
   document.getElementById('addUrl').value = '';
   document.getElementById('addMemo').value = '';
+  populateAddModalTags();
   document.getElementById('addModal').showModal();
   document.getElementById('addUrl').focus();
 });
+document.getElementById('addMemo').addEventListener('input', populateAddModalTags);
 
 document.getElementById('addSubmit').addEventListener('click', async () => {
   const url = document.getElementById('addUrl').value.trim();
@@ -935,6 +1033,7 @@ if (sharedRaw) {
   if (urlMatch) {
     document.getElementById('addUrl').value = urlMatch[0];
     document.getElementById('addMemo').value = sharedRaw.replace(urlMatch[0], '').trim();
+    populateAddModalTags();
     document.getElementById('addModal').showModal();
     document.getElementById('addMemo').focus();
     history.replaceState({}, '', location.pathname);
