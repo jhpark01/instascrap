@@ -802,22 +802,27 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
 
 render();
 
+let wasServerRunning = false;
 async function checkSyncStatus() {
   const el = document.getElementById('syncStatus');
   const activePosts = POSTS.filter(p => !deleted.has(p.shortcode) && p.localImages?.length > 0);
   const syncedPosts = activePosts.filter(p => p.driveImages?.length > 0);
   const pendingCount = activePosts.length - syncedPosts.length;
   try {
-    const r = await fetch('https://api.github.com/repos/jhpark01/instascrap/actions/runs?per_page=1');
+    const r = await fetch('https://api.github.com/repos/jhpark01/instascrap/actions/runs?per_page=1', { cache: 'no-store' });
     if (r.ok) {
       const d = await r.json();
       const run = d.workflow_runs?.[0];
       if (run && (run.status === 'in_progress' || run.status === 'queued')) {
+        wasServerRunning = true;
         el.style.background = 'rgba(255, 170, 0, 0.18)';
         el.style.color = '#ffaa00';
         el.textContent = '🔄 서버 업로드 진행 중...' + (pendingCount > 0 ? ' (대기 ' + pendingCount + '건)' : '');
-        setTimeout(checkSyncStatus, 10000);
+        setTimeout(checkSyncStatus, 8000);
         return;
+      } else if (wasServerRunning) {
+        wasServerRunning = false;
+        setTimeout(() => location.reload(), 3000);
       }
     }
   } catch {}
