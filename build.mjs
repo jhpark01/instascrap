@@ -186,6 +186,8 @@ function renderHtml(posts) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ff4d79">
+<link rel="manifest" href="manifest.json">
 <title>인스타 스크랩북 (${posts.length}개)</title>
 <style>
   :root {
@@ -918,7 +920,25 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
 });
 
 render();
+checkSyncStatus();
 
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+
+// 모바일 공유하기(Web Share Target / 단축어)로 진입 시 자동으로 추가 창 열기
+const params = new URLSearchParams(location.search);
+const sharedRaw = [params.get('url'), params.get('text'), params.get('title')].filter(Boolean).join(' ');
+if (sharedRaw) {
+  const urlMatch = sharedRaw.match(/https?:\/\/[^\s]+/);
+  if (urlMatch) {
+    document.getElementById('addUrl').value = urlMatch[0];
+    document.getElementById('addMemo').value = sharedRaw.replace(urlMatch[0], '').trim();
+    document.getElementById('addModal').showModal();
+    document.getElementById('addMemo').focus();
+    history.replaceState({}, '', location.pathname);
+  }
+}
 let wasServerRunning = false;
 async function checkSyncStatus() {
   const el = document.getElementById('syncStatus');

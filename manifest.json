@@ -1,0 +1,27 @@
+{
+  "name": "인스타 스크랩북",
+  "short_name": "인스타스크랩",
+  "start_url": "/instascrap/",
+  "scope": "/instascrap/",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#ff4d79",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/174/174855.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "share_target": {
+    "action": "/instascrap/",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
