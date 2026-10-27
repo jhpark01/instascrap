@@ -13604,5 +13604,25 @@
     "localVideo": "",
     "driveVideo": "",
     "isVideo": false
+  },
+  {
+    "shortcode": "De-hSpbI_fo",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/De-hSpbI_fo/?srtk=aTZjYzRiZDhvcnZj",
+    "date": "2026년 10월 27일 오전 10:18",
+    "imgIndex": 1,
+    "memo": "#노래발성",
+    "owner": "vocalmanual",
+    "caption": "두성은 정말 머리에서 내는 소리일까요? 🤔\n\n이름 때문에 머리에서 소리를 만들어야 한다고 생각하기 쉽지만, 두성에서도 소리가 만들어지는 곳은 성대입니다.\n\n성대의 진동으로 만들어진 소리가 성도를 지나면서 우리는 여러 가지 진동과 공명 감각을 느낍니다.\n\n“머리로 보내세요”라는 이미지와 실제 소리가 만들어지는 원리를 구분해 보세요.\n\n#발성사용설명서 #두성 #가성 #발성 #공명 #보컬트레이닝",
+    "localImages": [
+      "images/De-hSpbI_fo_1.jpg"
+    ],
+    "localVideo": "videos/De-hSpbI_fo.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1ImMPsahLNDN4zO85j1JO1qQCy7deRAbn=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1LQwt4wyM5nvZGPn8qiT7WIClsiK7BRdN/preview"
   }
 ]
