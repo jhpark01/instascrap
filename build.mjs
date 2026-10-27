@@ -220,6 +220,27 @@ function renderHtml(posts) {
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
     padding: 14px 20px;
+    transition: transform 0.25s ease;
+  }
+  header.header-hidden {
+    transform: translateY(-100%);
+  }
+  @media (max-width: 768px) {
+    header { padding: 10px 12px; }
+    .toolbar { gap: 6px; }
+    .title { font-size: 15px; margin-right: 4px; }
+    .search { min-width: 100%; order: 10; padding: 7px 11px; font-size: 13px; }
+    .btn { padding: 6px 9px; font-size: 12px; }
+    .tag-bar {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tag-bar::-webkit-scrollbar { display: none; }
+    .tag-chip { flex-shrink: 0; }
+    .grid { padding: 0 12px 48px; margin: 12px auto; gap: 14px; grid-template-columns: 1fr; }
   }
   .toolbar {
     max-width: 1440px;
@@ -1025,6 +1046,17 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
 });
 
 let wasServerRunning = false;
+let lastScrollY = window.scrollY;
+const headerEl = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const curY = window.scrollY;
+  if (curY > 70 && curY > lastScrollY + 6) {
+    headerEl.classList.add('header-hidden');
+  } else if (curY < lastScrollY - 6 || curY <= 50) {
+    headerEl.classList.remove('header-hidden');
+  }
+  lastScrollY = curY;
+}, { passive: true });
 render();
 checkSyncStatus();
 
