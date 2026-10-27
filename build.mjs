@@ -8,6 +8,7 @@ const IMG_DIR = path.join(OUT_DIR, 'images');
 const VID_DIR = path.join(OUT_DIR, 'videos');
 const CACHE_FILE = path.join(OUT_DIR, 'data.json');
 const DELETED_FILE = path.join(OUT_DIR, 'deleted.json');
+const DRIVE_STATS_FILE = path.join(OUT_DIR, 'drive-stats.json');
 const HTML_FILE = path.join(OUT_DIR, 'index.html');
 
 fs.mkdirSync(IMG_DIR, { recursive: true });
@@ -181,6 +182,11 @@ async function downloadImage(url, destPath) {
 
 function renderHtml(posts) {
   const jsonSafe = JSON.stringify(posts).replace(/</g, '\\u003c');
+  let driveStats = {};
+  if (fs.existsSync(DRIVE_STATS_FILE)) {
+    try { driveStats = JSON.parse(fs.readFileSync(DRIVE_STATS_FILE, 'utf8')); } catch {}
+  }
+  const statsSafe = JSON.stringify(driveStats).replace(/</g, '\\u003c');
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -530,6 +536,7 @@ function renderHtml(posts) {
 </dialog>
 <script>
 const POSTS = ${jsonSafe};
+const DRIVE_STATS = ${statsSafe};
 const starred = new Set(JSON.parse(localStorage.getItem('ig_starred') || '[]'));
 const deleted = new Set(JSON.parse(localStorage.getItem('ig_deleted') || '[]'));
 const customMemos = JSON.parse(localStorage.getItem('ig_memos') || '{}');
@@ -1039,11 +1046,26 @@ if (sharedRaw) {
     history.replaceState({}, '', location.pathname);
   }
 }
+function fmtBytes(b) {
+  if (!b) return '0MB';
+  const tb = b / (1024 ** 4);
+  if (tb >= 1) return tb.toFixed(1) + 'TB';
+  const gb = b / (1024 ** 3);
+  if (gb >= 1) return gb.toFixed(2) + 'GB';
+  return (b / (1024 ** 2)).toFixed(0) + 'MB';
+}
 async function checkSyncStatus() {
   const el = document.getElementById('syncStatus');
   const activePosts = POSTS.filter(p => !deleted.has(p.shortcode) && p.localImages?.length > 0);
   const syncedPosts = activePosts.filter(p => p.driveImages?.length > 0);
   const pendingCount = activePosts.length - syncedPosts.length;
+  const usageShort = DRIVE_STATS.scrapBytes
+    ? ' · 📦 ' + fmtBytes(DRIVE_STATS.scrapBytes) + (DRIVE_STATS.total ? ' (전체 ' + fmtBytes(DRIVE_STATS.used) + '/' + fmtBytes(DRIVE_STATS.total) + ')' : '')
+    : '';
+  if (DRIVE_STATS.scrapBytes) {
+    el.title = '인스타 스크랩 폴더: ' + fmtBytes(DRIVE_STATS.scrapBytes) + ' (' + (DRIVE_STATS.fileCount || 0) + '개 파일)'
+      + (DRIVE_STATS.total ? '\\n구글 드라이브 전체 사용량: ' + fmtBytes(DRIVE_STATS.used) + ' / ' + fmtBytes(DRIVE_STATS.total) + ' (여유 ' + fmtBytes(DRIVE_STATS.free) + ')' : '');
+  }
   try {
     const r = await fetch('https://api.github.com/repos/jhpark01/instascrap/actions/runs?per_page=1', { cache: 'no-store' });
     if (r.ok) {
@@ -1053,7 +1075,7 @@ async function checkSyncStatus() {
         wasServerRunning = true;
         el.style.background = 'rgba(255, 170, 0, 0.18)';
         el.style.color = '#ffaa00';
-        el.textContent = '🔄 서버 업로드 진행 중...' + (pendingCount > 0 ? ' (대기 ' + pendingCount + '건)' : '');
+        el.textContent = '🔄 서버 동기화 진행 중...' + (pendingCount > 0 ? ' (대기 ' + pendingCount + '건)' : '') + usageShort;
         setTimeout(checkSyncStatus, 8000);
         return;
       } else if (wasServerRunning) {
@@ -1065,11 +1087,11 @@ async function checkSyncStatus() {
   if (pendingCount > 0) {
     el.style.background = 'rgba(255, 170, 0, 0.18)';
     el.style.color = '#ffaa00';
-    el.textContent = '⏳ 드라이브 업로드 중 (' + syncedPosts.length + '/' + activePosts.length + ' 완료, 남은 ' + pendingCount + '건)';
+    el.textContent = '⏳ 드라이브 업로드 중 (' + syncedPosts.length + '/' + activePosts.length + ' 완료, 남은 ' + pendingCount + '건)' + usageShort;
   } else {
     el.style.background = 'rgba(46, 204, 113, 0.16)';
     el.style.color = '#2ecc71';
-    el.textContent = '☁️ 드라이브 동기화 완료 (' + syncedPosts.length + '건)';
+    el.textContent = '☁️ 드라이브 동기화 완료 (' + syncedPosts.length + '건)' + usageShort;
   }
 }
 checkSyncStatus();
@@ -1196,7 +1218,7 @@ export async function downloadPost(item) {
   });
 }
 
-export { OUT_DIR, CACHE_FILE, DELETED_FILE, HTML_FILE, fetchEmbed, downloadImage, renderHtml };
+export { OUT_DIR, CACHE_FILE, DELETED_FILE, DRIVE_STATS_FILE, HTML_FILE, fetchEmbed, downloadImage, renderHtml };
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();

@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { OUT_DIR, CACHE_FILE, DELETED_FILE, HTML_FILE, downloadPost, renderHtml } from './build.mjs';
-import { syncDrive } from './sync-drive.mjs';
+import { syncDrive, deleteFromDrive } from './sync-drive.mjs';
 
 const ENV_FILE = path.join(OUT_DIR, '.env');
 const OFFSET_FILE = path.join(OUT_DIR, '.tg_offset');
@@ -161,6 +161,7 @@ if (!IS_ONCE) {
           posts.splice(idx, 1);
           savePosts(posts);
         }
+        deleteFromDrive(shortcode);
         console.log(`[삭제] ${shortcode}`);
       } else if (req.url === '/restore') {
         delSet.delete(shortcode);
@@ -216,7 +217,19 @@ if (process.env.INPUT_ACTION) {
     delSet.add(inCode);
     saveDeletedSet(delSet);
     const idx = posts.findIndex(p => p.shortcode === inCode);
-    if (idx !== -1) { posts.splice(idx, 1); savePosts(posts); }
+    if (idx !== -1) {
+      for (const rel of posts[idx].localImages || []) {
+        const pth = path.join(OUT_DIR, rel);
+        if (fs.existsSync(pth)) try { fs.unlinkSync(pth); } catch {}
+      }
+      if (posts[idx].localVideo) {
+        const vpth = path.join(OUT_DIR, posts[idx].localVideo);
+        if (fs.existsSync(vpth)) try { fs.unlinkSync(vpth); } catch {}
+      }
+      posts.splice(idx, 1);
+      savePosts(posts);
+    }
+    deleteFromDrive(inCode);
   } else if (act === 'restore' && inCode) {
     delSet.delete(inCode);
     saveDeletedSet(delSet);
