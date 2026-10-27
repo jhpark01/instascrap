@@ -1,0 +1,7 @@
+images/
+videos/
+.env
+rclone.exe
+rclone.conf
+KakaoTalkChats.txt
+node_modules/
