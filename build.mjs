@@ -919,6 +919,7 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
   }
 });
 
+let wasServerRunning = false;
 render();
 checkSyncStatus();
 
@@ -930,7 +931,7 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
 const params = new URLSearchParams(location.search);
 const sharedRaw = [params.get('url'), params.get('text'), params.get('title')].filter(Boolean).join(' ');
 if (sharedRaw) {
-  const urlMatch = sharedRaw.match(/https?:\/\/[^\s]+/);
+  const urlMatch = sharedRaw.match(new RegExp('https?://\\\\S+'));
   if (urlMatch) {
     document.getElementById('addUrl').value = urlMatch[0];
     document.getElementById('addMemo').value = sharedRaw.replace(urlMatch[0], '').trim();
@@ -939,7 +940,6 @@ if (sharedRaw) {
     history.replaceState({}, '', location.pathname);
   }
 }
-let wasServerRunning = false;
 async function checkSyncStatus() {
   const el = document.getElementById('syncStatus');
   const activePosts = POSTS.filter(p => !deleted.has(p.shortcode) && p.localImages?.length > 0);
