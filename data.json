@@ -13,7 +13,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DZo0fedRY2o",
@@ -1111,7 +1112,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DaMsXSTCjW0",
@@ -2074,7 +2076,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DafcPqIJwfV",
@@ -2993,7 +2996,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "Day1d4pjEWV",
@@ -3137,7 +3141,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "Da71ClCE1st",
@@ -3559,7 +3564,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "yt_jjdilcpLJF4",
@@ -3575,7 +3581,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DacicZjGBAg",
@@ -4888,7 +4895,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "yt_wdPJoJ5HQ_M",
@@ -4904,7 +4912,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DbQd-VIkzwv",
@@ -5880,7 +5889,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DbXX3QbEz5j",
@@ -6195,7 +6205,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DbvHKKnHYXg",
@@ -8509,7 +8520,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DcLUpVdFMQ2",
@@ -11331,7 +11343,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DdngZlfDzYO",
@@ -12082,7 +12095,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "Dd_AosoCfuR",
@@ -12198,7 +12212,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DeHhyjymjRl",
@@ -12232,7 +12247,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DeF9_wPD_En",
@@ -12256,7 +12272,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DeHfqsKkwk-",
@@ -12287,7 +12304,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DeG3G5zEjGr",
@@ -12305,7 +12323,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DeRP9QqM6aA",
@@ -12446,7 +12465,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DeX1aqAT1D8",
@@ -12574,9 +12594,10 @@
       "images/DeY46sdjzeq_7.jpg",
       "images/DeY46sdjzeq_8.jpg"
     ],
-    "localVideo": "",
+    "localVideo": "videos/DeY46sdjzeq.mp4",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DeY4hx-jxX6",
@@ -12598,7 +12619,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "Dej0VadSA0J",
@@ -12631,7 +12653,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DeKKwePE491",
@@ -12651,7 +12674,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "yt_pedhmiylOL4",
@@ -12667,7 +12691,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": true
+    "isVideo": true,
+    "videoChecked": true
   },
   {
     "shortcode": "DevVIwMqYp5",
@@ -13123,7 +13148,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DeJhO8PlEeb",
@@ -13147,7 +13173,8 @@
     ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "De8FUYEE1wW",
