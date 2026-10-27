@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { OUT_DIR, CACHE_FILE, HTML_FILE, renderHtml } from './build.mjs';
 
 const RCLONE = process.platform === 'win32' ? path.join(OUT_DIR, 'rclone.exe') : 'rclone';
@@ -78,7 +79,7 @@ export function syncDrive(singleShortcode = null) {
   }
 }
 
-if (import.meta.url === `file:///${process.argv[1].replace(/\\/g, '/')}`) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   ensureDriveAuth();
   syncDrive();
 }

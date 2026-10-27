@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const OUT_DIR = import.meta.dirname || 'd:\\workspace\\instascrap';
 const CHAT_FILE = process.argv[2] || path.join(OUT_DIR, 'KakaoTalkChats.txt');
@@ -746,9 +747,11 @@ async function main() {
     while (queue.length) {
       const item = queue.shift();
       const cached = cache[item.shortcode];
-      const hasDrive = cached && cached.driveImages?.length > 0;
-      const imgsOk = hasDrive || (cached && cached.localImages?.length && cached.localImages.every(rel => fs.existsSync(path.join(OUT_DIR, rel))));
-      const needsVid = !hasDrive && (item.kind === 'reel' || cached?.isVideo) && item.kind !== 'youtube' && !cached?.videoChecked;
+      const hasDriveImgs = cached && cached.driveImages?.length > 0;
+      const imgsOk = hasDriveImgs || (cached && cached.localImages?.length && cached.localImages.every(rel => fs.existsSync(path.join(OUT_DIR, rel))));
+      const isIgVideo = (item.kind === 'reel' || cached?.isVideo) && item.kind !== 'youtube';
+      const hasVid = (cached && cached.driveVideo) || (cached && cached.localVideo && fs.existsSync(path.join(OUT_DIR, cached.localVideo)));
+      const needsVid = isIgVideo && !hasVid;
       if (imgsOk && !needsVid) {
         Object.assign(item, {
           owner: cached.owner,
@@ -834,6 +837,6 @@ export async function downloadPost(item) {
 
 export { OUT_DIR, CACHE_FILE, DELETED_FILE, HTML_FILE, fetchEmbed, downloadImage, renderHtml };
 
-if (import.meta.url === `file:///${process.argv[1].replace(/\\/g, '/')}`) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
 }
