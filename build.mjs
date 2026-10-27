@@ -842,7 +842,7 @@ function buildCard(p) {
     const hasDrive = p.driveImages?.length > 0;
     const pendingDrive = !isLocal && hasLocal && !hasDrive;
     const imgs = (!isLocal && hasDrive) ? p.driveImages : (isLocal ? (p.localImages || []) : []);
-    let idx = Math.min(Math.max((p.imgIndex || 1) - 1, 0), Math.max(imgs.length - 1, 0));
+    let idx = 0;
 
     const card = document.createElement('article');
     card.className = 'card';
