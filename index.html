@@ -134,7 +134,7 @@
     color: var(--muted);
     margin-top: 4px;
   }
-  .star-btn, .del-btn {
+  .star-btn, .del-btn, .share-btn {
     background: none;
     border: none;
     color: var(--muted);
@@ -144,6 +144,7 @@
     line-height: 1;
   }
   .star-btn.starred { color: #ffcc00; }
+  .share-btn:hover { color: var(--accent); }
   .del-btn:hover { color: #ff4d4f; }
   .memo { cursor: pointer; }
   .memo:hover { text-decoration: underline; }
@@ -672,6 +673,32 @@ function render() {
     actions.style.display = 'flex';
     actions.style.alignItems = 'center';
 
+    const sharePost = async (btnEl, copiedLabel) => {
+      const shareTitle = cleanMemo || firstCaptionLine.slice(0, 40) || '인스타 스크랩';
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: shareTitle, url: p.url });
+          return;
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+        }
+      }
+      try {
+        await navigator.clipboard.writeText(p.url);
+        const orig = btnEl.textContent;
+        btnEl.textContent = copiedLabel;
+        setTimeout(() => { btnEl.textContent = orig; }, 1500);
+      } catch {
+        prompt('아래 원본 링크를 복사해 주세요:', p.url);
+      }
+    };
+
+    const shareBtn = document.createElement('button');
+    shareBtn.className = 'share-btn';
+    shareBtn.textContent = '📤';
+    shareBtn.title = '원본 링크 공유하기';
+    shareBtn.onclick = () => sharePost(shareBtn, '✅');
+
     const starBtn = document.createElement('button');
     starBtn.className = 'star-btn' + (starred.has(p.shortcode) ? ' starred' : '');
     starBtn.textContent = '★';
@@ -702,7 +729,7 @@ function render() {
       checkSyncStatus();
     };
 
-    actions.append(starBtn, delBtn);
+    actions.append(shareBtn, starBtn, delBtn);
     head.append(headLeft, actions);
 
     const viewer = document.createElement('div');
@@ -842,12 +869,22 @@ function render() {
     const slideInfo = document.createElement('span');
     slideInfo.style.color = '#949ba8';
     slideInfo.textContent = imgs.length > 1 ? ('총 ' + imgs.length + '장 (클릭 시 전체보기)') : '';
+    const footRight = document.createElement('div');
+    footRight.style.display = 'flex';
+    footRight.style.alignItems = 'center';
+    footRight.style.gap = '10px';
+    const footShareBtn = document.createElement('button');
+    footShareBtn.className = 'more-btn';
+    footShareBtn.style.fontWeight = '600';
+    footShareBtn.textContent = '📤 공유';
+    footShareBtn.onclick = () => sharePost(footShareBtn, '✅ 링크 복사됨');
     const link = document.createElement('a');
     link.href = p.url;
     link.target = '_blank';
     link.rel = 'noopener';
     link.textContent = p.kind === 'youtube' ? '유튜브 원본 열기 ↗' : '인스타 원본 열기 ↗';
-    foot.append(slideInfo, link);
+    footRight.append(footShareBtn, link);
+    foot.append(slideInfo, footRight);
     body.appendChild(foot);
 
     card.append(head, viewer, body);
