@@ -597,8 +597,8 @@ function renderHtml(posts) {
   <div id="modalBody" class="modal-imgs"></div>
 </dialog>
 <script>
-const POSTS = ${jsonSafe};
-const DRIVE_STATS = ${statsSafe};
+let POSTS = ${jsonSafe};
+let DRIVE_STATS = ${statsSafe};
 const starred = new Set(JSON.parse(localStorage.getItem('ig_starred') || '[]'));
 const deleted = new Set(JSON.parse(localStorage.getItem('ig_deleted') || '[]'));
 const customMemos = JSON.parse(localStorage.getItem('ig_memos') || '{}');
@@ -779,6 +779,8 @@ function openTagEditor(p, mode = 'tag') {
   inp.focus();
 }
 
+const cardCache = new Map();
+
 function render() {
   renderTagBar();
   const q = query.trim().toLowerCase();
@@ -799,9 +801,43 @@ function render() {
   const activeTotal = POSTS.filter(p => !deleted.has(p.shortcode)).length;
   document.getElementById('count').textContent = list.length + ' / ' + activeTotal + '개';
   const grid = document.getElementById('grid');
-  grid.innerHTML = '';
 
-  for (const p of list) {
+  // 표시 대상이 아닌 카드는 DOM에서 제거
+  const visibleCodes = new Set(list.map(p => p.shortcode));
+  for (const child of [...grid.children]) {
+    if (!visibleCodes.has(child.dataset.code)) child.remove();
+  }
+
+  for (let i = 0; i < list.length; i++) {
+    const p = list[i];
+    const sig = JSON.stringify([
+      p.shortcode,
+      p.memo || '',
+      p.caption || '',
+      p.driveImages || [],
+      p.driveVideo || '',
+      p.localImages || [],
+      p.localVideo || '',
+      starred.has(p.shortcode),
+      deleted.has(p.shortcode)
+    ]);
+    let cached = cardCache.get(p.shortcode);
+    if (!cached || cached.sig !== sig) {
+      const card = buildCard(p);
+      card.dataset.code = p.shortcode;
+      if (cached?.el?.parentNode === grid) {
+        grid.replaceChild(card, cached.el);
+      }
+      cached = { el: card, sig };
+      cardCache.set(p.shortcode, cached);
+    }
+    if (grid.children[i] !== cached.el) {
+      grid.insertBefore(cached.el, grid.children[i] || null);
+    }
+  }
+}
+
+function buildCard(p) {
     const hasLocal = p.localImages?.length > 0;
     const hasDrive = p.driveImages?.length > 0;
     const pendingDrive = !isLocal && hasLocal && !hasDrive;
@@ -1077,8 +1113,7 @@ function render() {
     body.appendChild(foot);
 
     card.append(head, viewer, body);
-    grid.appendChild(card);
-  }
+    return card;
 }
 
 document.getElementById('q').addEventListener('input', e => {
@@ -1144,7 +1179,8 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
     }).catch(() => null);
     if (res?.ok) {
       document.getElementById('addModal').close();
-      location.reload();
+      await refreshData();
+      checkSyncStatus();
     } else {
       alert('로컬 봇 서버(start-bot.bat)가 실행 중인지 확인해 주세요.');
     }
@@ -1152,7 +1188,8 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
     const ok = await dispatchGitHub({ action: 'add', url, memo, shortcode: '' }, true);
     if (ok) {
       document.getElementById('addModal').close();
-      alert('✅ 등록 요청 완료! 약 1분 뒤 GitHub 서버가 구글 드라이브 업로드 및 페이지 갱신을 완료합니다.');
+      setTimeout(checkSyncStatus, 2500);
+      alert('✅ 등록 요청 완료! 약 1분 뒤 페이지 새로고침 없이 새 스크랩이 화면에 자동으로 추가됩니다.');
     }
   }
 });
@@ -1176,7 +1213,6 @@ window.addEventListener('scroll', () => {
   lastScrollY = curY;
 }, { passive: true });
 render();
-checkSyncStatus();
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -1196,6 +1232,46 @@ if (sharedRaw) {
     history.replaceState({}, '', location.pathname);
   }
 }
+async function fetchJsonLive(fileName) {
+  const ts = '?t=' + Date.now();
+  if (!isLocal) {
+    try {
+      const r = await fetch('https://raw.githubusercontent.com/jhpark01/instascrap/main/' + fileName + ts, { cache: 'no-store' });
+      if (r.ok) return await r.json();
+    } catch {}
+  }
+  if (location.protocol.startsWith('http')) {
+    const r = await fetch(fileName + ts, { cache: 'no-store' });
+    if (r.ok) return await r.json();
+  }
+  return null;
+}
+
+async function refreshData() {
+  if (!location.protocol.startsWith('http')) return;
+  try {
+    const [nextPosts, nextStats, nextDeleted] = await Promise.all([
+      fetchJsonLive('data.json').catch(() => null),
+      fetchJsonLive('drive-stats.json').catch(() => null),
+      fetchJsonLive('deleted.json').catch(() => null)
+    ]);
+    if (nextStats && nextStats.scrapBytes !== undefined) {
+      DRIVE_STATS = nextStats;
+    }
+    if (Array.isArray(nextDeleted)) {
+      for (const code of nextDeleted) deleted.add(code);
+      saveDeleted();
+    }
+    if (Array.isArray(nextPosts) && nextPosts.length > 0) {
+      for (const p of nextPosts) {
+        if (customMemos[p.shortcode] !== undefined) p.memo = customMemos[p.shortcode];
+      }
+      POSTS = nextPosts;
+      render();
+    }
+  } catch {}
+}
+
 function fmtBytes(b) {
   if (!b) return '0MB';
   const tb = b / (1024 ** 4);
@@ -1230,21 +1306,27 @@ async function checkSyncStatus() {
         return;
       } else if (wasServerRunning) {
         wasServerRunning = false;
-        setTimeout(() => location.reload(), 3000);
+        await refreshData();
       }
     }
   } catch {}
-  if (pendingCount > 0) {
+  const activeAfter = POSTS.filter(p => !deleted.has(p.shortcode) && p.localImages?.length > 0);
+  const syncedAfter = activeAfter.filter(p => p.driveImages?.length > 0);
+  const pendingAfter = activeAfter.length - syncedAfter.length;
+  const usageAfter = DRIVE_STATS.scrapBytes
+    ? ' · 📦 ' + fmtBytes(DRIVE_STATS.scrapBytes) + (DRIVE_STATS.total ? ' (전체 ' + fmtBytes(DRIVE_STATS.used) + '/' + fmtBytes(DRIVE_STATS.total) + ')' : '')
+    : '';
+  if (pendingAfter > 0) {
     el.style.background = 'rgba(255, 170, 0, 0.18)';
     el.style.color = '#ffaa00';
-    el.textContent = '⏳ 드라이브 업로드 중 (' + syncedPosts.length + '/' + activePosts.length + ' 완료, 남은 ' + pendingCount + '건)' + usageShort;
+    el.textContent = '⏳ 드라이브 업로드 중 (' + syncedAfter.length + '/' + activeAfter.length + ' 완료, 남은 ' + pendingAfter + '건)' + usageAfter;
   } else {
     el.style.background = 'rgba(46, 204, 113, 0.16)';
     el.style.color = '#2ecc71';
-    el.textContent = '☁️ 드라이브 동기화 완료 (' + syncedPosts.length + '건)' + usageShort;
+    el.textContent = '☁️ 드라이브 동기화 완료 (' + syncedAfter.length + '건)' + usageAfter;
   }
 }
-checkSyncStatus();
+refreshData().then(checkSyncStatus);
 </script>
 </body>
 </html>`;
