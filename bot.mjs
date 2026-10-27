@@ -115,12 +115,35 @@ if (!IS_ONCE) {
 
   let body = '';
   req.on('data', chunk => { body += chunk; });
-  req.on('end', () => {
+  req.on('end', async () => {
     try {
-      const { shortcode, memo } = JSON.parse(body || '{}');
-      if (!shortcode) { res.writeHead(400); res.end(); return; }
+      const { shortcode, memo, url } = JSON.parse(body || '{}');
       const posts = loadPosts();
       const delSet = loadDeleted();
+
+      if (req.url === '/add' && url) {
+        const ig = url.match(igRe);
+        const yt = !ig && url.match(ytRe);
+        if (!ig && !yt) { res.writeHead(400); res.end(); return; }
+        const code = ig ? ig[2] : `yt_${yt[1]}`;
+        const kind = ig ? (ig[1] === 'p' ? 'post' : 'reel') : 'youtube';
+        const idxMatch = (ig ? ig[3] : '').match(/[?&]img_index=(\d+)/);
+        let item = posts.find(p => p.shortcode === code);
+        if (!item) {
+          item = { shortcode: code, kind, url, date: formatKstDate(), imgIndex: idxMatch ? parseInt(idxMatch[1], 10) : 1, memo: memo || '' };
+          posts.push(item);
+        } else if (memo) {
+          item.memo = memo;
+        }
+        await downloadPost(item);
+        savePosts(posts);
+        syncDrive(code);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true, shortcode: code }));
+        return;
+      }
+
+      if (!shortcode) { res.writeHead(400); res.end(); return; }
 
       if (req.url === '/delete') {
         delSet.add(shortcode);
@@ -161,6 +184,47 @@ if (!IS_ONCE) {
 }
 
 console.log('🤖 인스타그램 스크랩 텔레그램 봇 대기 중... (인스타 링크와 메모를 보내주세요)');
+
+// GitHub Actions workflow_dispatch로 직접 전달된 입력(추가/삭제/메모수정) 처리
+if (process.env.INPUT_ACTION) {
+  const act = process.env.INPUT_ACTION;
+  const inUrl = (process.env.INPUT_URL || '').trim();
+  const inMemo = (process.env.INPUT_MEMO || '').trim();
+  const inCode = (process.env.INPUT_SHORTCODE || '').trim();
+  const posts = loadPosts();
+  const delSet = loadDeleted();
+
+  if (act === 'add' && inUrl) {
+    const ig = inUrl.match(igRe);
+    const yt = !ig && inUrl.match(ytRe);
+    if (ig || yt) {
+      const code = ig ? ig[2] : `yt_${yt[1]}`;
+      const kind = ig ? (ig[1] === 'p' ? 'post' : 'reel') : 'youtube';
+      const idxMatch = (ig ? ig[3] : '').match(/[?&]img_index=(\d+)/);
+      let item = posts.find(p => p.shortcode === code);
+      if (!item) {
+        item = { shortcode: code, kind, url: inUrl, date: formatKstDate(), imgIndex: idxMatch ? parseInt(idxMatch[1], 10) : 1, memo: inMemo };
+        posts.push(item);
+      } else if (inMemo) {
+        item.memo = inMemo;
+      }
+      await downloadPost(item);
+      savePosts(posts);
+      syncDrive(code);
+    }
+  } else if (act === 'delete' && inCode) {
+    delSet.add(inCode);
+    saveDeletedSet(delSet);
+    const idx = posts.findIndex(p => p.shortcode === inCode);
+    if (idx !== -1) { posts.splice(idx, 1); savePosts(posts); }
+  } else if (act === 'restore' && inCode) {
+    delSet.delete(inCode);
+    saveDeletedSet(delSet);
+  } else if (act === 'memo' && inCode) {
+    const target = posts.find(p => p.shortcode === inCode);
+    if (target) { target.memo = inMemo; savePosts(posts); }
+  }
+}
 
 while (true) {
   try {

@@ -6,6 +6,23 @@ on:
   schedule:
     - cron: '*/15 * * * *'
   workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action (add, delete, restore, memo)'
+        required: false
+        default: ''
+      url:
+        description: 'Instagram or YouTube URL'
+        required: false
+        default: ''
+      memo:
+        description: 'Memo text'
+        required: false
+        default: ''
+      shortcode:
+        description: 'Target shortcode'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -25,15 +42,16 @@ jobs:
           sudo apt-get update && sudo apt-get install -y rclone
           printf '%s\n' "${{ secrets.RCLONE_CONF }}" > rclone.conf
 
-      - name: Initial KakaoTalk sync & Google Drive upload (runs only for unmapped items)
-        run: |
-          node build.mjs
-          node sync-drive.mjs
-
-      - name: Poll Telegram, upload new media to Google Drive, rebuild HTML
+      - name: Poll Telegram or process web input, upload media to Google Drive, rebuild HTML
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        run: node bot.mjs --once
+          INPUT_ACTION: ${{ github.event.inputs.action }}
+          INPUT_URL: ${{ github.event.inputs.url }}
+          INPUT_MEMO: ${{ github.event.inputs.memo }}
+          INPUT_SHORTCODE: ${{ github.event.inputs.shortcode }}
+        run: |
+          node bot.mjs --once
+          node sync-drive.mjs
 
       - name: Commit and push updated web-book
         run: |

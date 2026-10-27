@@ -445,10 +445,22 @@ function renderHtml(posts) {
     <button class="btn" data-filter="starred">⭐ 즐겨찾기</button>
     <button class="btn" data-filter="trash">🗑️ 휴지통</button>
     <button id="sortBtn" class="btn" title="정렬 순서 변경">🔽 최신순</button>
+    <button id="addBtn" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);">➕ 링크 추가</button>
     <span id="count" class="count"></span>
   </div>
 </header>
 <main id="grid" class="grid"></main>
+<dialog id="addModal" style="width:min(480px,92vw);">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <strong>➕ 인스타 / 유튜브 링크 추가</strong>
+    <button class="btn" onclick="document.getElementById('addModal').close()">닫기</button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <input id="addUrl" class="search" type="url" placeholder="https://www.instagram.com/p/... 또는 유튜브 링크" />
+    <input id="addMemo" class="search" type="text" placeholder="메모 / 키워드 (예: 발성연습, 맛집 등)" />
+    <button id="addSubmit" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);padding:11px;">저장 및 스크랩 실행</button>
+  </div>
+</dialog>
 <dialog id="modal">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:16px;">
     <strong id="modalTitle"></strong>
@@ -475,7 +487,41 @@ function saveStars() {
 function saveDeleted() {
   localStorage.setItem('ig_deleted', JSON.stringify([...deleted]));
 }
+function dispatchGitHub(inputs, promptIfMissing = false) {
+  let pat = localStorage.getItem('gh_pat') || '';
+  if (!pat && promptIfMissing) {
+    pat = (prompt('GitHub에서 바로 실행하려면 GitHub Personal Access Token (repo/workflow 권한)을 1회 입력해 주세요.\n(브라우저에만 저장되며 외부에 노출되지 않습니다)') || '').trim();
+    if (pat) localStorage.setItem('gh_pat', pat);
+  }
+  if (!pat) return Promise.resolve(false);
+  return fetch('https://api.github.com/repos/jhpark01/instascrap/actions/workflows/scrap.yml/dispatches', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/vnd.github+json',
+      'Authorization': 'Bearer ' + pat,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ ref: 'main', inputs })
+  }).then(r => {
+    if (r.status === 401 || r.status === 403) {
+      localStorage.removeItem('gh_pat');
+      alert('GitHub 토큰 권한이 올바르지 않습니다. 다시 시도해 주세요.');
+      return false;
+    }
+    return r.ok;
+  }).catch(() => false);
+}
+
 function syncApi(action, payload) {
+  if (!isLocal) {
+    dispatchGitHub({
+      action,
+      shortcode: payload.shortcode || '',
+      url: payload.url || '',
+      memo: payload.memo || ''
+    }, action === 'add');
+    return;
+  }
   const base = location.protocol.startsWith('http') ? '' : 'http://127.0.0.1:4077';
   fetch(base + '/' + action, {
     method: 'POST',
@@ -710,6 +756,39 @@ document.getElementById('sortBtn').addEventListener('click', e => {
   newestFirst = !newestFirst;
   e.target.textContent = newestFirst ? '🔽 최신순' : '🔼 오래된순';
   render();
+});
+
+document.getElementById('addBtn').addEventListener('click', () => {
+  document.getElementById('addUrl').value = '';
+  document.getElementById('addMemo').value = '';
+  document.getElementById('addModal').showModal();
+  document.getElementById('addUrl').focus();
+});
+
+document.getElementById('addSubmit').addEventListener('click', async () => {
+  const url = document.getElementById('addUrl').value.trim();
+  const memo = document.getElementById('addMemo').value.trim();
+  if (!url) { alert('링크를 입력해 주세요.'); return; }
+  if (isLocal) {
+    const base = location.protocol.startsWith('http') ? '' : 'http://127.0.0.1:4077';
+    const res = await fetch(base + '/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url, memo })
+    }).catch(() => null);
+    if (res?.ok) {
+      document.getElementById('addModal').close();
+      location.reload();
+    } else {
+      alert('로컬 봇 서버(start-bot.bat)가 실행 중인지 확인해 주세요.');
+    }
+  } else {
+    const ok = await dispatchGitHub({ action: 'add', url, memo, shortcode: '' }, true);
+    if (ok) {
+      document.getElementById('addModal').close();
+      alert('✅ 등록 요청 완료! 약 1분 뒤 GitHub 서버가 구글 드라이브 업로드 및 페이지 갱신을 완료합니다.');
+    }
+  }
 });
 
 render();
