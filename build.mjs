@@ -446,6 +446,7 @@ function renderHtml(posts) {
     <button class="btn" data-filter="trash">🗑️ 휴지통</button>
     <button id="sortBtn" class="btn" title="정렬 순서 변경">🔽 최신순</button>
     <button id="addBtn" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);">➕ 링크 추가</button>
+    <span id="syncStatus" style="font-size:12px;padding:5px 10px;border-radius:99px;background:#1f2430;color:#949ba8;"></span>
     <span id="count" class="count"></span>
   </div>
 </header>
@@ -563,7 +564,10 @@ function render() {
   grid.innerHTML = '';
 
   for (const p of list) {
-    const imgs = (!isLocal && p.driveImages?.length) ? p.driveImages : (p.localImages?.length ? p.localImages : (p.driveImages || []));
+    const hasLocal = p.localImages?.length > 0;
+    const hasDrive = p.driveImages?.length > 0;
+    const pendingDrive = !isLocal && hasLocal && !hasDrive;
+    const imgs = (!isLocal && hasDrive) ? p.driveImages : (isLocal ? (p.localImages || []) : []);
     let idx = Math.min(Math.max((p.imgIndex || 1) - 1, 0), Math.max(imgs.length - 1, 0));
 
     const card = document.createElement('article');
@@ -622,6 +626,7 @@ function render() {
         syncApi('delete', { shortcode: p.shortcode });
       }
       render();
+      checkSyncStatus();
     };
 
     actions.append(starBtn, delBtn);
@@ -697,7 +702,11 @@ function render() {
     } else {
       const noImg = document.createElement('div');
       noImg.className = 'no-img';
-      noImg.innerHTML = '미디어를 불러오지 못했습니다<br><a href="' + p.url + '" target="_blank" rel="noopener" style="color:var(--accent);">원본 링크 바로가기 ↗</a>';
+      if (pendingDrive) {
+        noImg.innerHTML = '⏳ <b>구글 드라이브 업로드 대기/진행 중...</b><br><span style="font-size:12px;">완료되면 이미지가 자동으로 표시됩니다</span><br><br><a href="' + p.url + '" target="_blank" rel="noopener" style="color:var(--accent);">원본 링크 바로가기 ↗</a>';
+      } else {
+        noImg.innerHTML = '미디어를 불러오지 못했습니다<br><a href="' + p.url + '" target="_blank" rel="noopener" style="color:var(--accent);">원본 링크 바로가기 ↗</a>';
+      }
       viewer.appendChild(noImg);
     }
 
@@ -792,6 +801,37 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
 });
 
 render();
+
+async function checkSyncStatus() {
+  const el = document.getElementById('syncStatus');
+  const activePosts = POSTS.filter(p => !deleted.has(p.shortcode) && p.localImages?.length > 0);
+  const syncedPosts = activePosts.filter(p => p.driveImages?.length > 0);
+  const pendingCount = activePosts.length - syncedPosts.length;
+  try {
+    const r = await fetch('https://api.github.com/repos/jhpark01/instascrap/actions/runs?per_page=1');
+    if (r.ok) {
+      const d = await r.json();
+      const run = d.workflow_runs?.[0];
+      if (run && (run.status === 'in_progress' || run.status === 'queued')) {
+        el.style.background = 'rgba(255, 170, 0, 0.18)';
+        el.style.color = '#ffaa00';
+        el.textContent = '🔄 서버 업로드 진행 중...' + (pendingCount > 0 ? ' (대기 ' + pendingCount + '건)' : '');
+        setTimeout(checkSyncStatus, 10000);
+        return;
+      }
+    }
+  } catch {}
+  if (pendingCount > 0) {
+    el.style.background = 'rgba(255, 170, 0, 0.18)';
+    el.style.color = '#ffaa00';
+    el.textContent = '⏳ 드라이브 업로드 중 (' + syncedPosts.length + '/' + activePosts.length + ' 완료, 남은 ' + pendingCount + '건)';
+  } else {
+    el.style.background = 'rgba(46, 204, 113, 0.16)';
+    el.style.color = '#2ecc71';
+    el.textContent = '☁️ 드라이브 동기화 완료 (' + syncedPosts.length + '건)';
+  }
+}
+checkSyncStatus();
 </script>
 </body>
 </html>`;

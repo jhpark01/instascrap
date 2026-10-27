@@ -17,7 +17,15 @@ function runRclone(args, stdio = 'pipe') {
 }
 
 export function isDriveConfigured() {
-  return fs.existsSync(CONF) && fs.readFileSync(CONF, 'utf8').includes('[gdrive]');
+  if (!fs.existsSync(CONF)) return false;
+  let txt = fs.readFileSync(CONF, 'utf8').trim();
+  if (!txt) return false;
+  if (!txt.includes('[gdrive]')) {
+    if (txt.startsWith('{')) txt = `[gdrive]\ntype = drive\ntoken = ${txt}\n`;
+    else txt = `[gdrive]\ntype = drive\n${txt}\n`;
+    fs.writeFileSync(CONF, txt, 'utf8');
+  }
+  return true;
 }
 
 export function ensureDriveAuth() {
