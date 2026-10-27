@@ -11566,26 +11566,6 @@
     "isVideo": false
   },
   {
-    "shortcode": "yt_k5N9NKWewLU",
-    "kind": "youtube",
-    "url": "https://youtu.be/k5N9NKWewLU?si=hJYbaxcgFe6jcT7C",
-    "date": "2026년 9월 23일 오후 10:44",
-    "imgIndex": 1,
-    "memo": "",
-    "owner": "더큐TV_TheQ",
-    "caption": "[전 직업 종합편] 디아블로4 시즌15 입문/복귀 가이드 - 레벨링부터 전쟁 계획, 필터, 룬 워드, 큐빙까지… 한방 총정리!",
-    "localImages": [
-      "images/yt_k5N9NKWewLU_1.jpg"
-    ],
-    "driveImages": [
-      "https://lh3.googleusercontent.com/d/1p3COtkYjAc2XrV7-8L60DHylUYQf5fT7=w1000"
-    ],
-    "localVideo": "",
-    "driveVideo": "",
-    "videoChecked": true,
-    "isVideo": true
-  },
-  {
     "shortcode": "DdngZlfDzYO",
     "kind": "post",
     "url": "https://www.instagram.com/p/DdngZlfDzYO/?img_index=2&stkn=aDBoemRydWYyOTQ0",
@@ -11834,10 +11814,17 @@
       "images/Dd0GbRBmO7r_4.webp",
       "images/Dd0GbRBmO7r_5.webp"
     ],
-    "driveImages": [],
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1nVQLTqjdRGNZW7xuU1xt1ugoIesvWd_X=w1000",
+      "https://lh3.googleusercontent.com/d/1HiYAsAHysHmCGTSi9pFhjWk9ZTRHS_UW=w1000",
+      "https://lh3.googleusercontent.com/d/1N2-Fh3v-L7zY6h0av0xrv4xerA8RAgYz=w1000",
+      "https://lh3.googleusercontent.com/d/1yaYTzckeHcOsSj0u9UfHjraX0eYKJDXn=w1000",
+      "https://lh3.googleusercontent.com/d/1iC5WL0z6acGCma0gSvekcwPNHIsD6xji=w1000"
+    ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "Dd3HiO1jGYZ",
@@ -12280,7 +12267,28 @@
       "images/DeBJFBED2mk_19.jpg",
       "images/DeBJFBED2mk_20.jpg"
     ],
-    "driveImages": [],
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1w5diXeMfd1Pk1ooiQOayPHdAVY1_5kBX=w1000",
+      "https://lh3.googleusercontent.com/d/1uPFagY139NN0gyLdhxFOCAvk7_7OGZ0X=w1000",
+      "https://lh3.googleusercontent.com/d/1mRdXrM-IsAacJD6f9EgC1V-pjJh4F3sD=w1000",
+      "https://lh3.googleusercontent.com/d/1iHvmtkHc0qbLl01AKnPhT-V8aFFxfDhV=w1000",
+      "https://lh3.googleusercontent.com/d/1e52pcIjR2qN1U0YAEQoDsNB1vv_9fjJO=w1000",
+      "https://lh3.googleusercontent.com/d/1Lfy4Z5inhGOpAjvv8mRlGsQQC3W26rRK=w1000",
+      "https://lh3.googleusercontent.com/d/1bzVVF7BlyLeHDdJtwwRcT-5ndqNEhAzO=w1000",
+      "https://lh3.googleusercontent.com/d/1WrEi-lsljuoKn1mgojfsYumnCKEyKSCL=w1000",
+      "https://lh3.googleusercontent.com/d/1_ZxOLc-kORaGwWlTfpcrMyr1fwZHQ2pE=w1000",
+      "https://lh3.googleusercontent.com/d/1BrCHxRk-2H5KQHhn27PPYKDiR489Anb_=w1000",
+      "https://lh3.googleusercontent.com/d/1LeMwb0wdLeE63ZG9GnTf5lkB7TLw-SRU=w1000",
+      "https://lh3.googleusercontent.com/d/1XnzYulgP8xUftuX-p7l4_gpaeCYCbj3G=w1000",
+      "https://lh3.googleusercontent.com/d/18iYejAjAkof_Mu6Urq1jc2hwrtaTatJF=w1000",
+      "https://lh3.googleusercontent.com/d/1FX6ezR6bV4LUiW87xrW9vR27_pPeguhg=w1000",
+      "https://lh3.googleusercontent.com/d/1xbWtt8_Q_96KpwbC-YfCpcA7xKQSzAlC=w1000",
+      "https://lh3.googleusercontent.com/d/1TOOsZ0kDlTPIunPexpLykXQW5h2EJ_1d=w1000",
+      "https://lh3.googleusercontent.com/d/1gWf9HjrMIBddFXiZXTwezDOD0YdBHThz=w1000",
+      "https://lh3.googleusercontent.com/d/1NRUUMGdrzSuFrKpzkf9zAq-Xptka2-mp=w1000",
+      "https://lh3.googleusercontent.com/d/1zpNl1all4ffEiladkPmBBuK0P9WpfspR=w1000",
+      "https://lh3.googleusercontent.com/d/1sTyWMvwLeOu2L9AqD82Nme2meFEy7CxA=w1000"
+    ],
     "localVideo": "",
     "driveVideo": "",
     "videoChecked": true,
