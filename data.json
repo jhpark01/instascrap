@@ -9284,41 +9284,6 @@
     "isVideo": false
   },
   {
-    "shortcode": "DcOcBnZo4tR",
-    "kind": "post",
-    "url": "https://www.instagram.com/p/DcOcBnZo4tR/?img_index=4&igsh=YTZzdDVod2dzdzg2",
-    "date": "2026년 8월 20일 오후 6:23",
-    "imgIndex": 4,
-    "memo": "",
-    "owner": "markppark_",
-    "caption": "더 추천하는 곳 있으시면은 모두가 볼 수 있게 공유해주세요!",
-    "localImages": [
-      "images/DcOcBnZo4tR_1.jpg",
-      "images/DcOcBnZo4tR_2.jpg",
-      "images/DcOcBnZo4tR_3.jpg",
-      "images/DcOcBnZo4tR_4.jpg",
-      "images/DcOcBnZo4tR_5.jpg",
-      "images/DcOcBnZo4tR_6.jpg",
-      "images/DcOcBnZo4tR_7.jpg",
-      "images/DcOcBnZo4tR_8.jpg",
-      "images/DcOcBnZo4tR_9.jpg"
-    ],
-    "driveImages": [
-      "https://lh3.googleusercontent.com/d/1JNEIY_fnqh8HLJE6BVbO-FztRnYVH3dM=w1000",
-      "https://lh3.googleusercontent.com/d/1cjDZ4wrcj6CvpgHEGJLc2nk6vqeL5rmh=w1000",
-      "https://lh3.googleusercontent.com/d/11MFjFjRJAZSeVQc5wvVGRjAXJPDYoRKm=w1000",
-      "https://lh3.googleusercontent.com/d/1bagV4LPTtRv3P_zELA3DTutcFvvXxG6N=w1000",
-      "https://lh3.googleusercontent.com/d/1WTD3OBJxdgSTFShtqRKu2jEcU9UbGvP-=w1000",
-      "https://lh3.googleusercontent.com/d/1Ilrng4PFDDfq7WNK6sye80vjhQnxIn5w=w1000",
-      "https://lh3.googleusercontent.com/d/11KoEG6YikKhLfSRMhBYrmW-j1ReZOZzy=w1000",
-      "https://lh3.googleusercontent.com/d/1QnwLulg7GZP2CU1yktOt-xFksDj6S6Gv=w1000",
-      "https://lh3.googleusercontent.com/d/1jgsJDlOP8timyiPzxOnF0tjd1MCDor-7=w1000"
-    ],
-    "localVideo": "",
-    "driveVideo": "",
-    "isVideo": false
-  },
-  {
     "shortcode": "DcOo6wHCWTA",
     "kind": "post",
     "url": "https://www.instagram.com/p/DcOo6wHCWTA/?img_index=2&igsh=MW05aG41aGJla3ZiYg==",
@@ -10048,10 +10013,24 @@
       "images/DcyYDHOkv8k_11.jpg",
       "images/DcyYDHOkv8k_12.jpg"
     ],
-    "driveImages": [],
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1pcFhU4-pyeUnAwbGe4wF2Qixn58D-syp=w1000",
+      "https://lh3.googleusercontent.com/d/1fT6CpGHC3XbwzGGWuP9rBPlOnY-GVa1Q=w1000",
+      "https://lh3.googleusercontent.com/d/1gczV8C3luUe0Pdn9hn6Y4thrstfVgPaB=w1000",
+      "https://lh3.googleusercontent.com/d/12C4fs4jUDxBUoC9BFPMCQCAJaD6IRuYt=w1000",
+      "https://lh3.googleusercontent.com/d/1sKz4N-dMbS2t6gsGg6VSycDj9q3ynP_8=w1000",
+      "https://lh3.googleusercontent.com/d/1p0vkVH7zgzu92KL2fJacwTVQNFuBQnmX=w1000",
+      "https://lh3.googleusercontent.com/d/1IZ0OeMeKJYIGZQkk3_I54-oED4gk8rPa=w1000",
+      "https://lh3.googleusercontent.com/d/1C__87vq8K340hbiMRrIVRH1L3pW38qcf=w1000",
+      "https://lh3.googleusercontent.com/d/1keKWESS-WekOTuvILDqdpcx4PzPJ819N=w1000",
+      "https://lh3.googleusercontent.com/d/1BY_cQuzyvZCyS32QCHn9WU7_9vTLdTOk=w1000",
+      "https://lh3.googleusercontent.com/d/19GTmGFReeDFPzzIToVI9sTKdv_nHXWha=w1000",
+      "https://lh3.googleusercontent.com/d/1ZO-W8RStbsK_7FkrOekmgv1VgNvNPRiW=w1000"
+    ],
     "localVideo": "",
     "driveVideo": "",
-    "isVideo": false
+    "isVideo": false,
+    "videoChecked": true
   },
   {
     "shortcode": "DcxmojODP3E",
