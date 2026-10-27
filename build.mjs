@@ -1165,7 +1165,7 @@ async function main() {
       const imgsOk = hasDriveImgs || (cached && cached.localImages?.length && cached.localImages.every(rel => fs.existsSync(path.join(OUT_DIR, rel))));
       const isIgVideo = (item.kind === 'reel' || cached?.isVideo) && item.kind !== 'youtube';
       const hasVid = (cached && cached.driveVideo) || (cached && cached.localVideo && fs.existsSync(path.join(OUT_DIR, cached.localVideo)));
-      const needsVid = isIgVideo && !hasVid;
+      const needsVid = isIgVideo && !hasVid && !cached?.videoChecked;
       if (imgsOk && !needsVid) {
         Object.assign(item, {
           memo: cached.memo || item.memo,
@@ -1212,8 +1212,7 @@ async function main() {
         }
       }
       done++;
-      if (done % 25 === 0 || done === items.length) {
-        console.log(`Progress: ${done}/${items.length}`);
+      if (done === items.length) console.log(Progress: /);/${items.length}`);
         fs.writeFileSync(CACHE_FILE, JSON.stringify(items, null, 2), 'utf8');
       }
     }
