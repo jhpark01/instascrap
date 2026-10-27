@@ -393,6 +393,45 @@ function renderHtml(posts) {
     object-fit: contain;
     cursor: pointer;
   }
+  .slide-track {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .slide-track::-webkit-scrollbar { display: none; }
+  .slide-track img {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    scroll-snap-align: center;
+    cursor: pointer;
+  }
+  .top-btn {
+    position: fixed;
+    bottom: 22px;
+    right: 18px;
+    z-index: 40;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+    font-size: 20px;
+    font-weight: 800;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .top-btn.show { display: flex; }
   .nav-btn {
     position: absolute;
     top: 50%;
@@ -523,6 +562,7 @@ function renderHtml(posts) {
   <div id="tagBar" class="tag-bar"></div>
 </header>
 <main id="grid" class="grid"></main>
+<button id="topBtn" class="top-btn" title="맨 위로 이동">↑</button>
 <dialog id="addModal" style="width:min(480px,92vw);">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
     <strong>➕ 인스타 / 유튜브 링크 추가</strong>
@@ -882,44 +922,68 @@ function render() {
       };
       viewer.append(imgEl, playBadge);
     } else if (imgs.length > 0) {
-      const imgEl = document.createElement('img');
-      imgEl.loading = 'lazy';
-      imgEl.referrerPolicy = 'no-referrer';
-      imgEl.src = imgs[idx];
       const isExternalVid = p.kind === 'reel' || p.kind === 'youtube' || p.isVideo;
-      imgEl.title = isExternalVid ? '클릭 시 원본 영상 열기' : '클릭 시 슬라이드 전체보기';
-      imgEl.onclick = () => {
-        if (isExternalVid) window.open(p.url, '_blank', 'noopener');
-        else openModal(p);
-      };
-      viewer.appendChild(imgEl);
+      if (isExternalVid || imgs.length === 1) {
+        const imgEl = document.createElement('img');
+        imgEl.loading = 'lazy';
+        imgEl.referrerPolicy = 'no-referrer';
+        imgEl.src = imgs[idx];
+        imgEl.title = isExternalVid ? '클릭 시 원본 영상 열기' : '클릭 시 크게 보기';
+        imgEl.onclick = () => {
+          if (isExternalVid) window.open(p.url, '_blank', 'noopener');
+          else openModal(p);
+        };
+        viewer.appendChild(imgEl);
+        if (isExternalVid) {
+          const badge = document.createElement('span');
+          badge.className = 'badge';
+          badge.textContent = '↗ 클릭 시 영상 열기';
+          viewer.appendChild(badge);
+        }
+      } else {
+        const track = document.createElement('div');
+        track.className = 'slide-track';
+        for (let i = 0; i < imgs.length; i++) {
+          const sImg = document.createElement('img');
+          sImg.loading = 'lazy';
+          sImg.referrerPolicy = 'no-referrer';
+          sImg.src = imgs[i];
+          sImg.title = '좌우로 밀어서 넘기기 · 클릭 시 전체보기';
+          sImg.onclick = () => openModal(p);
+          track.appendChild(sImg);
+        }
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = (idx + 1) + ' / ' + imgs.length;
 
-      if (isExternalVid) {
-        const badge = document.createElement('span');
-        badge.className = 'badge';
-        badge.textContent = '↗ 클릭 시 영상 열기';
-        viewer.appendChild(badge);
-      } else if (imgs.length > 1) {
-        const badge = document.createElement('span');
-        badge.className = 'badge';
-        const updateSlide = (nextIdx) => {
+        const goToSlide = (nextIdx) => {
           idx = (nextIdx + imgs.length) % imgs.length;
-          imgEl.src = imgs[idx];
+          track.scrollTo({ left: idx * track.clientWidth, behavior: 'smooth' });
           badge.textContent = (idx + 1) + ' / ' + imgs.length;
         };
-        updateSlide(idx);
+        track.addEventListener('scroll', () => {
+          if (!track.clientWidth) return;
+          const cur = Math.round(track.scrollLeft / track.clientWidth);
+          if (cur >= 0 && cur < imgs.length && cur !== idx) {
+            idx = cur;
+            badge.textContent = (idx + 1) + ' / ' + imgs.length;
+          }
+        }, { passive: true });
+        if (idx > 0) {
+          requestAnimationFrame(() => { track.scrollLeft = idx * track.clientWidth; });
+        }
 
         const prev = document.createElement('button');
         prev.className = 'nav-btn prev';
         prev.textContent = '‹';
-        prev.onclick = (e) => { e.stopPropagation(); updateSlide(idx - 1); };
+        prev.onclick = (e) => { e.stopPropagation(); goToSlide(idx - 1); };
 
         const next = document.createElement('button');
         next.className = 'nav-btn next';
         next.textContent = '›';
-        next.onclick = (e) => { e.stopPropagation(); updateSlide(idx + 1); };
+        next.onclick = (e) => { e.stopPropagation(); goToSlide(idx + 1); };
 
-        viewer.append(prev, next, badge);
+        viewer.append(track, prev, next, badge);
       }
     } else {
       const noImg = document.createElement('div');
@@ -1048,12 +1112,18 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
 let wasServerRunning = false;
 let lastScrollY = window.scrollY;
 const headerEl = document.querySelector('header');
+const topBtn = document.getElementById('topBtn');
+topBtn.addEventListener('click', () => {
+  headerEl.classList.remove('header-hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 window.addEventListener('scroll', () => {
   const curY = window.scrollY;
-  if (curY > 70 && curY > lastScrollY + 6) {
-    headerEl.classList.add('header-hidden');
-  } else if (curY < lastScrollY - 6 || curY <= 50) {
+  topBtn.classList.toggle('show', curY > 300);
+  if (curY <= 80) {
     headerEl.classList.remove('header-hidden');
+  } else if (curY > lastScrollY + 6) {
+    headerEl.classList.add('header-hidden');
   }
   lastScrollY = curY;
 }, { passive: true });
