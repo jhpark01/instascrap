@@ -591,6 +591,16 @@ function openTagEditor(p, mode = 'tag') {
 }
 
 const cardCache = new Map();
+let activeVideoReset = null;
+const videoObserver = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) {
+      const v = entry.target.querySelector('video');
+      if (v && !v.paused) v.pause();
+      if (entry.target._stopVideo) entry.target._stopVideo();
+    }
+  }
+}, { threshold: 0.05 });
 
 function render() {
   renderTagBar();
@@ -782,49 +792,80 @@ function buildCard(p) {
       vidEl.preload = 'none';
       if (imgs[0]) vidEl.poster = imgs[0];
       vidEl.src = p.localVideo;
-      viewer.appendChild(vidEl);
-    } else if (!isLocal && p.driveVideo) {
-      const imgEl = document.createElement('img');
-      imgEl.loading = 'lazy';
-      imgEl.referrerPolicy = 'no-referrer';
-      imgEl.src = imgs[0] || '';
-      const playBadge = document.createElement('span');
-      playBadge.className = 'badge';
-      playBadge.style.cursor = 'pointer';
-      playBadge.textContent = '▶ 클릭하여 영상 재생';
-      const playInFrame = () => {
-        viewer.innerHTML = '<iframe src="' + p.driveVideo + '" style="width:100%;height:100%;border:0;" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+      vidEl.onplay = () => {
+        if (activeVideoReset && activeVideoReset !== viewer._stopVideo) activeVideoReset();
+        activeVideoReset = () => { if (!vidEl.paused) vidEl.pause(); };
       };
-      imgEl.onclick = playInFrame;
-      playBadge.onclick = playInFrame;
-      viewer.append(imgEl, playBadge);
-    } else if (imgs.length > 0) {
-      const isExternalVid = p.kind === 'reel' || p.kind === 'youtube' || p.isVideo;
-      if (isExternalVid || imgs.length === 1) {
+      viewer.appendChild(vidEl);
+      videoObserver.observe(viewer);
+    } else if (!isLocal && p.driveVideo) {
+      const mountDrivePoster = () => {
+        viewer.innerHTML = '';
         const imgEl = document.createElement('img');
         imgEl.loading = 'lazy';
         imgEl.referrerPolicy = 'no-referrer';
-        imgEl.src = imgs[idx];
-        imgEl.title = isExternalVid ? '클릭 시 프레임 안에서 영상 재생' : '클릭 시 크게 보기';
-        const playExternalInFrame = () => {
-          const embedSrc = p.kind === 'youtube'
-            ? 'https://www.youtube.com/embed/' + p.shortcode.replace(/^yt_/, '') + '?autoplay=1&playsinline=1'
-            : 'https://www.instagram.com/p/' + p.shortcode + '/embed/';
-          viewer.innerHTML = '<iframe src="' + embedSrc + '" style="width:100%;height:100%;border:0;background:#000;" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen scrolling="no"></iframe>';
+        imgEl.src = imgs[0] || '';
+        const playBadge = document.createElement('span');
+        playBadge.className = 'badge';
+        playBadge.style.cursor = 'pointer';
+        playBadge.textContent = '▶ 클릭하여 영상 재생';
+        const playInFrame = () => {
+          if (activeVideoReset) activeVideoReset();
+          viewer.innerHTML = '<iframe src="' + p.driveVideo + '" style="width:100%;height:100%;border:0;" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+          viewer._stopVideo = () => {
+            viewer._stopVideo = null;
+            if (activeVideoReset === stopFn) activeVideoReset = null;
+            mountDrivePoster();
+          };
+          const stopFn = viewer._stopVideo;
+          activeVideoReset = stopFn;
+          videoObserver.observe(viewer);
         };
-        imgEl.onclick = () => {
-          if (isExternalVid) playExternalInFrame();
-          else openModal(p);
+        imgEl.onclick = playInFrame;
+        playBadge.onclick = playInFrame;
+        viewer.append(kindBadge, imgEl, playBadge);
+      };
+      mountDrivePoster();
+    } else if (imgs.length > 0) {
+      const isExternalVid = p.kind === 'reel' || p.kind === 'youtube' || p.isVideo;
+      if (isExternalVid || imgs.length === 1) {
+        const mountExtPoster = () => {
+          viewer.innerHTML = '';
+          const imgEl = document.createElement('img');
+          imgEl.loading = 'lazy';
+          imgEl.referrerPolicy = 'no-referrer';
+          imgEl.src = imgs[idx];
+          imgEl.title = isExternalVid ? '클릭 시 프레임 안에서 영상 재생' : '클릭 시 크게 보기';
+          const playExternalInFrame = () => {
+            if (activeVideoReset) activeVideoReset();
+            const embedSrc = p.kind === 'youtube'
+              ? 'https://www.youtube.com/embed/' + p.shortcode.replace(/^yt_/, '') + '?autoplay=1&playsinline=1'
+              : 'https://www.instagram.com/p/' + p.shortcode + '/embed/';
+            viewer.innerHTML = '<iframe src="' + embedSrc + '" style="width:100%;height:100%;border:0;background:#000;" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen scrolling="no"></iframe>';
+            viewer._stopVideo = () => {
+              viewer._stopVideo = null;
+              if (activeVideoReset === stopFn) activeVideoReset = null;
+              mountExtPoster();
+            };
+            const stopFn = viewer._stopVideo;
+            activeVideoReset = stopFn;
+            videoObserver.observe(viewer);
+          };
+          imgEl.onclick = () => {
+            if (isExternalVid) playExternalInFrame();
+            else openModal(p);
+          };
+          viewer.append(kindBadge, imgEl);
+          if (isExternalVid) {
+            const badge = document.createElement('span');
+            badge.className = 'badge';
+            badge.style.cursor = 'pointer';
+            badge.textContent = '▶ 클릭하여 영상 재생';
+            badge.onclick = playExternalInFrame;
+            viewer.appendChild(badge);
+          }
         };
-        viewer.appendChild(imgEl);
-        if (isExternalVid) {
-          const badge = document.createElement('span');
-          badge.className = 'badge';
-          badge.style.cursor = 'pointer';
-          badge.textContent = '▶ 클릭하여 영상 재생';
-          badge.onclick = playExternalInFrame;
-          viewer.appendChild(badge);
-        }
+        mountExtPoster();
       } else {
         const track = document.createElement('div');
         track.className = 'slide-track';
