@@ -916,10 +916,13 @@ function render() {
       imgEl.src = imgs[0] || '';
       const playBadge = document.createElement('span');
       playBadge.className = 'badge';
-      playBadge.textContent = '▶ 클릭하여 드라이브 영상 재생';
-      imgEl.onclick = () => {
-        viewer.innerHTML = '<iframe src="' + p.driveVideo + '" style="width:100%;height:100%;border:0;" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+      playBadge.style.cursor = 'pointer';
+      playBadge.textContent = '▶ 클릭하여 영상 재생';
+      const playInFrame = () => {
+        viewer.innerHTML = '<iframe src="' + p.driveVideo + '" style="width:100%;height:100%;border:0;" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
       };
+      imgEl.onclick = playInFrame;
+      playBadge.onclick = playInFrame;
       viewer.append(imgEl, playBadge);
     } else if (imgs.length > 0) {
       const isExternalVid = p.kind === 'reel' || p.kind === 'youtube' || p.isVideo;
@@ -928,16 +931,24 @@ function render() {
         imgEl.loading = 'lazy';
         imgEl.referrerPolicy = 'no-referrer';
         imgEl.src = imgs[idx];
-        imgEl.title = isExternalVid ? '클릭 시 원본 영상 열기' : '클릭 시 크게 보기';
+        imgEl.title = isExternalVid ? '클릭 시 프레임 안에서 영상 재생' : '클릭 시 크게 보기';
+        const playExternalInFrame = () => {
+          const embedSrc = p.kind === 'youtube'
+            ? 'https://www.youtube.com/embed/' + p.shortcode.replace(/^yt_/, '') + '?autoplay=1&playsinline=1'
+            : 'https://www.instagram.com/p/' + p.shortcode + '/embed/';
+          viewer.innerHTML = '<iframe src="' + embedSrc + '" style="width:100%;height:100%;border:0;background:#000;" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen scrolling="no"></iframe>';
+        };
         imgEl.onclick = () => {
-          if (isExternalVid) window.open(p.url, '_blank', 'noopener');
+          if (isExternalVid) playExternalInFrame();
           else openModal(p);
         };
         viewer.appendChild(imgEl);
         if (isExternalVid) {
           const badge = document.createElement('span');
           badge.className = 'badge';
-          badge.textContent = '↗ 클릭 시 영상 열기';
+          badge.style.cursor = 'pointer';
+          badge.textContent = '▶ 클릭하여 영상 재생';
+          badge.onclick = playExternalInFrame;
           viewer.appendChild(badge);
         }
       } else {
