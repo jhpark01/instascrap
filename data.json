@@ -14505,6 +14505,27 @@
     "isVideo": true,
     "driveImages": [
       "https://lh3.googleusercontent.com/d/1ttIpqQiVsT_quVcMByCjzHi8DCBGFCYY=w1000"
+    ],
+    "driveVideo": ""
+  },
+  {
+    "shortcode": "yt_dKouA-DPDi8",
+    "kind": "youtube",
+    "url": "https://youtube.com/shorts/dKouA-DPDi8?si=caUMwvZHSbwt0LQ5",
+    "date": "2026년 10월 29일 오전 8:16",
+    "imgIndex": 1,
+    "memo": "먹의정과 통엿사. #개그 #유튜브",
+    "user": "sajo4077@gmail.com",
+    "owner": "옥상평상",
+    "caption": "먹의정과 통엿사.",
+    "localImages": [
+      "images/yt_dKouA-DPDi8_1.jpg"
+    ],
+    "localVideo": "",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1yw84_rrB5zohO7Z_q1T3SZjmaC5R0ji-=w1000"
     ]
   }
 ]
