@@ -379,32 +379,40 @@
 <button id="topBtn" class="top-btn" title="맨 위로 이동">↑</button>
 <dialog id="authModal" style="width:min(440px,92vw);">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-    <strong>🔐 구글 계정 로그인 / 회원가입</strong>
+    <strong>🔐 Google 계정 선택 로그인</strong>
     <button id="authCloseBtn" class="btn" onclick="document.getElementById('authModal').close()">닫기</button>
   </div>
-  <div style="display:flex;flex-direction:column;gap:10px;">
+  <div style="display:flex;flex-direction:column;gap:12px;">
     <div style="font-size:13px;color:var(--muted);line-height:1.45;">
-      구글 계정별로 스크랩북과 #태그가 완전히 분리되어 내 스크랩만 볼 수 있습니다.
+      브라우저(휴대폰/PC)에 로그인되어 있는 <b>Google 계정</b>을 선택하면 계정별로 스크랩북이 자동 분리됩니다.
     </div>
-    <div id="googleGsiBtn" style="display:flex;justify-content:center;margin:4px 0;"></div>
-    <div id="savedAccountsWrap" style="display:none;flex-direction:column;gap:6px;">
-      <div style="font-size:12px;color:var(--muted);">등록된 가족 구글 계정 (클릭하여 선택):</div>
+    <label id="authClaimWrap" style="display:flex;align-items:center;gap:8px;font-size:13px;color:#d3d7e2;cursor:pointer;background:#1f2430;padding:10px 12px;border-radius:8px;">
+      <input id="authClaimOwner" type="checkbox" />
+      <span>기존에 저장된 스크랩(526개)을 내 계정으로 연결 (본인 최초 1회)</span>
+    </label>
+    <button id="googleSelectBtn" class="btn" style="background:#4285F4;color:#fff;border-color:#4285F4;padding:12px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <span>🔵 현재 로그인된 Google 계정 선택하기</span>
+    </button>
+    <div id="googleGsiBtn" style="display:flex;justify-content:center;"></div>
+    <div id="savedAccountsWrap" style="display:none;flex-direction:column;gap:6px;border-top:1px solid var(--border);padding-top:10px;">
+      <div style="font-size:12px;color:var(--muted);">이 기기/가족에 등록된 Google 계정 바로 전환:</div>
       <div id="savedAccountsList" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
     </div>
-    <input id="authEmail" class="search" type="email" placeholder="구글 이메일 (예: myid@gmail.com)" />
-    <input id="authName" class="search" type="text" placeholder="이름 또는 닉네임 (신규 가입 시 입력)" />
-    <input id="authPin" class="search" type="password" placeholder="간편 비밀번호 (4자리 이상)" />
-    <label id="authClaimWrap" style="display:flex;align-items:center;gap:8px;font-size:13px;color:#d3d7e2;cursor:pointer;">
-      <input id="authClaimOwner" type="checkbox" />
-      <span>기존에 저장된 스크랩을 이 계정으로 연결 (본인 계정)</span>
-    </label>
-    <button id="authSubmit" class="btn" style="background:#4285F4;color:#fff;border-color:#4285F4;padding:11px;font-size:14px;">G 구글 계정으로 시작하기</button>
     <button id="logoutBtn" class="btn" style="display:none;color:#ff4d4f;border-color:#ff4d4f;padding:9px;">현재 계정 로그아웃</button>
-    <details style="margin-top:4px;font-size:12px;color:var(--muted);">
-      <summary style="cursor:pointer;">⚙️ Google 공식 원클릭 팝업(OAuth Client ID) 설정</summary>
-      <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
-        <input id="oauthClientIdInput" class="search" type="text" placeholder="xxxx.apps.googleusercontent.com" style="font-size:12px;padding:7px 10px;" />
-        <button id="saveOauthBtn" class="btn" style="padding:7px;">Client ID 저장</button>
+    <details id="oauthSetupDetails" style="margin-top:2px;font-size:12px;color:var(--muted);background:#12151b;padding:10px 12px;border-radius:8px;border:1px solid var(--border);">
+      <summary style="cursor:pointer;font-weight:600;color:#d3d7e2;">⚙️ 최초 1회 Google OAuth Client ID 등록 안내</summary>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;line-height:1.5;">
+        <div>구글 공식 계정 선택창을 띄우려면 최초 1회 본인 구글 클라우드에서 발급한 <b>웹 클라이언트 ID</b>가 필요합니다 (1회 저장 시 와이프분 폰에도 자동 적용됩니다).</div>
+        <div>1. <a href="https://console.cloud.google.com/apis/credentials/oauthclient" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600;">Google Cloud OAuth 클라이언트 ID 만들기 ↗</a> 접속</div>
+        <div>2. 애플리케이션 유형: <b>웹 애플리케이션</b> 선택</div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <span>3. <b>승인된 자바스크립트 원본</b>에 추가:</span>
+          <code style="background:#1f2430;padding:2px 6px;border-radius:4px;color:#fff;">https://jhpark01.github.io</code>
+          <button type="button" class="btn" style="padding:2px 7px;font-size:11px;" onclick="navigator.clipboard.writeText('https://jhpark01.github.io');this.textContent='✅ 복사됨';">주소 복사</button>
+        </div>
+        <div>4. 생성된 <b>클라이언트 ID</b>(<code>...apps.googleusercontent.com</code>)를 아래에 붙여넣고 저장하세요:</div>
+        <input id="oauthClientIdInput" class="search" type="text" placeholder="xxxx.apps.googleusercontent.com" style="font-size:12px;padding:8px 10px;" />
+        <button id="saveOauthBtn" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);padding:9px;">Client ID 저장 및 계정 선택창 열기</button>
       </div>
     </details>
   </div>
@@ -1177,22 +1185,55 @@ function initGoogleGsi() {
   } catch {}
 }
 
+function triggerGoogleAccountChooser() {
+  const cid = (AUTH_CONFIG.googleClientId || '').trim();
+  if (!cid) {
+    const det = document.getElementById('oauthSetupDetails');
+    if (det) det.open = true;
+    document.getElementById('oauthClientIdInput')?.focus();
+    alert('아래 안내에 따라 최초 1회 Google OAuth 클라이언트 ID를 등록해 주세요.\n(1회 등록 시 모든 기기에서 구글 계정 선택창이 바로 열립니다)');
+    return;
+  }
+  if (!window.google?.accounts?.oauth2) {
+    alert('Google 로그인 스크립트를 불러오는 중입니다. 잠시 후 다시 눌러주세요.');
+    return;
+  }
+  const tokenClient = window.google.accounts.oauth2.initTokenClient({
+    client_id: cid,
+    scope: 'openid email profile',
+    prompt: 'select_account',
+    callback: async (resp) => {
+      if (!resp || !resp.access_token) return;
+      try {
+        const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: 'Bearer ' + resp.access_token }
+        });
+        if (r.ok) {
+          const info = await r.json();
+          if (info.email) {
+            const claim = document.getElementById('authClaimOwner')?.checked || !AUTH_CONFIG.ownerEmail;
+            loginWithUserObj({ email: info.email, name: info.name || info.email.split('@')[0], picture: info.picture || '' }, claim, true);
+            document.getElementById('authModal').close();
+          }
+        }
+      } catch {}
+    }
+  });
+  tokenClient.requestAccessToken();
+}
+
 function openAuthModal() {
   const modal = document.getElementById('authModal');
-  const emailInp = document.getElementById('authEmail');
-  const nameInp = document.getElementById('authName');
-  const pinInp = document.getElementById('authPin');
   const claimWrap = document.getElementById('authClaimWrap');
   const claimChk = document.getElementById('authClaimOwner');
   const logoutBtn = document.getElementById('logoutBtn');
   const savedWrap = document.getElementById('savedAccountsWrap');
   const savedList = document.getElementById('savedAccountsList');
   const cidInp = document.getElementById('oauthClientIdInput');
+  const det = document.getElementById('oauthSetupDetails');
 
   if (cidInp) cidInp.value = AUTH_CONFIG.googleClientId || '';
-  emailInp.value = currentUser?.email || '';
-  nameInp.value = currentUser?.name || '';
-  pinInp.value = '';
+  if (det) det.open = !AUTH_CONFIG.googleClientId;
 
   const hasOwner = !!AUTH_CONFIG.ownerEmail;
   claimChk.checked = !hasOwner || (currentUser?.email && AUTH_CONFIG.ownerEmail.toLowerCase() === currentUser.email.toLowerCase());
@@ -1209,9 +1250,8 @@ function openAuthModal() {
       chip.className = 'tag-chip' + (currentUser?.email === u.email ? ' active' : '');
       chip.textContent = '👤 ' + (u.name || u.email.split('@')[0]) + ' (' + u.email + ')';
       chip.onclick = () => {
-        emailInp.value = u.email;
-        nameInp.value = u.name || '';
-        pinInp.focus();
+        loginWithUserObj(u, false, false);
+        modal.close();
       };
       savedList.appendChild(chip);
     }
@@ -1224,27 +1264,12 @@ function openAuthModal() {
 }
 
 document.getElementById('userBtn').addEventListener('click', openAuthModal);
-
-document.getElementById('authSubmit').addEventListener('click', () => {
-  let email = document.getElementById('authEmail').value.trim().toLowerCase();
-  const name = document.getElementById('authName').value.trim();
-  const pin = document.getElementById('authPin').value.trim();
-  if (!email) { alert('구글 이메일 주소를 입력해 주세요.'); return; }
-  if (!email.includes('@')) email += '@gmail.com';
-  if (pin.length < 4) { alert('간편 비밀번호를 4자리 이상 입력해 주세요.'); return; }
-
-  const pinHash = simpleHash(email + ':' + pin);
-  const existing = AUTH_CONFIG.users?.[email];
-  if (existing && existing.pinHash && existing.pinHash !== pinHash) {
-    alert('비밀번호가 일치하지 않습니다.');
-    return;
-  }
-  const claim = document.getElementById('authClaimOwner').checked;
-  loginWithUserObj({ email, name: name || existing?.name || email.split('@')[0], pinHash }, claim, true);
-  document.getElementById('authModal').close();
-});
+document.getElementById('googleSelectBtn').addEventListener('click', triggerGoogleAccountChooser);
 
 document.getElementById('logoutBtn').addEventListener('click', () => {
+  if (window.google?.accounts?.id) {
+    try { window.google.accounts.id.disableAutoSelect(); } catch {}
+  }
   currentUser = null;
   localStorage.removeItem('ig_user');
   loadUserState();
@@ -1255,10 +1280,13 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 
 document.getElementById('saveOauthBtn').addEventListener('click', () => {
   const cid = document.getElementById('oauthClientIdInput').value.trim();
+  if (!cid) { alert('클라이언트 ID를 입력해 주세요.'); return; }
   AUTH_CONFIG.googleClientId = cid;
   syncAuthConfig({ googleClientId: cid });
   initGoogleGsi();
-  alert('Google OAuth Client ID가 저장되었습니다.');
+  const det = document.getElementById('oauthSetupDetails');
+  if (det) det.open = false;
+  triggerGoogleAccountChooser();
 });
 
 document.getElementById('addBtn').addEventListener('click', () => {
