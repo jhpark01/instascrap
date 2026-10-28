@@ -14007,5 +14007,26 @@
       "https://lh3.googleusercontent.com/d/1Q7T52IKmLzrTzUJf0s8QORPmGogOh4Uz=w1000"
     ],
     "driveVideo": ""
+  },
+  {
+    "shortcode": "DfAutNfzC3Q",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DfAutNfzC3Q/?exln=MTNsdG5sbGM3Nm12eA==",
+    "date": "2026년 10월 28일 오후 9:06",
+    "imgIndex": 1,
+    "memo": "#IT운영",
+    "user": "sajo4077@gmail.com",
+    "owner": "securebydefault",
+    "caption": "If -rwxr-xr-x looks like random Linux nonsense, there’s actually a simple pattern behind it.\n\nOwner | Group | Others\n\nr = read\nw = write\nx = execute\n\nAnd numerically:\n\nr = 4\nw = 2\nx = 1\n\nSo:\n\nrwx = 7\nr-x = 5\nr-x = 5\n\nThat’s where 755 comes from.\n\nOnce you understand the pattern, Linux permissions get a lot easier.\n\nSave this one for later.\n\n#Linux #LinuxPermissions #Chmod #LinuxTips #LearnLinux #SysAdmin #ITSupport #LinuxAdmin #DevOps #SRE #SecureByDefault",
+    "localImages": [
+      "images/DfAutNfzC3Q_1.jpg"
+    ],
+    "localVideo": "videos/DfAutNfzC3Q.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1HUI4kXz9ZOcv6ivjvxJA0L2kpwEU5T34=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1H1kntlJVfp6VatHrHXjuRKKQyCt9WHM9/preview"
   }
 ]
