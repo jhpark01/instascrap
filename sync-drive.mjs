@@ -66,12 +66,15 @@ export function syncDrive(singleShortcode = null) {
     const raw = runRclone(['lsjson', REMOTE, '-R', '--files-only', '--no-modtime', '--no-mimetype']);
     let files = JSON.parse(raw);
 
-    // 삭제된 스크랩(deleted.json)의 파일이 구글 드라이브에 남아있다면 함께 삭제
+    const posts = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+    const activeCodes = new Set(posts.map(p => p.shortcode));
+
+    // 삭제된 스크랩(deleted.json) 중 다른 사용자가 사용 중이지 않은 파일만 구글 드라이브에서 삭제
     const deletedCodes = fs.existsSync(DELETED_FILE)
       ? JSON.parse(fs.readFileSync(DELETED_FILE, 'utf8'))
       : [];
     for (const code of deletedCodes) {
-      if (code && files.some(f => f.Name.startsWith(code))) {
+      if (code && !activeCodes.has(code) && files.some(f => f.Name.startsWith(code))) {
         deleteFromDrive(code);
         files = files.filter(f => !f.Name.startsWith(code));
       }
@@ -96,7 +99,6 @@ export function syncDrive(singleShortcode = null) {
 
     const idMap = new Map(files.map(f => [f.Path.replace(/\\/g, '/'), f.ID]));
 
-    const posts = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
     let mappedImgs = 0;
     let mappedVids = 0;
     for (const p of posts) {

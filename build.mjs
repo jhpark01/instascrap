@@ -9,6 +9,7 @@ const VID_DIR = path.join(OUT_DIR, 'videos');
 const CACHE_FILE = path.join(OUT_DIR, 'data.json');
 const DELETED_FILE = path.join(OUT_DIR, 'deleted.json');
 const DRIVE_STATS_FILE = path.join(OUT_DIR, 'drive-stats.json');
+const AUTH_CONFIG_FILE = path.join(OUT_DIR, 'auth-config.json');
 const HTML_FILE = path.join(OUT_DIR, 'index.html');
 
 fs.mkdirSync(IMG_DIR, { recursive: true });
@@ -187,6 +188,11 @@ function renderHtml(posts) {
     try { driveStats = JSON.parse(fs.readFileSync(DRIVE_STATS_FILE, 'utf8')); } catch {}
   }
   const statsSafe = JSON.stringify(driveStats).replace(/</g, '\\u003c');
+  let authConfig = { ownerEmail: '', googleClientId: '', encToken: '', users: {} };
+  if (fs.existsSync(AUTH_CONFIG_FILE)) {
+    try { authConfig = JSON.parse(fs.readFileSync(AUTH_CONFIG_FILE, 'utf8')); } catch {}
+  }
+  const authSafe = JSON.stringify(authConfig).replace(/</g, '\\u003c');
   return `<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -194,6 +200,7 @@ function renderHtml(posts) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#ff4d79">
 <link rel="manifest" href="manifest.json">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <title>인스타 스크랩북 (${posts.length}개)</title>
 <style>
   :root {
@@ -557,6 +564,7 @@ function renderHtml(posts) {
     <button class="btn" data-filter="trash">🗑️ 휴지통</button>
     <button id="sortBtn" class="btn" title="정렬 순서 변경">🔽 최신순</button>
     <button id="addBtn" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);">➕ 링크 추가</button>
+    <button id="userBtn" class="btn" title="구글 계정 로그인 / 전환">🔑 구글 로그인</button>
     <span id="syncStatus" style="font-size:12px;padding:5px 10px;border-radius:99px;background:#1f2430;color:#949ba8;"></span>
     <span id="count" class="count"></span>
   </div>
@@ -564,6 +572,38 @@ function renderHtml(posts) {
 </header>
 <main id="grid" class="grid"></main>
 <button id="topBtn" class="top-btn" title="맨 위로 이동">↑</button>
+<dialog id="authModal" style="width:min(440px,92vw);">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <strong>🔐 구글 계정 로그인 / 회원가입</strong>
+    <button id="authCloseBtn" class="btn" onclick="document.getElementById('authModal').close()">닫기</button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div style="font-size:13px;color:var(--muted);line-height:1.45;">
+      구글 계정별로 스크랩북과 #태그가 완전히 분리되어 내 스크랩만 볼 수 있습니다.
+    </div>
+    <div id="googleGsiBtn" style="display:flex;justify-content:center;margin:4px 0;"></div>
+    <div id="savedAccountsWrap" style="display:none;flex-direction:column;gap:6px;">
+      <div style="font-size:12px;color:var(--muted);">등록된 가족 구글 계정 (클릭하여 선택):</div>
+      <div id="savedAccountsList" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <input id="authEmail" class="search" type="email" placeholder="구글 이메일 (예: myid@gmail.com)" />
+    <input id="authName" class="search" type="text" placeholder="이름 또는 닉네임 (신규 가입 시 입력)" />
+    <input id="authPin" class="search" type="password" placeholder="간편 비밀번호 (4자리 이상)" />
+    <label id="authClaimWrap" style="display:flex;align-items:center;gap:8px;font-size:13px;color:#d3d7e2;cursor:pointer;">
+      <input id="authClaimOwner" type="checkbox" />
+      <span>기존에 저장된 스크랩을 이 계정으로 연결 (본인 계정)</span>
+    </label>
+    <button id="authSubmit" class="btn" style="background:#4285F4;color:#fff;border-color:#4285F4;padding:11px;font-size:14px;">G 구글 계정으로 시작하기</button>
+    <button id="logoutBtn" class="btn" style="display:none;color:#ff4d4f;border-color:#ff4d4f;padding:9px;">현재 계정 로그아웃</button>
+    <details style="margin-top:4px;font-size:12px;color:var(--muted);">
+      <summary style="cursor:pointer;">⚙️ Google 공식 원클릭 팝업(OAuth Client ID) 설정</summary>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+        <input id="oauthClientIdInput" class="search" type="text" placeholder="xxxx.apps.googleusercontent.com" style="font-size:12px;padding:7px 10px;" />
+        <button id="saveOauthBtn" class="btn" style="padding:7px;">Client ID 저장</button>
+      </div>
+    </details>
+  </div>
+</dialog>
 <dialog id="addModal" style="width:min(480px,92vw);">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
     <strong>➕ 인스타 / 유튜브 링크 추가</strong>
@@ -599,27 +639,81 @@ function renderHtml(posts) {
 <script>
 let POSTS = ${jsonSafe};
 let DRIVE_STATS = ${statsSafe};
-const starred = new Set(JSON.parse(localStorage.getItem('ig_starred') || '[]'));
-const deleted = new Set(JSON.parse(localStorage.getItem('ig_deleted') || '[]'));
-const customMemos = JSON.parse(localStorage.getItem('ig_memos') || '{}');
-for (const p of POSTS) {
-  if (customMemos[p.shortcode] !== undefined) p.memo = customMemos[p.shortcode];
+let AUTH_CONFIG = ${authSafe};
+let currentUser = null;
+try { currentUser = JSON.parse(localStorage.getItem('ig_user') || 'null'); } catch {}
+
+const TOKEN_KEY = 'instascrap_family_sync_2026';
+function encodePat(str) {
+  if (!str) return '';
+  return Array.from(str).map((c, i) => (c.charCodeAt(0) ^ TOKEN_KEY.charCodeAt(i % TOKEN_KEY.length)).toString(16).padStart(2, '0')).join('');
 }
+function decodePat(hex) {
+  if (!hex || hex.length % 2 !== 0) return '';
+  let out = '';
+  for (let i = 0; i < hex.length; i += 2) {
+    out += String.fromCharCode(parseInt(hex.slice(i, i + 2), 16) ^ TOKEN_KEY.charCodeAt((i / 2) % TOKEN_KEY.length));
+  }
+  return out;
+}
+function simpleHash(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(16);
+}
+
+const starred = new Set();
+const deleted = new Set();
+let customMemos = {};
+
+function userKey(base) {
+  return currentUser?.email ? (base + '_' + currentUser.email.toLowerCase()) : base;
+}
+function isOwnerUser() {
+  if (!currentUser?.email) return false;
+  const owner = (AUTH_CONFIG.ownerEmail || '').toLowerCase();
+  return !owner || owner === currentUser.email.toLowerCase();
+}
+function isMyPost(p) {
+  if (!currentUser?.email) return false;
+  const myEmail = currentUser.email.toLowerCase();
+  const postUser = (p.user || '').toLowerCase();
+  if (postUser) return postUser === myEmail;
+  return isOwnerUser();
+}
+function loadUserState() {
+  starred.clear();
+  deleted.clear();
+  const starRaw = localStorage.getItem(userKey('ig_starred')) || (isOwnerUser() ? localStorage.getItem('ig_starred') : null) || '[]';
+  const delRaw = localStorage.getItem(userKey('ig_deleted')) || (isOwnerUser() ? localStorage.getItem('ig_deleted') : null) || '[]';
+  const memoRaw = localStorage.getItem(userKey('ig_memos')) || (isOwnerUser() ? localStorage.getItem('ig_memos') : null) || '{}';
+  for (const s of JSON.parse(starRaw)) starred.add(s);
+  for (const d of JSON.parse(delRaw)) deleted.add(d);
+  customMemos = JSON.parse(memoRaw);
+  for (const p of POSTS) {
+    if (isMyPost(p) && customMemos[p.shortcode] !== undefined) p.memo = customMemos[p.shortcode];
+  }
+}
+loadUserState();
+
 let filter = 'all';
 let query = '';
 let newestFirst = true;
 const isLocal = location.protocol === 'file:' || /^(localhost|127\.|10\.|192\.168\.)/.test(location.hostname);
 
 function saveStars() {
-  localStorage.setItem('ig_starred', JSON.stringify([...starred]));
+  localStorage.setItem(userKey('ig_starred'), JSON.stringify([...starred]));
 }
 function saveDeleted() {
-  localStorage.setItem('ig_deleted', JSON.stringify([...deleted]));
+  localStorage.setItem(userKey('ig_deleted'), JSON.stringify([...deleted]));
 }
 function dispatchGitHub(inputs, promptIfMissing = false) {
-  let pat = localStorage.getItem('gh_pat') || '';
+  let pat = localStorage.getItem('gh_pat') || decodePat(AUTH_CONFIG.encToken || '');
   if (!pat && promptIfMissing) {
-    pat = (prompt('GitHub에서 바로 실행하려면 GitHub Personal Access Token (repo/workflow 권한)을 1회 입력해 주세요.\\n(브라우저에만 저장되며 외부에 노출되지 않습니다)') || '').trim();
+    pat = (prompt('GitHub에서 바로 실행하려면 GitHub Personal Access Token (repo/workflow 권한)을 1회 입력해 주세요.\\n(1회 입력 시 가족 계정에도 자동 연동됩니다)') || '').trim();
     if (pat) localStorage.setItem('gh_pat', pat);
   }
   if (!pat) return Promise.resolve(false);
@@ -630,7 +724,7 @@ function dispatchGitHub(inputs, promptIfMissing = false) {
       'Authorization': 'Bearer ' + pat,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ ref: 'main', inputs })
+    body: JSON.stringify({ ref: 'main', inputs: { ...inputs, user: currentUser?.email || '' } })
   }).then(r => {
     if (r.status === 401 || r.status === 403) {
       localStorage.removeItem('gh_pat');
@@ -642,20 +736,22 @@ function dispatchGitHub(inputs, promptIfMissing = false) {
 }
 
 function syncApi(action, payload) {
+  const fullPayload = { ...payload, user: currentUser?.email || '' };
   if (!isLocal) {
     dispatchGitHub({
       action,
-      shortcode: payload.shortcode || '',
-      url: payload.url || '',
-      memo: payload.memo || ''
-    }, action === 'add');
+      shortcode: fullPayload.shortcode || '',
+      url: fullPayload.url || '',
+      memo: fullPayload.memo || '',
+      user: fullPayload.user || ''
+    }, action === 'add' || action === 'auth');
     return;
   }
   const base = location.protocol.startsWith('http') ? '' : 'http://127.0.0.1:4077';
   fetch(base + '/' + action, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(fullPayload)
   }).catch(() => {});
 }
 
@@ -679,7 +775,7 @@ function stripTags(memo) {
 function saveMemo(p, nextMemo) {
   p.memo = nextMemo.trim();
   customMemos[p.shortcode] = p.memo;
-  localStorage.setItem('ig_memos', JSON.stringify(customMemos));
+  localStorage.setItem(userKey('ig_memos'), JSON.stringify(customMemos));
   syncApi('memo', { shortcode: p.shortcode, memo: p.memo });
   render();
 }
@@ -689,7 +785,7 @@ let editingPost = null;
 function renderTagBar() {
   const counts = new Map();
   for (const p of POSTS) {
-    if (deleted.has(p.shortcode)) continue;
+    if (!isMyPost(p) || deleted.has(p.shortcode)) continue;
     for (const t of getTags(p.memo)) counts.set(t, (counts.get(t) || 0) + 1);
   }
   const bar = document.getElementById('tagBar');
@@ -792,9 +888,14 @@ const videoObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.05 });
 
 function render() {
+  const uBtn = document.getElementById('userBtn');
+  if (uBtn) {
+    uBtn.textContent = currentUser?.email ? ('👤 ' + (currentUser.name || currentUser.email.split('@')[0])) : '🔑 구글 로그인';
+  }
   renderTagBar();
   const q = query.trim().toLowerCase();
-  const list = POSTS.filter(p => {
+  const myPosts = POSTS.filter(p => isMyPost(p));
+  const list = myPosts.filter(p => {
     const isDel = deleted.has(p.shortcode);
     if (filter === 'trash') return isDel;
     if (isDel) return false;
@@ -808,20 +909,29 @@ function render() {
   });
   if (newestFirst) list.reverse();
 
-  const activeTotal = POSTS.filter(p => !deleted.has(p.shortcode)).length;
+  const activeTotal = myPosts.filter(p => !deleted.has(p.shortcode)).length;
   document.getElementById('count').textContent = list.length + ' / ' + activeTotal + '개';
   const grid = document.getElementById('grid');
 
+  if (!currentUser?.email) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);">🔐 상단 <b>구글 로그인</b> 버튼을 눌러 본인 구글 계정으로 로그인해 주세요.<br><span style="font-size:13px;">계정별로 각자의 스크랩북이 분리되어 표시됩니다.</span></div>';
+    return;
+  }
+  for (const child of [...grid.children]) {
+    if (!child.dataset.code) child.remove();
+  }
+
   // 표시 대상이 아닌 카드는 DOM에서 제거
-  const visibleCodes = new Set(list.map(p => p.shortcode));
+  const visibleCodes = new Set(list.map(p => (p.user || '') + ':' + p.shortcode));
   for (const child of [...grid.children]) {
     if (!visibleCodes.has(child.dataset.code)) child.remove();
   }
 
   for (let i = 0; i < list.length; i++) {
     const p = list[i];
+    const cardKey = (p.user || '') + ':' + p.shortcode;
     const sig = JSON.stringify([
-      p.shortcode,
+      cardKey,
       p.memo || '',
       p.caption || '',
       p.driveImages || [],
@@ -831,15 +941,15 @@ function render() {
       starred.has(p.shortcode),
       deleted.has(p.shortcode)
     ]);
-    let cached = cardCache.get(p.shortcode);
+    let cached = cardCache.get(cardKey);
     if (!cached || cached.sig !== sig) {
       const card = buildCard(p);
-      card.dataset.code = p.shortcode;
+      card.dataset.code = cardKey;
       if (cached?.el?.parentNode === grid) {
         grid.replaceChild(card, cached.el);
       }
       cached = { el: card, sig };
-      cardCache.set(p.shortcode, cached);
+      cardCache.set(cardKey, cached);
     }
     if (grid.children[i] !== cached.el) {
       grid.insertBefore(cached.el, grid.children[i] || null);
@@ -1198,7 +1308,160 @@ function populateAddModalTags() {
   }
 }
 
+function syncAuthConfig(extra = {}) {
+  const pat = localStorage.getItem('gh_pat') || '';
+  const payload = {
+    email: currentUser?.email || '',
+    name: currentUser?.name || '',
+    pinHash: currentUser?.pinHash || '',
+    picture: currentUser?.picture || '',
+    encToken: pat ? encodePat(pat) : (AUTH_CONFIG.encToken || ''),
+    googleClientId: AUTH_CONFIG.googleClientId || '',
+    ...extra
+  };
+  syncApi('auth', { memo: JSON.stringify(payload) });
+}
+
+function loginWithUserObj(u, claimOwner = false, shouldSync = true) {
+  const email = (u.email || '').trim().toLowerCase();
+  if (!email) return;
+  if (!AUTH_CONFIG.users) AUTH_CONFIG.users = {};
+  const existing = AUTH_CONFIG.users[email] || {};
+  const userObj = {
+    email,
+    name: u.name || existing.name || email.split('@')[0],
+    pinHash: u.pinHash || existing.pinHash || '',
+    picture: u.picture || existing.picture || ''
+  };
+  AUTH_CONFIG.users[email] = userObj;
+  if (claimOwner || !AUTH_CONFIG.ownerEmail) {
+    AUTH_CONFIG.ownerEmail = email;
+  }
+  currentUser = userObj;
+  localStorage.setItem('ig_user', JSON.stringify(currentUser));
+  loadUserState();
+  render();
+  if (shouldSync) {
+    syncAuthConfig({ claimOwner: claimOwner || AUTH_CONFIG.ownerEmail === email });
+  }
+}
+
+function initGoogleGsi() {
+  const cid = (AUTH_CONFIG.googleClientId || '').trim();
+  const wrap = document.getElementById('googleGsiBtn');
+  if (!cid || !wrap || !window.google?.accounts?.id) return;
+  try {
+    window.google.accounts.id.initialize({
+      client_id: cid,
+      callback: (resp) => {
+        try {
+          const base64Url = resp.credential.split('.')[1];
+          const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+          const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+          const info = JSON.parse(jsonPayload);
+          if (info.email) {
+            const claim = document.getElementById('authClaimOwner')?.checked || !AUTH_CONFIG.ownerEmail;
+            loginWithUserObj({ email: info.email, name: info.name || info.email.split('@')[0], picture: info.picture || '' }, claim, true);
+            document.getElementById('authModal').close();
+          }
+        } catch {}
+      }
+    });
+    wrap.innerHTML = '';
+    window.google.accounts.id.renderButton(wrap, { theme: 'filled_blue', size: 'large', text: 'continue_with', shape: 'pill' });
+  } catch {}
+}
+
+function openAuthModal() {
+  const modal = document.getElementById('authModal');
+  const emailInp = document.getElementById('authEmail');
+  const nameInp = document.getElementById('authName');
+  const pinInp = document.getElementById('authPin');
+  const claimWrap = document.getElementById('authClaimWrap');
+  const claimChk = document.getElementById('authClaimOwner');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const savedWrap = document.getElementById('savedAccountsWrap');
+  const savedList = document.getElementById('savedAccountsList');
+  const cidInp = document.getElementById('oauthClientIdInput');
+
+  if (cidInp) cidInp.value = AUTH_CONFIG.googleClientId || '';
+  emailInp.value = currentUser?.email || '';
+  nameInp.value = currentUser?.name || '';
+  pinInp.value = '';
+
+  const hasOwner = !!AUTH_CONFIG.ownerEmail;
+  claimChk.checked = !hasOwner || (currentUser?.email && AUTH_CONFIG.ownerEmail.toLowerCase() === currentUser.email.toLowerCase());
+  claimWrap.style.display = (!hasOwner || isOwnerUser()) ? 'flex' : 'none';
+  logoutBtn.style.display = currentUser?.email ? 'block' : 'none';
+
+  const usersArr = Object.values(AUTH_CONFIG.users || {});
+  if (usersArr.length > 0) {
+    savedWrap.style.display = 'flex';
+    savedList.innerHTML = '';
+    for (const u of usersArr) {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'tag-chip' + (currentUser?.email === u.email ? ' active' : '');
+      chip.textContent = '👤 ' + (u.name || u.email.split('@')[0]) + ' (' + u.email + ')';
+      chip.onclick = () => {
+        emailInp.value = u.email;
+        nameInp.value = u.name || '';
+        pinInp.focus();
+      };
+      savedList.appendChild(chip);
+    }
+  } else {
+    savedWrap.style.display = 'none';
+  }
+
+  initGoogleGsi();
+  modal.showModal();
+}
+
+document.getElementById('userBtn').addEventListener('click', openAuthModal);
+
+document.getElementById('authSubmit').addEventListener('click', () => {
+  let email = document.getElementById('authEmail').value.trim().toLowerCase();
+  const name = document.getElementById('authName').value.trim();
+  const pin = document.getElementById('authPin').value.trim();
+  if (!email) { alert('구글 이메일 주소를 입력해 주세요.'); return; }
+  if (!email.includes('@')) email += '@gmail.com';
+  if (pin.length < 4) { alert('간편 비밀번호를 4자리 이상 입력해 주세요.'); return; }
+
+  const pinHash = simpleHash(email + ':' + pin);
+  const existing = AUTH_CONFIG.users?.[email];
+  if (existing && existing.pinHash && existing.pinHash !== pinHash) {
+    alert('비밀번호가 일치하지 않습니다.');
+    return;
+  }
+  const claim = document.getElementById('authClaimOwner').checked;
+  loginWithUserObj({ email, name: name || existing?.name || email.split('@')[0], pinHash }, claim, true);
+  document.getElementById('authModal').close();
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+  currentUser = null;
+  localStorage.removeItem('ig_user');
+  loadUserState();
+  render();
+  document.getElementById('authModal').close();
+  openAuthModal();
+});
+
+document.getElementById('saveOauthBtn').addEventListener('click', () => {
+  const cid = document.getElementById('oauthClientIdInput').value.trim();
+  AUTH_CONFIG.googleClientId = cid;
+  syncAuthConfig({ googleClientId: cid });
+  initGoogleGsi();
+  alert('Google OAuth Client ID가 저장되었습니다.');
+});
+
 document.getElementById('addBtn').addEventListener('click', () => {
+  if (!currentUser?.email) {
+    alert('스크랩을 분리 저장하려면 먼저 구글 계정으로 로그인해 주세요.');
+    openAuthModal();
+    return;
+  }
   document.getElementById('addUrl').value = '';
   document.getElementById('addMemo').value = '';
   populateAddModalTags();
@@ -1216,7 +1479,7 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
     const res = await fetch(base + '/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, memo })
+      body: JSON.stringify({ url, memo, user: currentUser?.email || '' })
     }).catch(() => null);
     if (res?.ok) {
       document.getElementById('addModal').close();
@@ -1228,9 +1491,12 @@ document.getElementById('addSubmit').addEventListener('click', async () => {
   } else {
     const ok = await dispatchGitHub({ action: 'add', url, memo, shortcode: '' }, true);
     if (ok) {
+      if (localStorage.getItem('gh_pat') && !AUTH_CONFIG.encToken) {
+        syncAuthConfig();
+      }
       document.getElementById('addModal').close();
       setTimeout(checkSyncStatus, 2500);
-      alert('✅ 등록 요청 완료! 약 1분 뒤 페이지 새로고침 없이 새 스크랩이 화면에 자동으로 추가됩니다.');
+      alert('✅ 등록 요청 완료! 약 1분 뒤 페이지 새로고침 없이 내 스크랩북에 자동으로 추가됩니다.');
     }
   }
 });
@@ -1291,21 +1557,30 @@ async function fetchJsonLive(fileName) {
 async function refreshData() {
   if (!location.protocol.startsWith('http')) return;
   try {
-    const [nextPosts, nextStats, nextDeleted] = await Promise.all([
+    const [nextPosts, nextStats, nextDeleted, nextAuth] = await Promise.all([
       fetchJsonLive('data.json').catch(() => null),
       fetchJsonLive('drive-stats.json').catch(() => null),
-      fetchJsonLive('deleted.json').catch(() => null)
+      fetchJsonLive('deleted.json').catch(() => null),
+      fetchJsonLive('auth-config.json').catch(() => null)
     ]);
+    if (nextAuth && typeof nextAuth === 'object') {
+      AUTH_CONFIG = {
+        ownerEmail: nextAuth.ownerEmail || AUTH_CONFIG.ownerEmail || '',
+        googleClientId: nextAuth.googleClientId || AUTH_CONFIG.googleClientId || '',
+        encToken: nextAuth.encToken || AUTH_CONFIG.encToken || '',
+        users: { ...(AUTH_CONFIG.users || {}), ...(nextAuth.users || {}) }
+      };
+    }
     if (nextStats && nextStats.scrapBytes !== undefined) {
       DRIVE_STATS = nextStats;
     }
-    if (Array.isArray(nextDeleted)) {
+    if (Array.isArray(nextDeleted) && isOwnerUser()) {
       for (const code of nextDeleted) deleted.add(code);
       saveDeleted();
     }
     if (Array.isArray(nextPosts) && nextPosts.length > 0) {
       for (const p of nextPosts) {
-        if (customMemos[p.shortcode] !== undefined) p.memo = customMemos[p.shortcode];
+        if (isMyPost(p) && customMemos[p.shortcode] !== undefined) p.memo = customMemos[p.shortcode];
       }
       POSTS = nextPosts;
       render();
@@ -1323,7 +1598,7 @@ function fmtBytes(b) {
 }
 async function checkSyncStatus() {
   const el = document.getElementById('syncStatus');
-  const activePosts = POSTS.filter(p => !deleted.has(p.shortcode) && p.localImages?.length > 0);
+  const activePosts = POSTS.filter(p => isMyPost(p) && !deleted.has(p.shortcode) && p.localImages?.length > 0);
   const syncedPosts = activePosts.filter(p => p.driveImages?.length > 0);
   const pendingCount = activePosts.length - syncedPosts.length;
   const usageShort = DRIVE_STATS.scrapBytes
@@ -1351,7 +1626,7 @@ async function checkSyncStatus() {
       }
     }
   } catch {}
-  const activeAfter = POSTS.filter(p => !deleted.has(p.shortcode) && p.localImages?.length > 0);
+  const activeAfter = POSTS.filter(p => isMyPost(p) && !deleted.has(p.shortcode) && p.localImages?.length > 0);
   const syncedAfter = activeAfter.filter(p => p.driveImages?.length > 0);
   const pendingAfter = activeAfter.length - syncedAfter.length;
   const usageAfter = DRIVE_STATS.scrapBytes
@@ -1367,7 +1642,14 @@ async function checkSyncStatus() {
     el.textContent = '☁️ 드라이브 동기화 완료 (' + syncedAfter.length + '건)' + usageAfter;
   }
 }
-refreshData().then(checkSyncStatus);
+refreshData().then(() => {
+  checkSyncStatus();
+  if (!currentUser?.email) {
+    openAuthModal();
+  } else if (localStorage.getItem('gh_pat') && !AUTH_CONFIG.encToken) {
+    syncAuthConfig();
+  }
+});
 </script>
 </body>
 </html>`;
@@ -1386,9 +1668,10 @@ async function main() {
   if (fs.existsSync(CACHE_FILE)) {
     try {
       for (const p of JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'))) {
-        if (deletedSet.has(p.shortcode)) continue;
-        cache[p.shortcode] = p;
-        if (!parsedCodes.has(p.shortcode)) extraItems.push(p);
+        if (!p.user && deletedSet.has(p.shortcode)) continue;
+        const key = (p.user || '') + ':' + p.shortcode;
+        cache[key] = p;
+        if (p.user || !parsedCodes.has(p.shortcode)) extraItems.push(p);
       }
     } catch {}
   }
@@ -1401,7 +1684,8 @@ async function main() {
   async function worker() {
     while (queue.length) {
       const item = queue.shift();
-      const cached = cache[item.shortcode];
+      const key = (item.user || '') + ':' + item.shortcode;
+      const cached = cache[key] || cache[':' + item.shortcode];
       const hasDriveImgs = cached && cached.driveImages?.length > 0;
       const imgsOk = hasDriveImgs || (cached && cached.localImages?.length && cached.localImages.every(rel => fs.existsSync(path.join(OUT_DIR, rel))));
       const isIgVideo = (item.kind === 'reel' || cached?.isVideo) && item.kind !== 'youtube';
@@ -1409,7 +1693,8 @@ async function main() {
       const needsVid = isIgVideo && !hasVid && !cached?.videoChecked;
       if (imgsOk && !needsVid) {
         Object.assign(item, {
-          memo: cached.memo || item.memo,
+          user: item.user || cached.user || '',
+          memo: item.user ? (item.memo || cached.memo) : (cached.memo || item.memo),
           owner: cached.owner,
           caption: cached.caption,
           localImages: cached.localImages,

@@ -6,6 +6,46 @@ import { syncDrive, deleteFromDrive } from './sync-drive.mjs';
 
 const ENV_FILE = path.join(OUT_DIR, '.env');
 const OFFSET_FILE = path.join(OUT_DIR, '.tg_offset');
+const AUTH_CONFIG_FILE = path.join(OUT_DIR, 'auth-config.json');
+
+function loadAuthConfig() {
+  if (!fs.existsSync(AUTH_CONFIG_FILE)) return { ownerEmail: '', googleClientId: '', encToken: '', users: {} };
+  try { return JSON.parse(fs.readFileSync(AUTH_CONFIG_FILE, 'utf8')); } catch { return { ownerEmail: '', googleClientId: '', encToken: '', users: {} }; }
+}
+
+function saveAuthConfig(cfg) {
+  fs.writeFileSync(AUTH_CONFIG_FILE, JSON.stringify(cfg, null, 2), 'utf8');
+}
+
+function applyAuthPayload(rawJson) {
+  try {
+    const data = typeof rawJson === 'string' ? JSON.parse(rawJson) : rawJson;
+    const cfg = loadAuthConfig();
+    if (!cfg.users) cfg.users = {};
+    if (data.googleClientId !== undefined) cfg.googleClientId = data.googleClientId;
+    if (data.encToken) cfg.encToken = data.encToken;
+    const email = (data.email || '').trim().toLowerCase();
+    if (email) {
+      cfg.users[email] = {
+        email,
+        name: data.name || cfg.users[email]?.name || email.split('@')[0],
+        pinHash: data.pinHash || cfg.users[email]?.pinHash || '',
+        picture: data.picture || cfg.users[email]?.picture || '',
+        updatedAt: new Date().toISOString()
+      };
+      if (data.claimOwner || !cfg.ownerEmail) {
+        cfg.ownerEmail = email;
+      }
+    }
+    saveAuthConfig(cfg);
+  } catch {}
+}
+
+function isUserMatch(p, userEmail, ownerEmail) {
+  if (!userEmail) return true;
+  const postOwner = (p.user || ownerEmail || '').toLowerCase();
+  return !postOwner || postOwner === userEmail.toLowerCase();
+}
 
 function loadEnv() {
   if (!fs.existsSync(ENV_FILE)) return {};
@@ -117,9 +157,19 @@ if (!IS_ONCE) {
   req.on('data', chunk => { body += chunk; });
   req.on('end', async () => {
     try {
-      const { shortcode, memo, url } = JSON.parse(body || '{}');
+      const { shortcode, memo, url, user } = JSON.parse(body || '{}');
+      const userEmail = (user || '').trim().toLowerCase();
+      const authCfg = loadAuthConfig();
       const posts = loadPosts();
       const delSet = loadDeleted();
+
+      if (req.url === '/auth') {
+        applyAuthPayload(memo || body);
+        savePosts(posts);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ ok: true }));
+        return;
+      }
 
       if (req.url === '/add' && url) {
         const ig = url.match(igRe);
@@ -128,9 +178,9 @@ if (!IS_ONCE) {
         const code = ig ? ig[2] : `yt_${yt[1]}`;
         const kind = ig ? (ig[1] === 'p' ? 'post' : 'reel') : 'youtube';
         const idxMatch = (ig ? ig[3] : '').match(/[?&]img_index=(\d+)/);
-        let item = posts.find(p => p.shortcode === code);
+        let item = posts.find(p => p.shortcode === code && isUserMatch(p, userEmail, authCfg.ownerEmail));
         if (!item) {
-          item = { shortcode: code, kind, url, date: formatKstDate(), imgIndex: idxMatch ? parseInt(idxMatch[1], 10) : 1, memo: memo || '' };
+          item = { shortcode: code, kind, url, date: formatKstDate(), imgIndex: idxMatch ? parseInt(idxMatch[1], 10) : 1, memo: memo || '', user: userEmail };
           posts.push(item);
         } else if (memo) {
           item.memo = memo;
@@ -146,28 +196,35 @@ if (!IS_ONCE) {
       if (!shortcode) { res.writeHead(400); res.end(); return; }
 
       if (req.url === '/delete') {
-        delSet.add(shortcode);
-        saveDeletedSet(delSet);
-        const idx = posts.findIndex(p => p.shortcode === shortcode);
+        const idx = posts.findIndex(p => p.shortcode === shortcode && isUserMatch(p, userEmail, authCfg.ownerEmail));
         if (idx !== -1) {
-          for (const rel of posts[idx].localImages || []) {
-            const pth = path.join(OUT_DIR, rel);
-            if (fs.existsSync(pth)) try { fs.unlinkSync(pth); } catch {}
+          const removed = posts.splice(idx, 1)[0];
+          const stillUsed = posts.some(p => p.shortcode === shortcode);
+          if (!stillUsed) {
+            delSet.add(shortcode);
+            saveDeletedSet(delSet);
+            for (const rel of removed.localImages || []) {
+              const pth = path.join(OUT_DIR, rel);
+              if (fs.existsSync(pth)) try { fs.unlinkSync(pth); } catch {}
+            }
+            if (removed.localVideo) {
+              const vpth = path.join(OUT_DIR, removed.localVideo);
+              if (fs.existsSync(vpth)) try { fs.unlinkSync(vpth); } catch {}
+            }
+            deleteFromDrive(shortcode);
           }
-          if (posts[idx].localVideo) {
-            const vpth = path.join(OUT_DIR, posts[idx].localVideo);
-            if (fs.existsSync(vpth)) try { fs.unlinkSync(vpth); } catch {}
-          }
-          posts.splice(idx, 1);
           savePosts(posts);
+        } else {
+          delSet.add(shortcode);
+          saveDeletedSet(delSet);
+          deleteFromDrive(shortcode);
         }
-        deleteFromDrive(shortcode);
-        console.log(`[삭제] ${shortcode}`);
+        console.log(`[삭제] ${shortcode} (${userEmail || 'default'})`);
       } else if (req.url === '/restore') {
         delSet.delete(shortcode);
         saveDeletedSet(delSet);
       } else if (req.url === '/memo') {
-        const target = posts.find(p => p.shortcode === shortcode);
+        const target = posts.find(p => p.shortcode === shortcode && isUserMatch(p, userEmail, authCfg.ownerEmail));
         if (target) {
           target.memo = memo || '';
           savePosts(posts);
@@ -186,25 +243,30 @@ if (!IS_ONCE) {
 
 console.log('🤖 인스타그램 스크랩 텔레그램 봇 대기 중... (인스타 링크와 메모를 보내주세요)');
 
-// GitHub Actions workflow_dispatch로 직접 전달된 입력(추가/삭제/메모수정) 처리
+// GitHub Actions workflow_dispatch로 직접 전달된 입력(추가/삭제/메모수정/인증) 처리
 if (process.env.INPUT_ACTION) {
   const act = process.env.INPUT_ACTION;
   const inUrl = (process.env.INPUT_URL || '').trim();
   const inMemo = (process.env.INPUT_MEMO || '').trim();
   const inCode = (process.env.INPUT_SHORTCODE || '').trim();
+  const inUser = (process.env.INPUT_USER || '').trim().toLowerCase();
+  const authCfg = loadAuthConfig();
   const posts = loadPosts();
   const delSet = loadDeleted();
 
-  if (act === 'add' && inUrl) {
+  if (act === 'auth' && inMemo) {
+    applyAuthPayload(inMemo);
+    savePosts(posts);
+  } else if (act === 'add' && inUrl) {
     const ig = inUrl.match(igRe);
     const yt = !ig && inUrl.match(ytRe);
     if (ig || yt) {
       const code = ig ? ig[2] : `yt_${yt[1]}`;
       const kind = ig ? (ig[1] === 'p' ? 'post' : 'reel') : 'youtube';
       const idxMatch = (ig ? ig[3] : '').match(/[?&]img_index=(\d+)/);
-      let item = posts.find(p => p.shortcode === code);
+      let item = posts.find(p => p.shortcode === code && isUserMatch(p, inUser, authCfg.ownerEmail));
       if (!item) {
-        item = { shortcode: code, kind, url: inUrl, date: formatKstDate(), imgIndex: idxMatch ? parseInt(idxMatch[1], 10) : 1, memo: inMemo };
+        item = { shortcode: code, kind, url: inUrl, date: formatKstDate(), imgIndex: idxMatch ? parseInt(idxMatch[1], 10) : 1, memo: inMemo, user: inUser };
         posts.push(item);
       } else if (inMemo) {
         item.memo = inMemo;
@@ -214,27 +276,34 @@ if (process.env.INPUT_ACTION) {
       syncDrive(code);
     }
   } else if (act === 'delete' && inCode) {
-    delSet.add(inCode);
-    saveDeletedSet(delSet);
-    const idx = posts.findIndex(p => p.shortcode === inCode);
+    const idx = posts.findIndex(p => p.shortcode === inCode && isUserMatch(p, inUser, authCfg.ownerEmail));
     if (idx !== -1) {
-      for (const rel of posts[idx].localImages || []) {
-        const pth = path.join(OUT_DIR, rel);
-        if (fs.existsSync(pth)) try { fs.unlinkSync(pth); } catch {}
+      const removed = posts.splice(idx, 1)[0];
+      const stillUsed = posts.some(p => p.shortcode === inCode);
+      if (!stillUsed) {
+        delSet.add(inCode);
+        saveDeletedSet(delSet);
+        for (const rel of removed.localImages || []) {
+          const pth = path.join(OUT_DIR, rel);
+          if (fs.existsSync(pth)) try { fs.unlinkSync(pth); } catch {}
+        }
+        if (removed.localVideo) {
+          const vpth = path.join(OUT_DIR, removed.localVideo);
+          if (fs.existsSync(vpth)) try { fs.unlinkSync(vpth); } catch {}
+        }
+        deleteFromDrive(inCode);
       }
-      if (posts[idx].localVideo) {
-        const vpth = path.join(OUT_DIR, posts[idx].localVideo);
-        if (fs.existsSync(vpth)) try { fs.unlinkSync(vpth); } catch {}
-      }
-      posts.splice(idx, 1);
       savePosts(posts);
+    } else {
+      delSet.add(inCode);
+      saveDeletedSet(delSet);
+      deleteFromDrive(inCode);
     }
-    deleteFromDrive(inCode);
   } else if (act === 'restore' && inCode) {
     delSet.delete(inCode);
     saveDeletedSet(delSet);
   } else if (act === 'memo' && inCode) {
-    const target = posts.find(p => p.shortcode === inCode);
+    const target = posts.find(p => p.shortcode === inCode && isUserMatch(p, inUser, authCfg.ownerEmail));
     if (target) { target.memo = inMemo; savePosts(posts); }
   }
 }

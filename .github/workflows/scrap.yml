@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: 'Action (add, delete, restore, memo)'
+        description: 'Action (add, delete, restore, memo, auth)'
         required: false
         default: ''
       url:
@@ -16,11 +16,15 @@ on:
         required: false
         default: ''
       memo:
-        description: 'Memo text'
+        description: 'Memo text or JSON payload'
         required: false
         default: ''
       shortcode:
         description: 'Target shortcode'
+        required: false
+        default: ''
+      user:
+        description: 'User Google email'
         required: false
         default: ''
 
@@ -61,6 +65,7 @@ jobs:
           INPUT_URL: ${{ github.event.inputs.url }}
           INPUT_MEMO: ${{ github.event.inputs.memo }}
           INPUT_SHORTCODE: ${{ github.event.inputs.shortcode }}
+          INPUT_USER: ${{ github.event.inputs.user }}
         run: |
           git pull --rebase origin main || true
           node build.mjs
@@ -71,5 +76,5 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html data.json .tg_offset deleted.json drive-stats.json || true
+          git add index.html data.json .tg_offset deleted.json drive-stats.json auth-config.json || true
           git diff --staged --quiet || (git commit -m "chore: update scraps and Drive links" && git pull --rebase -X ours origin main && git push)
