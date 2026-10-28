@@ -14442,6 +14442,27 @@
     "isVideo": true,
     "driveImages": [
       "https://lh3.googleusercontent.com/d/15JJBLA2GifQ5i-tGqghvgv943n1ouVRV=w1000"
+    ],
+    "driveVideo": ""
+  },
+  {
+    "shortcode": "yt_jB5QRkHj8tY",
+    "kind": "youtube",
+    "url": "https://youtube.com/shorts/jB5QRkHj8tY?si=idftxu8RuYVGmIQD",
+    "date": "2026년 10월 29일 오전 8:07",
+    "imgIndex": 1,
+    "memo": "#유튜브 #개그",
+    "user": "sajo4077@gmail.com",
+    "owner": "햄파민",
+    "caption": "20년 찐친 수영 긁는데 진심인 효연 유리 top 5",
+    "localImages": [
+      "images/yt_jB5QRkHj8tY_1.jpg"
+    ],
+    "localVideo": "",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1HJ0tTf4Ii3u9P4H_I80F1EWiGrmtIUFO=w1000"
     ]
   }
 ]
