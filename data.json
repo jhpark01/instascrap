@@ -14526,6 +14526,27 @@
     "isVideo": true,
     "driveImages": [
       "https://lh3.googleusercontent.com/d/1yw84_rrB5zohO7Z_q1T3SZjmaC5R0ji-=w1000"
+    ],
+    "driveVideo": ""
+  },
+  {
+    "shortcode": "yt_NGsfMIkmgMA",
+    "kind": "youtube",
+    "url": "https://youtube.com/shorts/NGsfMIkmgMA?si=X01kJaylPrS8VuK_",
+    "date": "2026년 10월 29일 오전 8:21",
+    "imgIndex": 1,
+    "memo": "조수봉 더블링 4종 세트. #유튜브 #개그",
+    "user": "sajo4077@gmail.com",
+    "owner": "옥상평상",
+    "caption": "조수봉 더블링 4종 세트.",
+    "localImages": [
+      "images/yt_NGsfMIkmgMA_1.jpg"
+    ],
+    "localVideo": "",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1PezgBg1mYhTu28RB3hUYOCkA3qOYWjAM=w1000"
     ]
   }
 ]
