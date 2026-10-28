@@ -14049,5 +14049,26 @@
       "https://lh3.googleusercontent.com/d/1d5xPrwxWYJ0Ak9_8_hUVTl6DRP7DEbAt=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/17Zl1pKDDB_AU5wmRk0jg_cH6bm3v9jfR/preview"
+  },
+  {
+    "shortcode": "De4CtjGyN35",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/De4CtjGyN35/?vrfl=NXM0cjFsNTRya2Fm",
+    "date": "2026년 10월 29일 오전 12:42",
+    "imgIndex": 1,
+    "memo": "#IT운영",
+    "user": "sajo4077@gmail.com",
+    "owner": "tiaz.dev",
+    "caption": "컨테이너, 어떻게 만들까요? 🐳\n\nDockerfile → 이미지 → 컨테이너\n이미지 하나로 컨테이너는 몇 개든 찍어낼 수 있어요.\n\n⚠️ 그런데 아무 이미지나 받으면 안 됩니다.\n2018년엔 코인 채굴기를 숨긴 이미지가 500만 번이나 받아졌어요.\n\n받기 전에 출처부터 확인!\n공식 이미지 표시, 꼭 챙기세요 ✅\n\n---\n\nHow do you make a container? 🐳\n\nDockerfile → image → container\nOne image can stamp out as many containers as you like.\n\n⚠️ But don’t pull just any image.\nIn 2018, images hiding coin miners were pulled 5 million times.\n\nCheck the source before you pull!\nLook for the official image badge ✅\n\n#Docker #Container #DockerHub",
+    "localImages": [
+      "images/De4CtjGyN35_1.jpg"
+    ],
+    "localVideo": "videos/De4CtjGyN35.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1RMV9nhNKFhe_-gI3ErClhwqIT3IsTod4=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1A_-HXWblBiWhSfJMjyZw5Bnmqyt6qQkZ/preview"
   }
 ]
