@@ -14484,6 +14484,27 @@
     "isVideo": true,
     "driveImages": [
       "https://lh3.googleusercontent.com/d/1bkeez6t5RmUjStcLgbo7Dyi3LvULVxyp=w1000"
+    ],
+    "driveVideo": ""
+  },
+  {
+    "shortcode": "yt_U0lTdxncWo0",
+    "kind": "youtube",
+    "url": "https://youtube.com/shorts/U0lTdxncWo0?si=CqoVp1BbY6ZTr2ob",
+    "date": "2026년 10월 29일 오전 8:10",
+    "imgIndex": 1,
+    "memo": "중국인들한테 유행중이라는 페이커잭슨ㅋㅋ #페이커 #유튜브",
+    "user": "sajo4077@gmail.com",
+    "owner": "롤 비하인드",
+    "caption": "중국인들한테 유행중이라는 페이커잭슨ㅋㅋ #페이커",
+    "localImages": [
+      "images/yt_U0lTdxncWo0_1.jpg"
+    ],
+    "localVideo": "",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1ttIpqQiVsT_quVcMByCjzHi8DCBGFCYY=w1000"
     ]
   }
 ]
