@@ -14254,6 +14254,28 @@
       "https://lh3.googleusercontent.com/d/1BZb6IKELkGHx8ZdoOFeoK4ggBejEy-AM=w1000",
       "https://lh3.googleusercontent.com/d/1fIViByAOC3i9SK7WJvHuPJjNQp3GJrcu=w1000",
       "https://lh3.googleusercontent.com/d/1vXGbeUHhP1SPN90wdQ2aKO91MgjH9VYC=w1000"
-    ]
+    ],
+    "driveVideo": ""
+  },
+  {
+    "shortcode": "DelnHN3jNau",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DelnHN3jNau/?psln=dWlnN3NqbjJodDJm",
+    "date": "2026년 10월 29일 오전 12:58",
+    "imgIndex": 1,
+    "memo": "#JAVA",
+    "user": "sajo4077@gmail.com",
+    "owner": "mandeum.app",
+    "caption": "자바 개발할 때 무심코 try-catch로 예외를 잡고 넘어가신 적 있으신가요?\n\n예외가 발생하면 JVM은 호출 스택(Call Stack)을 거꾸로 거슬러 올라가며 핸들러를 찾습니다.\n이 과정에서 스택 프레임을 전수 조사해 스택 추적(Stack Trace)을 생성하므로, if-else 대신 예외로 비즈니스 로직을 제어하면 막대한 CPU 비용이 발생합니다!\n\n또한 catch 블록에서 원본 예외(cause)를 넘기지 않고 새 예외를 던지면 진짜 장애 원인을 영영 잃어버릴 수 있습니다.\n호출 스택의 역사를 지키는 올바른 예외 처리 설계 원칙을 확인해 보세요.\n\n#자바 #백엔드개발 #주니어개발자 #코딩팁 #프로그래밍",
+    "localImages": [
+      "images/DelnHN3jNau_1.jpg"
+    ],
+    "localVideo": "videos/DelnHN3jNau.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1G5qDlfbZWKxy0N5p4lZjvk-bdts_Jb0P=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/12ZGcBbhDlMaAOQH2BO2C7xxTcM-O_akF/preview"
   }
 ]
