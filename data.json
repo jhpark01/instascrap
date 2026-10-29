@@ -14648,5 +14648,26 @@
       "https://lh3.googleusercontent.com/d/1sP4AFjM2_SWpF7NeWD2FbYSEDIFPSz32=w1000"
     ],
     "driveVideo": ""
+  },
+  {
+    "shortcode": "DeuA_afDjAO",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DeuA_afDjAO/?dlrf=Y2szMHcybzhwbGNs",
+    "date": "2026년 10월 29일 오후 3:38",
+    "imgIndex": 1,
+    "memo": "#JAVA",
+    "user": "sajo4077@gmail.com",
+    "owner": "mandeum.app",
+    "caption": "자바 추상 클래스(abstract class)는 직접 new로 객체를 생성할 수 없다는 사실, 알고 계셨나요? 뼈대만 잡힌 미완성 설계도처럼 공통 필드와 메서드의 기본 틀을 제공하고, 반드시 자식이 완성해야 하는 핵심 추상 메서드를 강제합니다. 단, 자바의 단일 상속 제약으로 인해 무분별한 상속 계층 확장은 피해야 합니다!\n\n#자바 #Java #추상클래스 #객체지향 #백엔드개발",
+    "localImages": [
+      "images/DeuA_afDjAO_1.jpg"
+    ],
+    "localVideo": "videos/DeuA_afDjAO.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1KDNBI5XIUlA537TwPjdQUpmTsU7wh9ze=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/18Hw2ptkkuxXA1mjWDRpt68dwEtLLYFVj/preview"
   }
 ]
