@@ -1,5 +1,9 @@
 {
   "ownerEmail": "sajo4077@gmail.com",
+  "adminEmails": [
+    "sajo4077@gmail.com",
+    "sajo4077@naver.com"
+  ],
   "googleClientId": "517274633569-pvv1hgqra5v030f3a99v9nspj00h5gsh.apps.googleusercontent.com",
   "encToken": "0e06032b2030343d29202c2414050a0d4a0e243323062d5a4859641a0a0920132651433324062b2e",
   "users": {
@@ -8,6 +12,7 @@
       "name": "재휘박",
       "pinHash": "",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocL963nFH-Q0IyjTDx9Nyuyhu5McTtZjvyPa17tW91-Lc4Z0ZA=s96-c",
+      "status": "approved",
       "updatedAt": "2026-10-28T00:30:50.743Z"
     },
     "wusdl486@gmail.com": {
@@ -15,6 +20,7 @@
       "name": "김지연",
       "pinHash": "",
       "picture": "https://lh3.googleusercontent.com/a/ACg8ocJa7IMbUKSMgdvEsFmHEmfbySAFYhKlP9Nf6rrYN4bzHJCe8g=s96-c",
+      "status": "approved",
       "updatedAt": "2026-10-28T01:14:26.852Z"
     }
   }

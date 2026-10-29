@@ -572,42 +572,38 @@ function renderHtml(posts) {
 </header>
 <main id="grid" class="grid"></main>
 <button id="topBtn" class="top-btn" title="맨 위로 이동">↑</button>
-<dialog id="authModal" style="width:min(440px,92vw);">
+<dialog id="authModal" style="width:min(460px,94vw);">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-    <strong>🔐 Google 계정 선택 로그인</strong>
+    <strong>🔐 Google 계정 로그인 및 회원 관리</strong>
     <button id="authCloseBtn" class="btn" onclick="document.getElementById('authModal').close()">닫기</button>
   </div>
   <div style="display:flex;flex-direction:column;gap:12px;">
     <div style="font-size:13px;color:var(--muted);line-height:1.45;">
-      브라우저(휴대폰/PC)에 로그인되어 있는 <b>Google 계정</b>을 선택하면 계정별로 스크랩북이 자동 분리됩니다.
+      관리자(<b>sajo4077@gmail.com</b>)가 승인한 Google 계정만 접속할 수 있으며, 계정별로 스크랩북이 완전히 분리됩니다.
     </div>
-    <label id="authClaimWrap" style="display:flex;align-items:center;gap:8px;font-size:13px;color:#d3d7e2;cursor:pointer;background:#1f2430;padding:10px 12px;border-radius:8px;">
+    <label id="authClaimWrap" style="display:none;align-items:center;gap:8px;font-size:13px;color:#d3d7e2;cursor:pointer;background:#1f2430;padding:10px 12px;border-radius:8px;">
       <input id="authClaimOwner" type="checkbox" />
-      <span>기존에 저장된 스크랩(526개)을 내 계정으로 연결 (본인 최초 1회)</span>
+      <span>기존에 저장된 스크랩을 내 계정으로 연결 (관리자 기본)</span>
     </label>
     <button id="googleSelectBtn" class="btn" style="background:#4285F4;color:#fff;border-color:#4285F4;padding:12px;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;">
       <span>🔵 현재 로그인된 Google 계정 선택하기</span>
     </button>
     <div id="googleGsiBtn" style="display:flex;justify-content:center;"></div>
-    <div id="savedAccountsWrap" style="display:none;flex-direction:column;gap:6px;border-top:1px solid var(--border);padding-top:10px;">
-      <div style="font-size:12px;color:var(--muted);">이 기기/가족에 등록된 Google 계정 바로 전환:</div>
-      <div id="savedAccountsList" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    <div id="adminPanel" style="display:none;flex-direction:column;gap:10px;border-top:1px solid var(--border);padding-top:12px;">
+      <strong style="font-size:14px;color:#ffcc00;">👑 관리자 회원 승인 관리</strong>
+      <div id="adminPendingWrap" style="display:flex;flex-direction:column;gap:6px;"></div>
+      <div id="adminApprovedWrap" style="display:flex;flex-direction:column;gap:6px;"></div>
+      <div style="display:flex;gap:6px;margin-top:4px;">
+        <input id="adminAddEmail" class="search" type="email" placeholder="미리 승인할 구글 이메일 입력..." style="font-size:12px;padding:7px 10px;" />
+        <button id="adminAddBtn" type="button" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);white-space:nowrap;">+ 직접 승인</button>
+      </div>
     </div>
     <button id="logoutBtn" class="btn" style="display:none;color:#ff4d4f;border-color:#ff4d4f;padding:9px;">현재 계정 로그아웃</button>
-    <details id="oauthSetupDetails" style="margin-top:2px;font-size:12px;color:var(--muted);background:#12151b;padding:10px 12px;border-radius:8px;border:1px solid var(--border);">
-      <summary style="cursor:pointer;font-weight:600;color:#d3d7e2;">⚙️ 최초 1회 Google OAuth Client ID 등록 안내</summary>
+    <details id="oauthSetupDetails" style="display:none;margin-top:2px;font-size:12px;color:var(--muted);background:#12151b;padding:10px 12px;border-radius:8px;border:1px solid var(--border);">
+      <summary style="cursor:pointer;font-weight:600;color:#d3d7e2;">⚙️ Google OAuth Client ID 설정 (관리자용)</summary>
       <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px;line-height:1.5;">
-        <div>구글 공식 계정 선택창을 띄우려면 최초 1회 본인 구글 클라우드에서 발급한 <b>웹 클라이언트 ID</b>가 필요합니다 (1회 저장 시 와이프분 폰에도 자동 적용됩니다).</div>
-        <div>1. <a href="https://console.cloud.google.com/apis/credentials/oauthclient" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600;">Google Cloud OAuth 클라이언트 ID 만들기 ↗</a> 접속</div>
-        <div>2. 애플리케이션 유형: <b>웹 애플리케이션</b> 선택</div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-          <span>3. <b>승인된 자바스크립트 원본</b>에 추가:</span>
-          <code style="background:#1f2430;padding:2px 6px;border-radius:4px;color:#fff;">https://jhpark01.github.io</code>
-          <button type="button" class="btn" style="padding:2px 7px;font-size:11px;" onclick="navigator.clipboard.writeText('https://jhpark01.github.io');this.textContent='✅ 복사됨';">주소 복사</button>
-        </div>
-        <div>4. 생성된 <b>클라이언트 ID</b>(<code>...apps.googleusercontent.com</code>)를 아래에 붙여넣고 저장하세요:</div>
         <input id="oauthClientIdInput" class="search" type="text" placeholder="xxxx.apps.googleusercontent.com" style="font-size:12px;padding:8px 10px;" />
-        <button id="saveOauthBtn" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);padding:9px;">Client ID 저장 및 계정 선택창 열기</button>
+        <button id="saveOauthBtn" class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);padding:9px;">Client ID 저장</button>
       </div>
     </details>
   </div>
@@ -677,16 +673,31 @@ const starred = new Set();
 const deleted = new Set();
 let customMemos = {};
 
+const ADMIN_EMAILS = ['sajo4077@gmail.com', 'sajo4077@naver.com'];
+function isAdminEmail(email) {
+  const e = (email || '').trim().toLowerCase();
+  return ADMIN_EMAILS.includes(e) || (AUTH_CONFIG.adminEmails || []).map(x => x.toLowerCase()).includes(e);
+}
+function isAdminUser() {
+  return !!currentUser?.email && isAdminEmail(currentUser.email);
+}
+function isApprovedUser() {
+  if (!currentUser?.email) return false;
+  const e = currentUser.email.trim().toLowerCase();
+  if (isAdminEmail(e)) return true;
+  return AUTH_CONFIG.users?.[e]?.status === 'approved';
+}
 function userKey(base) {
   return currentUser?.email ? (base + '_' + currentUser.email.toLowerCase()) : base;
 }
 function isOwnerUser() {
   if (!currentUser?.email) return false;
-  const owner = (AUTH_CONFIG.ownerEmail || '').toLowerCase();
-  return !owner || owner === currentUser.email.toLowerCase();
+  if (isAdminUser()) return true;
+  const owner = (AUTH_CONFIG.ownerEmail || 'sajo4077@gmail.com').toLowerCase();
+  return owner === currentUser.email.toLowerCase();
 }
 function isMyPost(p) {
-  if (!currentUser?.email) return false;
+  if (!isApprovedUser()) return false;
   const myEmail = currentUser.email.toLowerCase();
   const postUser = (p.user || '').toLowerCase();
   if (postUser) return postUser === myEmail;
@@ -897,9 +908,59 @@ const videoObserver = new IntersectionObserver((entries) => {
 
 function render() {
   const uBtn = document.getElementById('userBtn');
+  const pendingUsers = Object.values(AUTH_CONFIG.users || {}).filter(u => u.status === 'pending' && !isAdminEmail(u.email));
   if (uBtn) {
-    uBtn.textContent = currentUser?.email ? ('👤 ' + (currentUser.name || currentUser.email.split('@')[0])) : '🔑 구글 로그인';
+    if (!currentUser?.email) {
+      uBtn.textContent = '🔑 구글 로그인';
+      uBtn.style.borderColor = '';
+      uBtn.style.color = '';
+    } else if (isAdminUser()) {
+      uBtn.textContent = '👑 ' + (currentUser.name || '관리자') + (pendingUsers.length > 0 ? ' (승인대기 ' + pendingUsers.length + '명)' : ' (회원관리)');
+      if (pendingUsers.length > 0) {
+        uBtn.style.borderColor = '#ffcc00';
+        uBtn.style.color = '#ffcc00';
+      } else {
+        uBtn.style.borderColor = '';
+        uBtn.style.color = '';
+      }
+    } else {
+      uBtn.textContent = '👤 ' + (currentUser.name || currentUser.email.split('@')[0]);
+      uBtn.style.borderColor = '';
+      uBtn.style.color = '';
+    }
   }
+
+  const approved = isApprovedUser();
+  document.querySelectorAll('.toolbar > :not(.title):not(#userBtn)').forEach(el => {
+    el.style.display = approved ? '' : 'none';
+  });
+  document.getElementById('tagBar').style.display = approved ? '' : 'none';
+
+  const grid = document.getElementById('grid');
+  if (!currentUser?.email) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:14px;">'
+      + '<div style="font-size:18px;font-weight:700;color:#fff;">🔐 승인된 사용자 전용 스크랩북입니다</div>'
+      + '<div style="font-size:13px;">Google 계정으로 로그인 후 관리자(sajo4077@gmail.com) 승인을 받은 분만 이용할 수 있습니다.</div>'
+      + '<button class="btn" style="background:#4285F4;color:#fff;border-color:#4285F4;padding:11px 20px;font-size:14px;" onclick="openAuthModal()">🔵 Google 계정으로 로그인</button>'
+      + '</div>';
+    return;
+  }
+  if (!approved) {
+    const st = AUTH_CONFIG.users?.[currentUser.email.toLowerCase()]?.status || 'pending';
+    const isRej = st === 'rejected';
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:14px;">'
+      + '<div style="font-size:18px;font-weight:700;color:' + (isRej ? '#ff4d4f' : '#ffaa00') + ';">'
+      + (isRej ? '🚫 접속이 승인되지 않은 계정입니다' : '⏳ 관리자 승인 대기 중입니다')
+      + '</div>'
+      + '<div style="font-size:14px;color:#d3d7e2;">로그인 계정: <b>' + currentUser.email + '</b> (' + (currentUser.name || '') + ')</div>'
+      + '<div style="font-size:13px;line-height:1.5;">관리자(<b>sajo4077@gmail.com</b>)에게 접속 승인 요청이 전달되었습니다.<br>관리자가 수락하면 바로 화면이 열립니다.</div>'
+      + '<div style="display:flex;gap:8px;margin-top:6px;">'
+      + '<button class="btn" style="background:var(--accent);color:#fff;border-color:var(--accent);padding:9px 16px;" onclick="refreshData()">🔄 승인 상태 확인</button>'
+      + '<button class="btn" style="padding:9px 16px;" onclick="openAuthModal()">다른 계정으로 변경 / 로그아웃</button>'
+      + '</div></div>';
+    return;
+  }
+
   renderTagBar();
   const q = query.trim().toLowerCase();
   const myPosts = POSTS.filter(p => isMyPost(p));
@@ -919,12 +980,6 @@ function render() {
 
   const activeTotal = myPosts.filter(p => !deleted.has(p.shortcode)).length;
   document.getElementById('count').textContent = list.length + ' / ' + activeTotal + '개';
-  const grid = document.getElementById('grid');
-
-  if (!currentUser?.email) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);">🔐 상단 <b>구글 로그인</b> 버튼을 눌러 본인 구글 계정으로 로그인해 주세요.<br><span style="font-size:13px;">계정별로 각자의 스크랩북이 분리되어 표시됩니다.</span></div>';
-    return;
-  }
   for (const child of [...grid.children]) {
     if (!child.dataset.code) child.remove();
   }
@@ -1335,14 +1390,18 @@ function loginWithUserObj(u, claimOwner = false, shouldSync = true) {
   if (!email) return;
   if (!AUTH_CONFIG.users) AUTH_CONFIG.users = {};
   const existing = AUTH_CONFIG.users[email] || {};
+  const status = isAdminEmail(email)
+    ? 'approved'
+    : (existing.status === 'approved' ? 'approved' : (existing.status === 'rejected' ? 'rejected' : 'pending'));
   const userObj = {
     email,
     name: u.name || existing.name || email.split('@')[0],
     pinHash: u.pinHash || existing.pinHash || '',
-    picture: u.picture || existing.picture || ''
+    picture: u.picture || existing.picture || '',
+    status
   };
   AUTH_CONFIG.users[email] = userObj;
-  if (claimOwner || !AUTH_CONFIG.ownerEmail) {
+  if (isAdminEmail(email) && (claimOwner || !AUTH_CONFIG.ownerEmail)) {
     AUTH_CONFIG.ownerEmail = email;
   }
   currentUser = userObj;
@@ -1350,7 +1409,105 @@ function loginWithUserObj(u, claimOwner = false, shouldSync = true) {
   loadUserState();
   render();
   if (shouldSync) {
-    syncAuthConfig({ claimOwner: claimOwner || AUTH_CONFIG.ownerEmail === email });
+    syncAuthConfig({ claimOwner: isAdminEmail(email) });
+  }
+}
+
+function setTargetUserStatus(targetEmail, targetStatus) {
+  if (!isAdminUser()) return;
+  const t = (targetEmail || '').trim().toLowerCase();
+  if (!t) return;
+  if (!AUTH_CONFIG.users) AUTH_CONFIG.users = {};
+  if (targetStatus === 'remove') {
+    delete AUTH_CONFIG.users[t];
+  } else {
+    AUTH_CONFIG.users[t] = {
+      ...(AUTH_CONFIG.users[t] || { email: t, name: t.split('@')[0], picture: '' }),
+      email: t,
+      status: targetStatus
+    };
+  }
+  syncAuthConfig({ targetEmail: t, targetStatus });
+  renderAdminPanel();
+  render();
+}
+
+function renderAdminPanel() {
+  const panel = document.getElementById('adminPanel');
+  if (!panel) return;
+  if (!isAdminUser()) {
+    panel.style.display = 'none';
+    return;
+  }
+  panel.style.display = 'flex';
+  const pendingWrap = document.getElementById('adminPendingWrap');
+  const approvedWrap = document.getElementById('adminApprovedWrap');
+  pendingWrap.innerHTML = '';
+  approvedWrap.innerHTML = '';
+
+  const allUsers = Object.values(AUTH_CONFIG.users || {});
+  const pendingList = allUsers.filter(u => !isAdminEmail(u.email) && u.status !== 'approved');
+  const approvedList = allUsers.filter(u => isAdminEmail(u.email) || u.status === 'approved');
+
+  const pTitle = document.createElement('div');
+  pTitle.style.fontSize = '12px';
+  pTitle.style.color = '#ffaa00';
+  pTitle.textContent = '⏳ 승인 대기 / 차단 목록 (' + pendingList.length + '명)';
+  pendingWrap.appendChild(pTitle);
+
+  if (pendingList.length === 0) {
+    const empty = document.createElement('div');
+    empty.style.fontSize = '12px';
+    empty.style.color = 'var(--muted)';
+    empty.textContent = '현재 승인 대기 중인 사용자가 없습니다.';
+    pendingWrap.appendChild(empty);
+  } else {
+    for (const u of pendingList) {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;background:#1f2430;padding:8px 10px;border-radius:8px;gap:8px;font-size:12px;';
+      const info = document.createElement('div');
+      info.textContent = (u.name || u.email.split('@')[0]) + ' (' + u.email + ')' + (u.status === 'rejected' ? ' [거절됨]' : '');
+      const btns = document.createElement('div');
+      btns.style.cssText = 'display:flex;gap:5px;flex-shrink:0;';
+      const okBtn = document.createElement('button');
+      okBtn.className = 'btn';
+      okBtn.style.cssText = 'padding:4px 8px;font-size:11px;background:#2ecc71;color:#fff;border-color:#2ecc71;';
+      okBtn.textContent = '✅ 수락';
+      okBtn.onclick = () => setTargetUserStatus(u.email, 'approved');
+      const noBtn = document.createElement('button');
+      noBtn.className = 'btn';
+      noBtn.style.cssText = 'padding:4px 8px;font-size:11px;color:#ff4d4f;border-color:#ff4d4f;';
+      noBtn.textContent = '삭제';
+      noBtn.onclick = () => setTargetUserStatus(u.email, 'remove');
+      btns.append(okBtn, noBtn);
+      row.append(info, btns);
+      pendingWrap.appendChild(row);
+    }
+  }
+
+  const aTitle = document.createElement('div');
+  aTitle.style.fontSize = '12px';
+  aTitle.style.color = '#2ecc71';
+  aTitle.style.marginTop = '4px';
+  aTitle.textContent = '✅ 승인된 사용자 목록 (' + approvedList.length + '명)';
+  approvedWrap.appendChild(aTitle);
+
+  for (const u of approvedList) {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;background:#141821;padding:7px 10px;border-radius:8px;gap:8px;font-size:12px;border:1px solid var(--border);';
+    const isAdm = isAdminEmail(u.email);
+    const info = document.createElement('div');
+    info.textContent = (isAdm ? '👑 ' : '👤 ') + (u.name || u.email.split('@')[0]) + ' (' + u.email + ')';
+    row.appendChild(info);
+    if (!isAdm) {
+      const revokeBtn = document.createElement('button');
+      revokeBtn.className = 'btn';
+      revokeBtn.style.cssText = 'padding:3px 8px;font-size:11px;color:#ff4d4f;border-color:#ff4d4f;';
+      revokeBtn.textContent = '승인 취소';
+      revokeBtn.onclick = () => setTargetUserStatus(u.email, 'rejected');
+      row.appendChild(revokeBtn);
+    }
+    approvedWrap.appendChild(row);
   }
 }
 
@@ -1419,47 +1576,32 @@ function triggerGoogleAccountChooser() {
 
 function openAuthModal() {
   const modal = document.getElementById('authModal');
-  const claimWrap = document.getElementById('authClaimWrap');
-  const claimChk = document.getElementById('authClaimOwner');
   const logoutBtn = document.getElementById('logoutBtn');
-  const savedWrap = document.getElementById('savedAccountsWrap');
-  const savedList = document.getElementById('savedAccountsList');
   const cidInp = document.getElementById('oauthClientIdInput');
   const det = document.getElementById('oauthSetupDetails');
 
   if (cidInp) cidInp.value = AUTH_CONFIG.googleClientId || '';
-  if (det) det.open = !AUTH_CONFIG.googleClientId;
-
-  const hasOwner = !!AUTH_CONFIG.ownerEmail;
-  claimChk.checked = !hasOwner || (currentUser?.email && AUTH_CONFIG.ownerEmail.toLowerCase() === currentUser.email.toLowerCase());
-  claimWrap.style.display = (!hasOwner || isOwnerUser()) ? 'flex' : 'none';
+  if (det) {
+    det.style.display = (!AUTH_CONFIG.googleClientId || isAdminUser()) ? 'block' : 'none';
+    det.open = !AUTH_CONFIG.googleClientId;
+  }
   logoutBtn.style.display = currentUser?.email ? 'block' : 'none';
 
-  const usersArr = Object.values(AUTH_CONFIG.users || {});
-  if (usersArr.length > 0) {
-    savedWrap.style.display = 'flex';
-    savedList.innerHTML = '';
-    for (const u of usersArr) {
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'tag-chip' + (currentUser?.email === u.email ? ' active' : '');
-      chip.textContent = '👤 ' + (u.name || u.email.split('@')[0]) + ' (' + u.email + ')';
-      chip.onclick = () => {
-        loginWithUserObj(u, false, false);
-        modal.close();
-      };
-      savedList.appendChild(chip);
-    }
-  } else {
-    savedWrap.style.display = 'none';
-  }
-
+  renderAdminPanel();
   initGoogleGsi();
   modal.showModal();
 }
 
 document.getElementById('userBtn').addEventListener('click', openAuthModal);
 document.getElementById('googleSelectBtn').addEventListener('click', triggerGoogleAccountChooser);
+document.getElementById('adminAddBtn')?.addEventListener('click', () => {
+  const inp = document.getElementById('adminAddEmail');
+  let email = (inp.value || '').trim().toLowerCase();
+  if (!email) return;
+  if (!email.includes('@')) email += '@gmail.com';
+  setTargetUserStatus(email, 'approved');
+  inp.value = '';
+});
 
 document.getElementById('logoutBtn').addEventListener('click', () => {
   if (window.google?.accounts?.id) {
@@ -1593,11 +1735,19 @@ async function refreshData() {
     ]);
     if (nextAuth && typeof nextAuth === 'object') {
       AUTH_CONFIG = {
-        ownerEmail: nextAuth.ownerEmail || AUTH_CONFIG.ownerEmail || '',
+        ownerEmail: nextAuth.ownerEmail || AUTH_CONFIG.ownerEmail || 'sajo4077@gmail.com',
+        adminEmails: nextAuth.adminEmails || AUTH_CONFIG.adminEmails || ADMIN_EMAILS,
         googleClientId: nextAuth.googleClientId || AUTH_CONFIG.googleClientId || '',
         encToken: nextAuth.encToken || AUTH_CONFIG.encToken || '',
         users: { ...(AUTH_CONFIG.users || {}), ...(nextAuth.users || {}) }
       };
+      if (currentUser?.email) {
+        const latestMe = AUTH_CONFIG.users[currentUser.email.toLowerCase()];
+        if (latestMe) {
+          currentUser.status = latestMe.status;
+          localStorage.setItem('ig_user', JSON.stringify(currentUser));
+        }
+      }
     }
     if (nextStats && nextStats.scrapBytes !== undefined) {
       DRIVE_STATS = nextStats;

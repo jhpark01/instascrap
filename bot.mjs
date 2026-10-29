@@ -7,10 +7,22 @@ import { syncDrive, deleteFromDrive } from './sync-drive.mjs';
 const ENV_FILE = path.join(OUT_DIR, '.env');
 const OFFSET_FILE = path.join(OUT_DIR, '.tg_offset');
 const AUTH_CONFIG_FILE = path.join(OUT_DIR, 'auth-config.json');
+const ADMIN_EMAILS = new Set(['sajo4077@gmail.com', 'sajo4077@naver.com']);
+
+function isAdminEmail(email) {
+  return ADMIN_EMAILS.has((email || '').trim().toLowerCase());
+}
+
+function isApprovedEmail(email, cfg) {
+  const e = (email || '').trim().toLowerCase();
+  if (!e) return false;
+  if (isAdminEmail(e)) return true;
+  return cfg?.users?.[e]?.status === 'approved';
+}
 
 function loadAuthConfig() {
-  if (!fs.existsSync(AUTH_CONFIG_FILE)) return { ownerEmail: '', googleClientId: '', encToken: '', users: {} };
-  try { return JSON.parse(fs.readFileSync(AUTH_CONFIG_FILE, 'utf8')); } catch { return { ownerEmail: '', googleClientId: '', encToken: '', users: {} }; }
+  if (!fs.existsSync(AUTH_CONFIG_FILE)) return { ownerEmail: 'sajo4077@gmail.com', adminEmails: [...ADMIN_EMAILS], googleClientId: '', encToken: '', users: {} };
+  try { return JSON.parse(fs.readFileSync(AUTH_CONFIG_FILE, 'utf8')); } catch { return { ownerEmail: 'sajo4077@gmail.com', adminEmails: [...ADMIN_EMAILS], googleClientId: '', encToken: '', users: {} }; }
 }
 
 function saveAuthConfig(cfg) {
@@ -22,18 +34,39 @@ function applyAuthPayload(rawJson) {
     const data = typeof rawJson === 'string' ? JSON.parse(rawJson) : rawJson;
     const cfg = loadAuthConfig();
     if (!cfg.users) cfg.users = {};
+    if (!cfg.adminEmails) cfg.adminEmails = [...ADMIN_EMAILS];
     if (data.googleClientId !== undefined) cfg.googleClientId = data.googleClientId;
     if (data.encToken) cfg.encToken = data.encToken;
+
+    if (data.targetEmail && isAdminEmail(data.email)) {
+      const target = data.targetEmail.trim().toLowerCase();
+      if (data.targetStatus === 'remove') {
+        delete cfg.users[target];
+      } else if (data.targetStatus) {
+        cfg.users[target] = {
+          ...(cfg.users[target] || { email: target, name: target.split('@')[0], picture: '' }),
+          email: target,
+          status: data.targetStatus,
+          updatedAt: new Date().toISOString()
+        };
+      }
+    }
+
     const email = (data.email || '').trim().toLowerCase();
     if (email) {
+      const prev = cfg.users[email] || {};
+      const nextStatus = isAdminEmail(email)
+        ? 'approved'
+        : (prev.status === 'approved' ? 'approved' : (prev.status === 'rejected' ? 'rejected' : 'pending'));
       cfg.users[email] = {
         email,
-        name: data.name || cfg.users[email]?.name || email.split('@')[0],
-        pinHash: data.pinHash || cfg.users[email]?.pinHash || '',
-        picture: data.picture || cfg.users[email]?.picture || '',
+        name: data.name || prev.name || email.split('@')[0],
+        pinHash: data.pinHash || prev.pinHash || '',
+        picture: data.picture || prev.picture || '',
+        status: nextStatus,
         updatedAt: new Date().toISOString()
       };
-      if (data.claimOwner || !cfg.ownerEmail) {
+      if (isAdminEmail(email) && (data.claimOwner || !cfg.ownerEmail)) {
         cfg.ownerEmail = email;
       }
     }
@@ -257,6 +290,8 @@ if (process.env.INPUT_ACTION) {
   if (act === 'auth' && inMemo) {
     applyAuthPayload(inMemo);
     savePosts(posts);
+  } else if (inUser && !isApprovedEmail(inUser, authCfg)) {
+    console.log(`[미승인 사용자 차단] ${inUser} (${act})`);
   } else if (act === 'add' && inUrl) {
     const ig = inUrl.match(igRe);
     const yt = !ig && inUrl.match(ytRe);
