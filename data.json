@@ -15424,6 +15424,42 @@
     "isVideo": true,
     "driveImages": [
       "https://lh3.googleusercontent.com/d/1zeV-BBDboQQ2YWpEHBC_fN6kyWi2QgfJ=w1000"
-    ]
+    ],
+    "driveVideo": ""
+  },
+  {
+    "shortcode": "DersNmOEhrr",
+    "kind": "post",
+    "url": "https://www.instagram.com/p/DersNmOEhrr/?img_index=8&vrfl=ZHd2bnl0ZDd3MTVv",
+    "date": "2026년 10월 31일 오전 8:45",
+    "imgIndex": 8,
+    "memo": "#업무 pdf to markdown",
+    "user": "sajo4077@gmail.com",
+    "owner": "reelsner",
+    "caption": "클로드에 PDF 올리는 분들, MarkItDown 무조건 쓰세요.\n\n클로드는 PDF 한 페이지를 글로도 읽고, 페이지 이미지로도 읽어요.\n같은 페이지를 두 번 계산하는 셈이에요.\n\n✔ MarkItDown\n마이크로소프트가 만든 무료 오픈소스(MIT)\n\n✔ 바꿔주는 것\nPDF·워드·엑셀·PPT → 글자만 남긴 마크다운\n표는 표로, 제목은 제목으로 남아요\n\n✔ 클로드 데스크톱 연결\nMCP로 연결해두면 ”이 PDF 마크다운으로 바꿔줘“ 한마디면 끝\n\n※ 그림·차트가 중요한 문서는 PDF 그대로 올리세요.\n변환하면 글만 남아요.\n※ 줄어드는 양은 문서마다 달라요.\n\n💬 설치부터 클로드 연결까지 정리한 자료,\n댓글에 ’마크다운‘ 남기시면 DM으로 보내드릴게요 📩",
+    "localImages": [
+      "images/DersNmOEhrr_1.jpg",
+      "images/DersNmOEhrr_2.jpg",
+      "images/DersNmOEhrr_3.jpg",
+      "images/DersNmOEhrr_4.jpg",
+      "images/DersNmOEhrr_5.jpg",
+      "images/DersNmOEhrr_6.jpg",
+      "images/DersNmOEhrr_7.jpg",
+      "images/DersNmOEhrr_8.jpg"
+    ],
+    "localVideo": "videos/DersNmOEhrr.mp4",
+    "videoChecked": true,
+    "isVideo": false,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1cS_Az_op3G2J6DwJ-tWpQBoQIOXlIonR=w1000",
+      "https://lh3.googleusercontent.com/d/1XNZY7a80uvPLDXFC64KC4sEAqUL7zt2B=w1000",
+      "https://lh3.googleusercontent.com/d/1J6qFhpgmOtZkoBRuOxFQHBlypfnsE9J2=w1000",
+      "https://lh3.googleusercontent.com/d/1bBEEF8lMrHVWMgdMP2etfkFwon7bp5o_=w1000",
+      "https://lh3.googleusercontent.com/d/1zQcAild2tV7buUT80yhOzEpxHpIaQWZF=w1000",
+      "https://lh3.googleusercontent.com/d/1XmulYK_XcRzUs_efVOwS9niB6UWX7pV7=w1000",
+      "https://lh3.googleusercontent.com/d/1gQgW7huLUqulZjp9kIyQI4Ai5aV_wCfW=w1000",
+      "https://lh3.googleusercontent.com/d/1VzB803KwViM9Fiqvo7cg4NCNycSxE1Tj=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1RpsEKd6OpXdX_weSndGpQcTHyuCHUhHW/preview"
   }
 ]
