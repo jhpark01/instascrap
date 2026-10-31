@@ -4550,12 +4550,25 @@
     "date": "2026년 7월 26일 오전 8:36",
     "imgIndex": 4,
     "memo": "ac dc설명",
-    "owner": "",
-    "caption": "",
-    "localImages": [],
+    "owner": "balance_nori",
+    "caption": "직류 vs 교류",
+    "localImages": [
+      "images/Da2bGZIFAkW_1.jpg",
+      "images/Da2bGZIFAkW_2.jpg",
+      "images/Da2bGZIFAkW_3.jpg",
+      "images/Da2bGZIFAkW_4.jpg",
+      "images/Da2bGZIFAkW_5.jpg"
+    ],
     "localVideo": "",
     "videoChecked": true,
-    "isVideo": false
+    "isVideo": false,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/12gVgf9RUe7vMOnmocQbmeqfDnj-pye1p=w1000",
+      "https://lh3.googleusercontent.com/d/1GWddw5OLwQmD0gewsV3YY6McmcYA1TeT=w1000",
+      "https://lh3.googleusercontent.com/d/16MNtmG4l-5u6XV7srS22w064KDXGXmQq=w1000",
+      "https://lh3.googleusercontent.com/d/1NJng1kdIqvWtk0pKtOdRn75obeYKtqMn=w1000",
+      "https://lh3.googleusercontent.com/d/1SDx9ESh99tfsEP55dStmOF6xde7RRhTy=w1000"
+    ]
   },
   {
     "shortcode": "DaqBtjdCa63",
