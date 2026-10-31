@@ -15461,5 +15461,26 @@
       "https://lh3.googleusercontent.com/d/1VzB803KwViM9Fiqvo7cg4NCNycSxE1Tj=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/1RpsEKd6OpXdX_weSndGpQcTHyuCHUhHW/preview"
+  },
+  {
+    "shortcode": "DfHwvZyj8Jr",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DfHwvZyj8Jr/?exln=ZGJpbzBiaHgzYjh1",
+    "date": "2026년 10월 31일 오전 9:55",
+    "imgIndex": 1,
+    "memo": "#JAVA",
+    "user": "sajo4077@gmail.com",
+    "owner": "mandeum.app",
+    "caption": "자바 코드 위에 붙이는 골뱅이(@), 애너테이션은 어떻게 동작할까요? 단순한 메모 표식이 어떻게 프레임워크를 움직이고 자동으로 의존성을 주입하는지 그 핵심 원리를 정리했습니다.\n\n#자바 #애너테이션 #스프링 #백엔드개발 #컴퓨터공학",
+    "localImages": [
+      "images/DfHwvZyj8Jr_1.jpg"
+    ],
+    "localVideo": "videos/DfHwvZyj8Jr.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1Yps8Ymvdqg8-GokBiDYOFgUvl34T0XDg=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1dhbp6StPfn_2in-_xgMi2b5nZd9-I3qW/preview"
   }
 ]
