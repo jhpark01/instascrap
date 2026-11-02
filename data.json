@@ -15678,6 +15678,28 @@
     "isVideo": true,
     "driveImages": [
       "https://lh3.googleusercontent.com/d/1FMNBy14rrfP-jj8X1r70Yb2BSlS17n12=w1000"
-    ]
+    ],
+    "driveVideo": ""
+  },
+  {
+    "shortcode": "De8G2sJSJyT",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/De8G2sJSJyT/?dlrf=MXQ5Y24weHo0Y2w4Yw==",
+    "date": "2026년 11월 2일 오후 1:35",
+    "imgIndex": 1,
+    "memo": "",
+    "user": "wusdl486@gmail.com",
+    "owner": "jubuham",
+    "caption": "라면보다 자주 먹는 #초간단 #규동 \n레시피도 진짜 간단하니깐 저장해놨다 따라해보세요!\n맛은 대박이에요~ #단백질식단 🥩",
+    "localImages": [
+      "images/De8G2sJSJyT_1.jpg"
+    ],
+    "localVideo": "videos/De8G2sJSJyT.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1Ob_LiKJWPkadrQ-UStuQAqt1xdHRvxec=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1U_JsfGao9ufg-s__e-KR-gw-fUWvldDR/preview"
   }
 ]
