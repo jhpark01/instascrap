@@ -15909,5 +15909,26 @@
       "https://lh3.googleusercontent.com/d/1vIcYLmQq6exSNKnxf3jVn9bU00UVsAlS=w1000"
     ],
     "driveVideo": ""
+  },
+  {
+    "shortcode": "DfO7_KBtb52",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DfO7_KBtb52/?psln=M3lmOGoxaDUzN240",
+    "date": "2026년 11월 3일 오후 3:41",
+    "imgIndex": 1,
+    "memo": "#IT운영",
+    "user": "sajo4077@gmail.com",
+    "owner": "catitclass",
+    "caption": "📚 IT 기초 14편\n'권한 777 주면 돼요' 정말 괜찮은 걸까?\n\n리눅스 파일에는 읽기·쓰기·실행 허락이 주인·그룹·모두에게 따로 붙어 있고, 숫자 777은 모두에게 전부 허락한다는 뜻이에요. 권한 숫자를 읽는 법과 777이 위험한 이유를 까미와 솜이가 설명해요.\n\n※ 고양이들의 목소리는 AI 음성(TTS)으로 만들었어요.\n\n· 다음 편: '서비스 재시작할게요' 서버를 껐다 켜는 걸까?\n👉 팔로우하면 개발자랑 말이 통하는 IT지식, 매일 하나씩 쌓여요\n📌 회의 전에 저장하고, 개발 얘기 어려워하는 동료한테 보내 주세요\n\n#IT기초 #IT지식 #IT상식 #IT공부 #비전공자 #기획자 #PM #네트워크 #CS공부 #개발자 #컴공 #주니어개발자 #신입개발자 #IT취업 #취준생 #techexplained #리눅스 #파일권한 #보안",
+    "localImages": [
+      "images/DfO7_KBtb52_1.jpg"
+    ],
+    "localVideo": "videos/DfO7_KBtb52.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/12oZKwJ-B9rGjGrx6tg9KnI42UxnSJvuK=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1C0pWhBY0O7CTc6nNNH51-tXxW1L52Rl1/preview"
   }
 ]
