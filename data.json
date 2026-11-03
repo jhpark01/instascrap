@@ -15840,6 +15840,28 @@
       "https://lh3.googleusercontent.com/d/1vi-bJcXDXO4SJtsETlAPIkqTFY9S7YsN=w1000",
       "https://lh3.googleusercontent.com/d/11Wi4DYn-n-IkJF6fZJCPqO61Rd4Ef4xX=w1000",
       "https://lh3.googleusercontent.com/d/1Y4NPlwjGuiVxgupaKTeWbRA1zUYoIK_D=w1000"
-    ]
+    ],
+    "driveVideo": ""
+  },
+  {
+    "shortcode": "DfPbSM2DSrf",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DfPbSM2DSrf/?psln=YTd4aWhrdmkxZjRi",
+    "date": "2026년 11월 3일 오전 9:24",
+    "imgIndex": 1,
+    "memo": "#JAVA",
+    "user": "sajo4077@gmail.com",
+    "owner": "mandeum.app",
+    "caption": "강아지가 동물의 자식 클래스여도 List<Dog>는 List<Animal>의 자식이 아닙니다! 🐕\n만약 대입을 허용하면 강아지 전용 리스트에 고양이를 넣는 끔찍한 런타임 에러가 발생할 수 있기 때문인데요.\n\n자바 제네릭이 왜 기본적으로 불공변(invariant)인지, 그리고 읽기 전용으로 안전하게 다형성을 활용하는 와일드카드(? extends T)의 핵심 동작 원리를 1분 만에 알아보세요!\n\n#자바 #제네릭 #와일드카드 #백엔드개발자 #개발자상식",
+    "localImages": [
+      "images/DfPbSM2DSrf_1.jpg"
+    ],
+    "localVideo": "videos/DfPbSM2DSrf.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1FH07wL_DIMv0rABnAgZCAsg6CT1kohDr=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/15rRFk3kWaueVxDAp8m6J_4nUQz4z6oLI/preview"
   }
 ]
