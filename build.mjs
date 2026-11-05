@@ -115,14 +115,29 @@ async function fetchYouTube(shortcode) {
 
 async function fetchEmbed(shortcode) {
   if (shortcode.startsWith('yt_')) return fetchYouTube(shortcode);
-  const url = `https://www.instagram.com/p/${shortcode}/embed/captioned/`;
-  const res = await fetch(url, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+  const endpoints = [
+    `https://www.instagram.com/p/${shortcode}/embed/captioned/`,
+    `https://www.instagram.com/p/${shortcode}/embed/`
+  ];
+  let html = '';
+  let lastStatus = 0;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    if (attempt > 0) await new Promise(r => setTimeout(r, 2000 * attempt));
+    const url = endpoints[attempt % endpoints.length];
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7'
+      }
+    });
+    lastStatus = res.status;
+    if (res.ok) {
+      html = await res.text();
+      break;
     }
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const html = await res.text();
+    if (res.status !== 429 && res.status < 500) break;
+  }
+  if (!html) throw new Error(`HTTP ${lastStatus}`);
 
   let owner = '';
   let caption = '';
@@ -1865,7 +1880,8 @@ async function main() {
       const key = (item.user || '') + ':' + item.shortcode;
       const cached = cache[key] || cache[':' + item.shortcode];
       const hasDriveImgs = cached && cached.driveImages?.length > 0;
-      const imgsOk = hasDriveImgs || (cached && cached.localImages?.length && cached.localImages.every(rel => fs.existsSync(path.join(OUT_DIR, rel))));
+      const alreadyCheckedEmpty = cached && cached.videoChecked && !cached.retryNeeded && (!cached.localImages || cached.localImages.length === 0);
+      const imgsOk = hasDriveImgs || alreadyCheckedEmpty || (cached && cached.localImages?.length && cached.localImages.every(rel => fs.existsSync(path.join(OUT_DIR, rel))));
       const isIgVideo = (item.kind === 'reel' || cached?.isVideo) && item.kind !== 'youtube';
       const hasVid = (cached && cached.driveVideo) || (cached && cached.localVideo && fs.existsSync(path.join(OUT_DIR, cached.localVideo)));
       const needsVid = isIgVideo && !hasVid && !cached?.videoChecked;
@@ -1900,6 +1916,8 @@ async function main() {
             const vOk = await downloadImage(meta.videoUrl, path.join(OUT_DIR, vRel));
             if (vOk) localVideo = vRel;
           }
+          delete item.retryNeeded;
+          delete item.error;
           Object.assign(item, {
             owner: meta.owner || cached?.owner || '',
             caption: meta.caption || cached?.caption || '',
@@ -1929,32 +1947,45 @@ async function main() {
 }
 
 export async function downloadPost(item) {
-  const meta = await fetchEmbed(item.shortcode);
-  const localImages = [];
-  for (let i = 0; i < meta.imageUrls.length; i++) {
-    const ext = meta.imageUrls[i].includes('.webp') ? 'webp' : 'jpg';
-    const rel = `images/${item.shortcode}_${i + 1}.${ext}`;
-    const ok = await downloadImage(meta.imageUrls[i], path.join(OUT_DIR, rel));
-    if (ok) localImages.push(rel);
+  try {
+    const meta = await fetchEmbed(item.shortcode);
+    const localImages = [];
+    for (let i = 0; i < meta.imageUrls.length; i++) {
+      const ext = meta.imageUrls[i].includes('.webp') ? 'webp' : 'jpg';
+      const rel = `images/${item.shortcode}_${i + 1}.${ext}`;
+      const ok = await downloadImage(meta.imageUrls[i], path.join(OUT_DIR, rel));
+      if (ok) localImages.push(rel);
+    }
+    let localVideo = '';
+    if (meta.videoUrl) {
+      const vRel = `videos/${item.shortcode}.mp4`;
+      const vOk = await downloadImage(meta.videoUrl, path.join(OUT_DIR, vRel));
+      if (vOk) localVideo = vRel;
+    }
+    delete item.retryNeeded;
+    delete item.error;
+    return Object.assign(item, {
+      owner: meta.owner || item.owner || '',
+      caption: meta.caption || item.caption || '',
+      localImages,
+      localVideo,
+      videoChecked: true,
+      isVideo: meta.isVideo
+    });
+  } catch (err) {
+    console.error(`[downloadPost 재시도 예약] ${item.shortcode}:`, err.message);
+    return Object.assign(item, {
+      localImages: item.localImages || [],
+      localVideo: item.localVideo || '',
+      videoChecked: false,
+      retryNeeded: true,
+      error: err.message
+    });
   }
-  let localVideo = '';
-  if (meta.videoUrl) {
-    const vRel = `videos/${item.shortcode}.mp4`;
-    const vOk = await downloadImage(meta.videoUrl, path.join(OUT_DIR, vRel));
-    if (vOk) localVideo = vRel;
-  }
-  return Object.assign(item, {
-    owner: meta.owner,
-    caption: meta.caption,
-    localImages,
-    localVideo,
-    videoChecked: true,
-    isVideo: meta.isVideo
-  });
 }
 
 export { OUT_DIR, CACHE_FILE, DELETED_FILE, DRIVE_STATS_FILE, HTML_FILE, fetchEmbed, downloadImage, renderHtml };
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
 }

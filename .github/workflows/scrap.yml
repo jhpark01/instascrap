@@ -68,8 +68,8 @@ jobs:
           INPUT_USER: ${{ github.event.inputs.user }}
         run: |
           git pull --rebase origin main || true
-          node build.mjs
           node bot.mjs --once
+          node build.mjs
           node sync-drive.mjs
 
       - name: Commit and push updated web-book
