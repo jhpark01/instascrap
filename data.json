@@ -16108,6 +16108,44 @@
     "isVideo": true,
     "driveImages": [
       "https://lh3.googleusercontent.com/d/1zC_eTO_heppYwPtRg36EYZmCdvO1GE-i=w1000"
-    ]
+    ],
+    "driveVideo": ""
+  },
+  {
+    "shortcode": "DfVi7Y3E-jf",
+    "kind": "post",
+    "url": "https://www.instagram.com/p/DfVi7Y3E-jf/?img_index=7&exln=MWU3MWwxbXM5Z3o2NQ==",
+    "date": "2026년 11월 5일 오전 9:10",
+    "imgIndex": 7,
+    "memo": "#AI코딩",
+    "user": "sajo4077@gmail.com",
+    "owner": "prompt_what",
+    "caption": "AI를 매일 쓴다면 한 번 읽어봐야 하는 경고입니다 🧠\n\n클로드 코드를 만드는 앤트로픽 엔지니어 애디 오스마니가\nAI에 맡길수록 결과를 확인하는 실력부터 무뎌진다고 짚으며\n이렇게 적었는데요.\n”내가 책임질 수 있는 것보다 많이 만들고 있다면, 더는 검토하는 게 아니다. 잘되길 바라는 것뿐이다.“\n\n그럴듯한 답이 쌓이면 훑어보고 넘기다가\n어느새 AI의 답을 내 생각처럼 받아들이게 되는데,\n그는 이 상태를 ‘인지적 항복’이라고 불렀습니다.\n앤트로픽 실험에서도 AI 답을 받고 이유를 되물은 사람은 86점,\n통째로 맡긴 사람은 39점으로 같은 AI를 써도 결과가 갈렸고요.\n\n코딩이든 글쓰기든 AI를 매일 쓰는 분이라면\n오스마니가 스스로 던지는 질문 6개와 원칙 8개,\n클로드에 바로 붙여 넣는 검토 프롬프트 5개를 챙겨 두세요.\n\n댓글에 ‘클로드’ 남겨주시면 정리본 보내드릴게요!\n\nA warning worth reading if you use AI every day.\n\nAddy Osmani, an engineer on Anthropic‘s Claude Code team, says the more we hand off to AI, the faster our ability to check its work fades:\n”When you’re producing more than you can stand behind, you‘re no longer reviewing. You’re hoping.“\nWhen plausible answers keep piling up, we skim, pass them on, and eventually take AI‘s answer as our own thought.\nHe calls this ”cognitive surrender.“\nIn Anthropic’s own experiment, people who asked why the AI wrote the code that way scored 86%,\nwhile those who handed it over entirely scored 39%.\n\nWhether you code or write, if you use AI every day,\ngrab his 6 questions, 8 principles, and 5 review prompts you can paste into Claude.\n\nComment ‘클로드’ below and I‘ll send it over!\n\nEdit: @prompt_what\nSource: x.com/addyosmani",
+    "localImages": [
+      "images/DfVi7Y3E-jf_1.jpg",
+      "images/DfVi7Y3E-jf_2.jpg",
+      "images/DfVi7Y3E-jf_3.jpg",
+      "images/DfVi7Y3E-jf_4.jpg",
+      "images/DfVi7Y3E-jf_5.jpg",
+      "images/DfVi7Y3E-jf_6.jpg",
+      "images/DfVi7Y3E-jf_7.jpg",
+      "images/DfVi7Y3E-jf_8.jpg",
+      "images/DfVi7Y3E-jf_9.jpg"
+    ],
+    "localVideo": "videos/DfVi7Y3E-jf.mp4",
+    "videoChecked": true,
+    "isVideo": false,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1CiL9ktXUb-BYMQxl_StAVxp4C5XSG5Qo=w1000",
+      "https://lh3.googleusercontent.com/d/1bU8s-jYVSpDy5o8pnS8AsfQMc8qhX470=w1000",
+      "https://lh3.googleusercontent.com/d/10g2A74iuggfPuNjZUjvkMdYaYnA5Fs7V=w1000",
+      "https://lh3.googleusercontent.com/d/1GhOjlKoE5oYm2zjFTqa4XsN3hEq_izms=w1000",
+      "https://lh3.googleusercontent.com/d/18buZa2ZFV_D7iudTSb0dOpPE8LABIhLW=w1000",
+      "https://lh3.googleusercontent.com/d/1W1xMJhzjzifzgptdbqVrlG28wmHLIsxp=w1000",
+      "https://lh3.googleusercontent.com/d/10DJeDdONu0PbLK3Yw-w1oYB6MmfSamqe=w1000",
+      "https://lh3.googleusercontent.com/d/1XzFWyWaE6XCjtHODSy8AZEnvmoOOYg8c=w1000",
+      "https://lh3.googleusercontent.com/d/1thgo_8FvcUPwB4QxupZLhwPggLmXwszT=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/10MLPwBskom53rpLYBW7Sl_1UZJsP6z8S/preview"
   }
 ]
