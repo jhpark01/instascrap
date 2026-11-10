@@ -16865,5 +16865,30 @@
       "https://lh3.googleusercontent.com/d/1CTZyWA2l6rPBWuDMN8j_6XUIUssRvunu=w1000"
     ],
     "driveVideo": ""
+  },
+  {
+    "shortcode": "Dfj78b0iZfe",
+    "kind": "post",
+    "url": "https://www.instagram.com/p/Dfj78b0iZfe/?img_index=3&dlrf=NDEyZGk1Z3hmaTY0",
+    "date": "2026년 11월 11일 오전 8:55",
+    "imgIndex": 3,
+    "memo": "#AI코딩",
+    "user": "sajo4077@gmail.com",
+    "owner": "promppy_com",
+    "caption": "💻 웹사이트를 단 한 번의 명령어로 무료 데스크톱 앱으로 변환하는 오픈소스 도구\n\n🚀 파케(Pake)는 개발자 tw93이 Rust와 Tauri를 기반으로 만든 오픈소스 도구\n별도의 웹사이트를 독립적인 데스크톱 창으로 실행할 수 있도록 만들어 매일 사용하는 웹서비스를 일반 프로그램처럼 활용 가능\n\n🖥️ 웹사이트 URL 하나만 입력하면 맥OS 윈도우 리눅스용 데스크톱 앱으로 변환 가능\n노션 챗GPT 유튜브 등 다양한 웹서비스를 앱 형태로 실행 가능\n\n📦 설치 패키지 크기는 일반적으로 10MB 미만으로 일렉트론(Electron) 기반 앱 패키지보다 약 20배 작음\n다만 이는 디스크에 저장되는 패키지 크기이며 실제 메모리 사용량이 20배 적다는 의미는 아님\n\n🛠️ 별도의 구독료 없이 무료로 사용할 수 있으며 소스 코드도 공개되어 있어 개발자와 일반 사용자 모두 활용 가능\n\n팩트체크: Pake GitHub – https://github.com/tw93/Pake\n✨최신 트렌드, AI 소식은 @promppy_com",
+    "localImages": [
+      "images/Dfj78b0iZfe_1.jpg",
+      "images/Dfj78b0iZfe_2.jpg",
+      "images/Dfj78b0iZfe_3.jpg"
+    ],
+    "localVideo": "",
+    "videoChecked": true,
+    "isVideo": false,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/14OQwmDmlTV-Nuh6z9c6m4F1dW5q-uKQJ=w1000",
+      "https://lh3.googleusercontent.com/d/1ZaaG0lV353ZHd2YRF4yMgi8hkX_aO-GF=w1000",
+      "https://lh3.googleusercontent.com/d/1RKZOFqJF82_9JeAI5Xr6f1g5zkYb8sFi=w1000"
+    ],
+    "driveVideo": ""
   }
 ]
