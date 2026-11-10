@@ -16746,5 +16746,36 @@
       "https://lh3.googleusercontent.com/d/15Zeo5-Zohueb1ZZWUBvQjO20PaQDPlCu=w1000"
     ],
     "driveVideo": ""
+  },
+  {
+    "shortcode": "DfjztHmnJ28",
+    "kind": "post",
+    "url": "https://www.instagram.com/p/DfjztHmnJ28/?img_index=6&cplk=MTV4dXp4dzJvcmkxbg==",
+    "date": "2026년 11월 10일 오후 9:30",
+    "imgIndex": 6,
+    "memo": "#아두이노",
+    "user": "sajo4077@gmail.com",
+    "owner": "promppy_com",
+    "caption": "🔧 주말 동안 저렴하게 직접 만들 수 있는 실용적인 DIY 테크 기기 5가지\n\n💻 비싼 장비를 구매하거나 공학 학위가 없어도 저렴한 하드웨어와 오픈소스 소프트웨어만 있으면 유용한 기술 장치를 직접 제작 가능\n일상적인 작업을 자동화하고 전자기기 작동 원리까지 배울 수 있는 프로젝트\n\n⌨️ 라즈베리 파이 피코 2를 약 750원으로 제작하는 간단한 키 입력 자동화 장치로 활용 가능\n라즈베리 파이 제로 2 W에 파이홀(Pi-hole)을 설치하면 약 22500원으로 가정용 와이파이 네트워크 전체의 광고와 추적기를 차단 가능\n\n✈️ 라즈베리 파이와 무선 수신 동글을 결합하면 약 52500원으로 항공기 위치 추적 장치 제작 가능\n주변 항공기의 실시간 비행 정보를 수신하고 확인할 수 있는 프로젝트\n\n📡 셀룰러 네트워크 없이 메시지를 주고받는 오프그리드 통신 장치도 제작 가능\nLoRa 보드와 메스태스틱(Meshtastic)을 활용하면 약 37500원으로 이동통신망에 의존하지 않는 무선 메시 네트워크 구축 가능\n\n🔐 라즈베리 파이를 와이어가드(WireGuard) 기반 개인 VPN 서버로 활용하는 방법도 있음\n외부에서도 집에 있는 네트워크에 안전하게 원격 접속할 수 있어 개인 정보 보호와 원격 연결에 유용\n\n🚀 저렴한 부품만으로도 자동화와 개인정보 보호 통신 및 학습에 활용할 수 있는 다양한 장치 제작 가능\n각 프로젝트를 자신의 필요에 맞게 수정하고 기능을 확장할 수 있다는 점도 장점\n\n팩트체크: Raspberry Pi / Pi-hole / Meshtastic / WireGuard\n✨최신 트렌드, AI 소식은 @promppy_com",
+    "localImages": [
+      "images/DfjztHmnJ28_1.jpg",
+      "images/DfjztHmnJ28_2.jpg",
+      "images/DfjztHmnJ28_3.jpg",
+      "images/DfjztHmnJ28_4.jpg",
+      "images/DfjztHmnJ28_5.jpg",
+      "images/DfjztHmnJ28_6.jpg"
+    ],
+    "localVideo": "",
+    "videoChecked": true,
+    "isVideo": false,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/19EqDdo7OuFRiKwgvBpz1Lvx77IYcdJZb=w1000",
+      "https://lh3.googleusercontent.com/d/1tCFJ3kE2_9CPVINwDYqSV6P_0GnquB-K=w1000",
+      "https://lh3.googleusercontent.com/d/1NdMe_-xzPaTk1OIMc2b0Q3o2YJJhT4bC=w1000",
+      "https://lh3.googleusercontent.com/d/1RH4sG8P2n8cm-h9ld-z16KFyTUxuPqS5=w1000",
+      "https://lh3.googleusercontent.com/d/1rP9J-kHGWFqU6jX9Uo5LxPxjnZrpcmYc=w1000",
+      "https://lh3.googleusercontent.com/d/1dIaN3XPMovJOGYltH-novSbFEZpr7XQd=w1000"
+    ],
+    "driveVideo": ""
   }
 ]
