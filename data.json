@@ -17704,5 +17704,26 @@
     "videoChecked": true,
     "isVideo": false,
     "driveVideo": ""
+  },
+  {
+    "shortcode": "Dc8ZN6TRq6K",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/Dc8ZN6TRq6K/?cplk=dDEwOWkwaHVsOTR3",
+    "date": "2026년 11월 13일 오전 8:03",
+    "imgIndex": 1,
+    "memo": "#종이접기",
+    "user": "sajo4077@gmail.com",
+    "owner": "gfts.ideas",
+    "caption": "#diy #giftidea #tutorial",
+    "localImages": [
+      "images/Dc8ZN6TRq6K_1.jpg"
+    ],
+    "localVideo": "",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1jxynpKrguWCZ1IpHoyjClTZNitnY-9TT=w1000"
+    ],
+    "driveVideo": ""
   }
 ]
