@@ -17457,5 +17457,26 @@
       "https://lh3.googleusercontent.com/d/11JYGO7ilOrSMtC_Mk0kOtj4IXeR1v9xe=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/1BDfpChsr7tDkK7bpucEMgh4N7x64mW47/preview"
+  },
+  {
+    "shortcode": "Dfp_VWuKc-N",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/Dfp_VWuKc-N/?vrfl=MTV1YXpuMnZnbDVndw==",
+    "date": "2026년 11월 13일 오전 7:43",
+    "imgIndex": 1,
+    "memo": "#IT운영",
+    "user": "sajo4077@gmail.com",
+    "owner": "codewithdeekeej",
+    "caption": "Redis runs your commands on ONE thread. It still beats your database. Why?\n\n-> A SQL query does 3 steps: parse the SQL, plan it, read the pages (prepared statements can skip parsing, but still plan and read).\n-> A Redis GET does 1 step: look up the key in a hash table in RAM.\n-> No parser, no planner, no disk on the hot path, and one thread means no locks between threads.\n\nResult: with pipelining, one Redis instance can serve around 1 million requests per second (redis.io FAQ).\n\nSenior notes:\n- Your database caches hot pages in RAM too (buffer pool). The win is the work per request, not only “RAM vs disk”.\n- One thread = one slow command (KEYS *, a huge SORT) blocks everyone. Keep commands O(1) or O(log N).\n- Data must fit in memory. Need more CPU? Run more Redis instances (sharding), not more threads.\n\nComment DIAGRAM and I’ll send you the animation for free.\n\nSave this one.\n\n#redis #backenddev #systemdesign #devtips",
+    "localImages": [
+      "images/Dfp_VWuKc-N_1.jpg"
+    ],
+    "localVideo": "videos/Dfp_VWuKc-N.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1tUbwuqyCyvjbpXAttMDOiBVm-dVQbDVL=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/11Hh9J3jaHa_VFXir7qY0we46Kpgqpp5E/preview"
   }
 ]
