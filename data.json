@@ -18088,5 +18088,26 @@
       "https://lh3.googleusercontent.com/d/1WFXDhy9TNmVL7_vqy_jzs1_CLAU-VW4O=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/1rJ3wpUxclQx2q5ZmpHDD6IHv9_g_9x7G/preview"
+  },
+  {
+    "shortcode": "DfrSWJEpZXe",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DfrSWJEpZXe/?vrfl=MTVuZXh0bDU4d2txZA==",
+    "date": "2026년 11월 14일 오전 8:18",
+    "imgIndex": 1,
+    "memo": "#보안",
+    "user": "sajo4077@gmail.com",
+    "owner": "boltlee_dev",
+    "caption": "GitHub 웹훅 문서에 `==` 연산자를 절대 쓰지 말라는 경고, 보신 적 있나요? 🤔\n\n일반적인 문자열 비교는 틀린 글자를 만나면 바로 검사를 멈춰 응답 속도에 미세한 차이가 발생합니다.\n공격자는 이 시간 차이를 이용해 비밀 서명을 알아내는 '타이밍 공격'을 시도할 수 있어요.\n따라서 서명 검증에는 일치 여부와 상관없이 비교 시간이 언제나 일정한 '상수 시간 비교(Constant-time comparison)' 함수를 사용해야 안전합니다! 🛡️\n\n#개발자 #개발공부 #보안 #백엔드 #웹훅 #타이밍공격 #boltlee_dev",
+    "localImages": [
+      "images/DfrSWJEpZXe_1.jpg"
+    ],
+    "localVideo": "videos/DfrSWJEpZXe.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/111SOOAu39_f8wz3D2K1lUUubGsvnFhTH=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1qDgq3Zi14kdaDXe5kMjZgyVwXCdlrlo7/preview"
   }
 ]
