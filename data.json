@@ -18067,5 +18067,26 @@
     "videoChecked": true,
     "isVideo": false,
     "driveVideo": ""
+  },
+  {
+    "shortcode": "DdENwWivW9L",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DdENwWivW9L/?xtok=c2FoMDcwMDE0eWI4",
+    "date": "2026년 11월 14일 오전 8:13",
+    "imgIndex": 1,
+    "memo": "#AI코딩",
+    "user": "sajo4077@gmail.com",
+    "owner": "gojaehyun.go",
+    "caption": "오늘은 갤럭시 Z폴드8로 오타마톤을 만들었어요. 힌지 걱정해주시는 분들 많은데 갤럭시는 내구성이 아주 좋아서 괜찮아요. ㅎㅎ \n\n오타마톤은 연주가 어려운 게 묘미인데 비슷해서 좋네요. ㅋㅋㅋㅋㅋ 힌지를 접는 각도에 따라 음이 달라지는데 재밌어요!",
+    "localImages": [
+      "images/DdENwWivW9L_1.jpg"
+    ],
+    "localVideo": "videos/DdENwWivW9L.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1WFXDhy9TNmVL7_vqy_jzs1_CLAU-VW4O=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1rJ3wpUxclQx2q5ZmpHDD6IHv9_g_9x7G/preview"
   }
 ]
