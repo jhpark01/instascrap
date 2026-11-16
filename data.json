@@ -18624,5 +18624,26 @@
       "https://lh3.googleusercontent.com/d/1qdYhUNl9pRrEj_idcWKaRgiFVlbdsaN4=w1000"
     ],
     "driveVideo": ""
+  },
+  {
+    "shortcode": "Dfy7mLTM9DA",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/Dfy7mLTM9DA/?xtok=enJ3ODAycHpqeGx5",
+    "date": "2026년 11월 17일 오전 8:58",
+    "imgIndex": 1,
+    "memo": "#DIY",
+    "user": "sajo4077@gmail.com",
+    "owner": "boomers_ig",
+    "caption": "요즘 금손 근황\n\n이 제품은 HVT Lab이 황동과 기성 부품으로 만든 수제 스마트워치입니다. \n\n케이스 대신 2mm 황동 튜브를 구부려 납땜한 프레임을 쓰고, 1.5mm 황동 봉으로 보강했습니다. 디스플레이 배선은 1mm 황동 선인데, 황동 프레임 자체가 모든 부품의 (-)극 접점을 겸합니다.\n\n내부는 ESP32-C3 보드, 1.3인치 OLED, DS3231 RTC 모듈, 3.7V 리튬 배터리와 충전 모듈 구성이고, 조작은 3방향 토글 스위치로 합니다. \n\n핸드폰과 블루투스로 연결하면 알림과 수신 전화 표시, 시간 자동 동기화가 되고, 워치페이스는 여러 종 중에 고를 수 있습니다. \n\n표면에 보호 코팅을 해서 비와 땀을 버티고 물에 잠깐 담그는 테스트도 통과했고요.\n\n회로도와 부품 목록, 소스코드가 전부 공개돼 있고, 펌웨어는 웹에서 바로 플래싱할 수 있습니다.\n\n💰 미정\n📡 HVT Lab\n-\nSubscribe @boomers_ig",
+    "localImages": [
+      "images/Dfy7mLTM9DA_1.jpg"
+    ],
+    "localVideo": "videos/Dfy7mLTM9DA.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/17osW0AhPnylqdY4mekwXIfNlUJNSzkq5=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1sgBbTZ9zHMiZft8A6fGeCbFySmILEqJx/preview"
   }
 ]
