@@ -18840,5 +18840,26 @@
       "https://lh3.googleusercontent.com/d/1domyEObB3yVhwLPMsoznFpPvXD6dpUvA=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/1SjXbrgZToHL0RrTYtgK3xB930KUyMJWY/preview"
+  },
+  {
+    "shortcode": "Df4CKNumZ0_",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/Df4CKNumZ0_/?jplx=MWk0YXdvZGk4MW15Zw==",
+    "date": "2026년 11월 19일 오전 9:50",
+    "imgIndex": 1,
+    "memo": "#AI코딩 #디버깅",
+    "user": "sajo4077@gmail.com",
+    "owner": "creative_of_coding",
+    "caption": "📌 클로드 코드 쓰는 개발자라면 에러 복붙하지 마세요\n\n클로드 코드한테 코딩 시키고 에러 나면\n콘솔 에러 복사하고, 화면 캡처해서 붙여 넣죠\n클로드 코드가 브라우저를 직접 못 봐서 그래요\n\n크롬 팀이 이걸 풀려고 만든 게\nChrome DevTools MCP(크롬 데브툴즈 MCP)예요\n붙여 두면 클로드가 크롬을 직접 열어서\n콘솔 에러, 네트워크, 느린 이유까지 확인해요\n무료 오픈소스고, 코덱스나 커서에도 붙일 수 있어요\n\n설치법은 깃허브에서 chrome-devtools-mcp 검색하면 바로 나와요\n\n이런 개발 도구 소식 먼저 받고 싶으면 팔로우해 두세요\n나중에 세팅할 때 다시 보려면 저장해 두세요",
+    "localImages": [
+      "images/Df4CKNumZ0__1.jpg"
+    ],
+    "localVideo": "videos/Df4CKNumZ0_.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1RGyF09b65aemCYnSLzCKChyK83zz4BkD=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1EhLxhLF-eoJe0V9abTNE6mJt3rnJNiEK/preview"
   }
 ]
