@@ -18952,5 +18952,26 @@
       "https://lh3.googleusercontent.com/d/1TtEtjjNgkeUuhdkvrMauXMJQv6K2NAi2=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/1PmgTadqBSZnAce1_ELbBjld684WfEAZM/preview"
+  },
+  {
+    "shortcode": "Df75YHBAMTu",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/Df75YHBAMTu/?gwpx=Z3k5eXJwMDgxd3gw",
+    "date": "2026년 11월 20일 오전 7:40",
+    "imgIndex": 1,
+    "memo": "#IT운영",
+    "user": "sajo4077@gmail.com",
+    "owner": "codewithdeekeej",
+    "caption": "50,000,000 people watch the same live stream. One server would need to push 250 Tbps.\n\nThat is why live video never comes straight from the origin.\n\nHow live streaming scales:\n→ video is cut into small segments\n→ the first viewer asks the CDN edge, the edge fetches the segment from the origin once\n→ the edge stores it\n→ every next viewer gets it from the edge\n\nTwitch, YouTube Live, a World Cup final: the origin sends each segment once per edge, the edges serve the crowd.\n\nComment DIAGRAM and I'll send you the animation for free.\n\nSave this one.\n\n#systemdesign #livestreaming #cdn #backenddev",
+    "localImages": [
+      "images/Df75YHBAMTu_1.jpg"
+    ],
+    "localVideo": "videos/Df75YHBAMTu.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1lTb2CrQdfwLJDNrTdPNAHBEsl_nHam3c=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1JlCoVP23Pkcz4HHZAuIFFJ_1EkYkyHN_/preview"
   }
 ]
