@@ -19059,5 +19059,26 @@
     "videoChecked": true,
     "isVideo": false,
     "driveVideo": ""
+  },
+  {
+    "shortcode": "Df7arDpS9aE",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/Df7arDpS9aE/?bqrl=OGI4OW1vZjUxeTl5",
+    "date": "2026년 11월 20일 오전 9:05",
+    "imgIndex": 1,
+    "memo": "#네크워크 구조",
+    "user": "sajo4077@gmail.com",
+    "owner": "tiaz.dev",
+    "caption": "ALB, NLB, GWLB… 로드 밸런서 셋, 뭐가 다른 걸까요? ⚖️\n\n영상에 다 못 담은 이야기, 짧게 모아 봤어요.\n\n· 셋을 가르는 건 패킷을 어디까지 열어 보느냐예요. ALB는 HTTP 내용까지, NLB는 IP와 포트까지 보고, GWLB는 열지 않고 통째로 넘겨요\n· NLB는 가용 영역마다 고정 IP를 받아요. 인터넷용이면 탄력적 IP도 붙일 수 있어서 거래처 방화벽 허용 목록에 넣기 좋아요\n· NLB는 TCP 연결 하나를 끝날 때까지 같은 서버로 보내요. TCP, UDP, TLS, QUIC까지 받아요\n· 인스턴스로 붙이면 보낸 사람 IP가 서버까지 그대로 가요. 다만 IP 주소로 붙인 TCP는 기본으로 꺼져 있어요\n· 경로 나누기도 고정 IP도 필요하면 NLB 뒤에 ALB를 붙이면 돼요. NLB는 TCP로 그대로 넘기고, 암호는 ALB가 풀어요\n· GWLB는 Palo Alto, Fortinet 같은 방화벽 장비 여러 대를 묶어 줘요. 라우트 테이블로 엔드포인트를 끼우면 들어오는 트래픽이 먼저 검사를 거쳐요\n· 장비로 보낼 땐 GENEVE(UDP 6081)로 한 겹 감싸서, 원래 패킷은 손대지 않아요\n\n#AWS #로드밸런서 #네트워크",
+    "localImages": [
+      "images/Df7arDpS9aE_1.jpg"
+    ],
+    "localVideo": "videos/Df7arDpS9aE.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1t4PT9Ab2fivhDO6kQWQTPG5z9rL1g3ia=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1tfEGvM3ke1V2MQazWtIfJJcIhMz4LRiE/preview"
   }
 ]
