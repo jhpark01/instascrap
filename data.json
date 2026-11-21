@@ -19355,5 +19355,26 @@
       "https://lh3.googleusercontent.com/d/1oR-CQgRAw_CNncjNPXdngupEkeUnrTD0=w1000"
     ],
     "driveVideo": ""
+  },
+  {
+    "shortcode": "Df_gzk9SDcm",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/Df_gzk9SDcm/?evlk=dmRscmw3Nmp1MzFo",
+    "date": "2026년 11월 22일 오전 12:51",
+    "imgIndex": 1,
+    "memo": "#상식",
+    "user": "sajo4077@gmail.com",
+    "owner": "technote_j",
+    "caption": "양쪽 끝 플러그가 똑같이 생겼는데, 거꾸로 꽂으면 TV 화면이 안 나오는 선이 있습니다.\n\nHDMI 광케이블은 구리선이 버티지 못하는 48기가비트 신호를 게임기 쪽 플러그의 레이저 4개가 빛으로 바꿔 보내는 선이라, 거꾸로 꽂으면 빛을 쏠 레이저가 없어서 먹통이 됩니다.\n\n이 영상은 누구나 볼 수 있는 공개 자료와 교육 자료만으로 만들었습니다. 기업 내부 정보나 비공개 기술은 다루지 않습니다.\n\n참고 자료\nHDMI Licensing Administrator 자료 (HDMI 1.0 연혁, 광케이블 연결 방향, 케이블 길이 FAQ)\nHDMI Forum HDMI 2.1 규격 발표 (2017)\nTexas Instruments HDMI 2.1 FRL 응용 노트, 신호 손실 기술 자료, Analog Devices 케이블 손실 자료\nExtron 디지털 영상 신호 오류자료",
+    "localImages": [
+      "images/Df_gzk9SDcm_1.jpg"
+    ],
+    "localVideo": "videos/Df_gzk9SDcm.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1pI8tRO-lTsGZyuxLJWuMJk48RnQFb6uC=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1AyvAzL6nK9F-7ejGACZZIjHjEydKja95/preview"
   }
 ]
