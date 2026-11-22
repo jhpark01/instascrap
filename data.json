@@ -19376,5 +19376,40 @@
       "https://lh3.googleusercontent.com/d/1pI8tRO-lTsGZyuxLJWuMJk48RnQFb6uC=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/1AyvAzL6nK9F-7ejGACZZIjHjEydKja95/preview"
+  },
+  {
+    "shortcode": "DgB9sSvj2Km",
+    "kind": "post",
+    "url": "https://www.instagram.com/p/DgB9sSvj2Km/?img_index=5&dmpr=NjZ0NjM1NXlsamJy",
+    "date": "2026년 11월 22일 오후 9:48",
+    "imgIndex": 5,
+    "memo": "#보안",
+    "user": "sajo4077@gmail.com",
+    "owner": "ai.asap.kr",
+    "caption": "PHP에서 주소를 'HTTPS://'처럼 대문자 S로 쓰면 암호화 없이 데이터가 나가는 버그가 11월 19일 공개됐습니다. PHP 공지에 따르면 2006년 PHP 5.2.0부터 있었던 버그입니다.\n\nPHP는 주소 앞부분을 대소문자 상관없이 알아봤지만, 암호화를 켤지는 정해진 자리의 글자가 소문자 s인지만 확인했습니다.\n그래서 비밀번호, 로그인 토큰, 쿠키 같은 정보가 평문으로 나갈 수 있었는데, 응답은 정상으로 와서 아무도 눈치채지 못했습니다.\n상대 서버가 대문자 주소로 리다이렉트하면 내 코드에 소문자를 써도 당할 수 있었습니다.\n8.2.36, 8.3.37, 8.4.28, 8.5.13 이상으로 업데이트하면 고쳐집니다.\n\n출처: PHP 보안 공지(GitHub), php.net\n\nAI·테크 이슈, 가장 깊게 읽어보려면 @ai.asap.kr",
+    "localImages": [
+      "images/DgB9sSvj2Km_1.jpg",
+      "images/DgB9sSvj2Km_2.jpg",
+      "images/DgB9sSvj2Km_3.jpg",
+      "images/DgB9sSvj2Km_4.jpg",
+      "images/DgB9sSvj2Km_5.jpg",
+      "images/DgB9sSvj2Km_6.jpg",
+      "images/DgB9sSvj2Km_7.jpg",
+      "images/DgB9sSvj2Km_8.jpg"
+    ],
+    "localVideo": "videos/DgB9sSvj2Km.mp4",
+    "videoChecked": true,
+    "isVideo": false,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1n_cJ3aozjLKCiFznAabGmT7ORA1YJ4mZ=w1000",
+      "https://lh3.googleusercontent.com/d/1dmkUZWXV4OsHFgYB9SaRprw5_3zX2wAd=w1000",
+      "https://lh3.googleusercontent.com/d/1fQJ0vYzrdMrGA-69X-4AHMmFRTPD63UJ=w1000",
+      "https://lh3.googleusercontent.com/d/11pJUt0b7ZEfzezRBxZU-TuDAdH_th-V-=w1000",
+      "https://lh3.googleusercontent.com/d/1-5A9kpECs2b5gUm6N3vexPGonJfxH7EE=w1000",
+      "https://lh3.googleusercontent.com/d/1Y4q7T5mKYJa793FEvTMDcJ7FTX5EK37g=w1000",
+      "https://lh3.googleusercontent.com/d/1FcTVHB-U0-4RooMaYBHfRBh0R8kC4HlL=w1000",
+      "https://lh3.googleusercontent.com/d/1wtUeVYi9VaLtAmFZAX3IIFvHB9P_Wmkb=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1_X9Q4dw3BwcLpvj1tXYRT0RGg1K1H8FH/preview"
   }
 ]
