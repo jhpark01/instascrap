@@ -19412,5 +19412,26 @@
     "videoChecked": true,
     "isVideo": false,
     "driveVideo": ""
+  },
+  {
+    "shortcode": "Dfy_gIWIvvG",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/Dfy_gIWIvvG/?dmpr=MW1wNDN4M3RoaHJocg==",
+    "date": "2026년 11월 22일 오후 11:10",
+    "imgIndex": 1,
+    "memo": "#요리레시피",
+    "user": "sajo4077@gmail.com",
+    "owner": "sudal_foodie",
+    "caption": "장사천재 조서형 셰프 강원도식 감자전 \n\n#장사천재조서형 #강원도식감자전 #감자전 #감자전레시피 #강원도감자전 #감자요리 #감자전만들기 #바삭한감자전",
+    "localImages": [
+      "images/Dfy_gIWIvvG_1.jpg"
+    ],
+    "localVideo": "videos/Dfy_gIWIvvG.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/18nQxHTdPujqHxPLMsoika7u_BUQVv7qH=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1qE1Y39sw0thzIucImL_o6_UNgzbTC52_/preview"
   }
 ]
