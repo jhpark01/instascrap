@@ -19835,5 +19835,26 @@
     "videoChecked": true,
     "isVideo": false,
     "driveVideo": ""
+  },
+  {
+    "shortcode": "Dfw14SuJkwE",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/Dfw14SuJkwE/?gwpx=enMxNmZvZ29oMzB6",
+    "date": "2026년 11월 24일 오전 7:51",
+    "imgIndex": 1,
+    "memo": "#좋은앱",
+    "user": "sajo4077@gmail.com",
+    "owner": "ddalkkaklab",
+    "caption": "한글 파일 변환, 이제 공짜다\n\nFilee = 깃허브 별 2.1만 받은 무료 파일 변환기(MIT). 설명서 형식 표에 한글 줄이 따로 있어요.\nHWP → PDF·워드·그림, 반대로 PDF → 한글(HWPX)·워드. 한컴오피스 없이, 업로드 없이.\n\n전체 정리(뭐냐·끌어다 놓기·한글 파일·여러 개·클로드 연결·까는 법·주의 7가지)는 프로필 링크(유튜브 딸깍연구소)에서 볼 수 있어요.\n⚠ 바꾸기만 하고 고치기는 못 해요. 고치는 건 쓰던 프로그램으로.\n영상 목소리는 AI 음성(무료 Supertonic)입니다. 내용은 2026-11-04 기준 깃허브 Filee 설명서(README·한국어 README·클로드 스킬 파일)와 설명서 속 앱 화면 기준이에요.\n\n#파일변환 #한글파일 #무료프로그램 #AI활용 #꿀팁",
+    "localImages": [
+      "images/Dfw14SuJkwE_1.jpg"
+    ],
+    "localVideo": "videos/Dfw14SuJkwE.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1NP9ujofA0Dl_KEANSnNFjO2EBLZbvCQ5=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1-cox86M7qzx3WnALB9JeVQWFOo-gCIwa/preview"
   }
 ]
