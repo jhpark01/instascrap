@@ -19856,5 +19856,26 @@
       "https://lh3.googleusercontent.com/d/1NP9ujofA0Dl_KEANSnNFjO2EBLZbvCQ5=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/1-cox86M7qzx3WnALB9JeVQWFOo-gCIwa/preview"
+  },
+  {
+    "shortcode": "yt_6eBSHbLKuN0",
+    "kind": "youtube",
+    "url": "https://m.youtube.com/watch?v=6eBSHbLKuN0&fbclid=PAVERTVgVxpGVleHRuA2FlbQIxMABwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp0EJdA6V8q0wTRjojNp4piclvarecrpzmbFZTDMHAmUXjO9E2TDzYD0JyALv_aem_Lu8rrfXX27elB-z5qpznEA",
+    "date": "2026년 11월 24일 오전 7:58",
+    "imgIndex": 1,
+    "memo": "",
+    "user": "sajo4077@gmail.com",
+    "owner": "Anthropic",
+    "caption": "Mastering Claude Code in 30 minutes",
+    "localImages": [
+      "images/yt_6eBSHbLKuN0_1.jpg"
+    ],
+    "localVideo": "",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1uhExYKJXbk8gZS_INlctm5xmO6p3-3ZH=w1000"
+    ],
+    "driveVideo": ""
   }
 ]
