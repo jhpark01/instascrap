@@ -19985,5 +19985,26 @@
       "https://lh3.googleusercontent.com/d/1KntxNhSl3zo3C4h3JwQksGS3ra4r8GPf=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/170UqstMygPGqYuGMh2dDb974We2cHA92/preview"
+  },
+  {
+    "shortcode": "DfwvAOtCAuS",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DfwvAOtCAuS/?dmpr=MTR3ZnUwcTJleG15Mg==",
+    "date": "2026년 11월 25일 오전 12:24",
+    "imgIndex": 1,
+    "memo": "#AI코딩",
+    "user": "sajo4077@gmail.com",
+    "owner": "bsd_funneldding",
+    "caption": "팔로우하고 댓글에 \"바퍼\" 남기면 Reverse API Engineer 설치법 바로 DM으로 보내드려요\n\nAPI 없는 사이트도 API로 만들어 주는 무료 오픈소스가 있어요. 이름은 리버스 API 엔지니어(MIT).\n\n사이트 주소와 원하는 데이터를 말하면, AI가 사이트를 돌아다니며 화면 뒤에서 오가는 요청을 전부 기록하고 바로 쓰는 API 코드를 만들어 줘요. 메뉴판 대신 주방을 들여다보는 거라 디자인이 바뀌어도 잘 안 깨져요.\n\n클로드 코드에 스킬로 바로 붙여서 써요.\n\n단, 로그인해야 하는 사이트는 약관상 자동 수집을 막아 둔 곳이 많아요. 내 데이터나 허용된 공개 데이터에만 쓰세요. AI 모델 사용료는 별도예요.\n\n#클로드코드 #자동화 #API #오픈소스 #바이브코딩",
+    "localImages": [
+      "images/DfwvAOtCAuS_1.jpg"
+    ],
+    "localVideo": "videos/DfwvAOtCAuS.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1RPUAGOVYVyczwlgIOeSXlDlEE5bjJuXD=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/1eX-8JlLIXpEncJohhO2bAd0KqevWqIHd/preview"
   }
 ]
