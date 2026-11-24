@@ -19964,5 +19964,26 @@
       "https://lh3.googleusercontent.com/d/1iV27_Uat-oIXeEuQFXX0sS-zToljEjJB=w1000"
     ],
     "driveVideo": "https://drive.google.com/file/d/1JgJq97_4Gi59Ij0gribjWz0CE2-F8GN2/preview"
+  },
+  {
+    "shortcode": "DgHMGHcB0WO",
+    "kind": "reel",
+    "url": "https://www.instagram.com/reel/DgHMGHcB0WO/?avpt=cTExdWJrZzZ2em5t",
+    "date": "2026년 11월 25일 오전 12:04",
+    "imgIndex": 1,
+    "memo": "#IT운영",
+    "user": "sajo4077@gmail.com",
+    "owner": "wook__db",
+    "caption": "[DevOps 기초 2편] CIDR이란?\n/24 = 앞 24비트 고정, 뒤 8비트 자유 → 주소 256개\n/16 → 65,536개, /32 → 1개\n다음 편: 서브넷\n\n이 콘텐츠는 VOLI의 AI보이스를 활용하여 제작되었습니다.\nhttps://voli.ai\n\n #devops #네트워크기초 #CIDR #개발자공부",
+    "localImages": [
+      "images/DgHMGHcB0WO_1.jpg"
+    ],
+    "localVideo": "videos/DgHMGHcB0WO.mp4",
+    "videoChecked": true,
+    "isVideo": true,
+    "driveImages": [
+      "https://lh3.googleusercontent.com/d/1KntxNhSl3zo3C4h3JwQksGS3ra4r8GPf=w1000"
+    ],
+    "driveVideo": "https://drive.google.com/file/d/170UqstMygPGqYuGMh2dDb974We2cHA92/preview"
   }
 ]
